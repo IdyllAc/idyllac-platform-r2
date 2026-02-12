@@ -1,0 +1,38 @@
+# Node
+node_modules/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads (local only)
+uploads/*
+!uploads/.gitkeep
+!uploads/profile_photos/
+uploads/profile_photos/*
+!uploads/profile_photos/.gitkeep
+
+# Local data
+subscriber_emails.txt
+
+# Certificates / Keys
+*.key
+*.pem
+*.crt
+*.p12
+*.jks
+
+# IDE
+.vscode/
+.idea/
+
+# Mac / misc
+*.swp

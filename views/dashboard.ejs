@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>User Dashboard</title>
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"/>  -->
+
+  <style>
+   body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2rem;
+  background: #333;
+  color: #fff;
+}
+
+h1, h2, h3, h4, h6, p { text-align: center;
+}
+
+.container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      text-align: center;
+    }
+
+
+    /* 🔄 Spinner styles */
+    #loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 150px;
+      color: #777;
+      font-size: 1.1em;
+      gap: 12px;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #ccc;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+
+#dashboard-content {
+  margin: 2rem auto;
+  max-width: 600px;
+  padding: 1rem;
+  background: #444;
+  border-radius: 8px;
+}
+
+button {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  color: #fff;
+  background: orange;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.a { 
+  color: #1f7d5f; 
+  text-decoration: none;
+  text-align: center; 
+}
+
+footer { margin-top: 3rem; text-align: center; }
+
+/* Unified button styles */
+.btn {
+  display: inline-block;
+  padding: 12px 25px;
+  margin: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  /* text-align: center; */
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: orange;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #e69500;
+}
+
+.btn-secondary {
+  background-color: #1f7d5f;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #145c45;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid #1f7d5f;
+  color: #1f7d5f;
+}
+
+.btn-outline:hover {
+  background-color: #1f7d5f;
+  color: white;
+}
+
+/* Progress bar */
+.progress-wrap {
+  max-width: 720px;
+  margin: 1rem auto;
+  text-align: center;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 12px;
+  background: #e6e6e6;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  width: 0%;
+  transition: width .5s ease-in-out;
+}
+ 
+  </style>
+</head>
+
+<body> 
+    <!-- 🔄 Spinner (initially visible) -->
+    <div id="loading-spinner" 
+    style="display: flex; align-items: center; justify-content: center; flex-direction: column; height: 100vh;">
+      <div class="spinner"
+      style="width: 40px; height: 40px; border: 4px solid #ccc; border-top-color: #0072ff; border-radius: 50%; animation: spin 1s linear infinite;">
+      </div>
+    </div>
+
+     <!-- ✅ Dashboard Content -->
+    <p style="margin-top: 12px; color: white;">Loading your dashboard...</p>
+
+  <!-- ✅ Actual dashboard (hidden until data loads) -->
+  <div id="dashboard-content" style="display: none; text-align: center; padding: 1rem;">
+    <div id="user-info"></div>
+    <h1 class="text-3xl font-bold mb-2">👋 Welcome back, <%= user ? user.name : 'Guest' %>!</h1>
+ <!-- <p class="text-lg text-gray-600">Your personal dashboard is ready.</p> -->
+  <p class="mt-2">You’re now securely logged in.</p>
+      <p>We’re glad to see you. Let’s get started 🚀</p>
+  <br>
+
+  <p>Your profile completion: 
+    <strong><%= typeof progress === 'number' ? progress : 0 %>%</strong>
+  </p>
+
+  <p><a href="/protect/personal_info" class="btn btn-primary">🚀 Start Registration</a></p>
+  
+  <!-- Progress bar -->
+<div class="progress-bar-bg" aria-hidden="true" style="margin-top: 1rem; background: #ddd; height: 10px; border-radius: 6px;">
+  <!-- <p>DEBUG: "<%= progress %>"</p> -->
+        <div class="progress-bar-fill" 
+       style="background: #0072ff; height: 10px; border-radius: 6px; width:<%= (typeof progress !== 'undefined' && typeof progress === 'number' ? progress : 0) %>%">
+      </div> 
+</div>
+
+  <!-- Registration flow buttons -->
+  <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; justify-content: center;">
+    <% if (progress < 100) { %>
+      <% let nextStep = '/protect/personal_info'; %>
+      <% if (progress >= 25 && progress < 50) nextStep = '/protect/upload/document'; %>
+      <% if (progress >= 50 && progress < 75) nextStep = '/protect/upload/selfie'; %>
+      <% if (progress >= 75 && progress < 100) nextStep = '/protect/completed'; %>
+
+      <a href="<%= nextStep %>" 
+         class="btn btn-primary" 
+         style="background:#0072ff; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+        <%= progress === 0 ? '🚀 Start Registration' : '➡ Continue Registration' %>
+       </a> 
+
+      <a href="/protect/completed" class="btn btn-outline" 
+         style="border:1px solid #0072ff; color:#0072ff; padding:10px 20px; border-radius:6px; text-decoration:none;">
+         Review Progress
+      </a>
+    <% } else { %>
+      <a href="/protect/completed" class="btn btn-success" 
+         style="background:green; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+         ✅ View Completed Profile
+        </a>
+    <% } %>
+  </div>
+
+  <section id="dashboard-main" style="text-align:center; margin-top:20px;">
+    <a href="/profile" class="btn btn-primary">Go to Profile</a><a href="/profile/settings" class="btn btn-primary">Go to Settings</a>
+  </section>
+  
+      <br>
+
+  <!-- Server-side rendered logout link/button -->
+<% if (user) { %> 
+<a href="/logout" class="btn btn-logout" 
+style="display:inline-block; margin-top:20px; background:#ff4d4d; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+Log out
+</a>
+<% } %>
+</div>
+
+  <footer>
+    <span class="nowrap">&copy;<time id="year"></time> IdyllAc</span>
+  </footer>
+
+
+  <!-- ✅ Inject server-side user object. Place your script *at the very bottom*, right before </body> -->
+ <script id="user-data" type="application/json">
+  <%- JSON.stringify(user || {}) %>
+</script>
+
+<!-- ✅ Place your JS file LAST -->
+<script src="/js/dashboard.js"></script>
+
+</body>
+</html>
+
+
+
+<!-- <button id="logout-btn">Log out</button> -->
+
+  <!-- <form id="logout-btn" action="/logout" method="POST">
+  <button id="logout-btn">Log out</button> 
+  </form> -->
+
+
+
+<!-- <% if (true) { %>  Replace 'true' with your actual condition 
+ <button id="logout-btn" class="btn btn-logout">Log out</button> 
+ <% } %> -->
+
+
+
+ <section class="documents-section">
+  <h3>Verification Documents</h3>
+
+  <ul class="doc-list">
+    <li>
+      Passport:
+      <span class="badge <%= documents?.passportKey ? 'ok' : 'missing' %>">
+        <%= documents?.passportKey ? 'Uploaded' : 'Missing' %>
+      </span>
+    </li>
+
+    <li>
+      ID Card:
+      <span class="badge <%= documents?.idCardKey ? 'ok' : 'missing' %>">
+        <%= documents?.idCardKey ? 'Uploaded' : 'Missing' %>
+      </span>
+    </li>
+
+    <li>
+      License:
+      <span class="badge <%= documents?.licenseKey ? 'ok' : 'missing' %>">
+        <%= documents?.licenseKey ? 'Uploaded' : 'Missing' %>
+      </span>
+    </li>
+
+    <li>
+      Selfie:
+      <span class="badge <%= selfie?.selfieKey ? 'ok' : 'missing' %>">
+        <%= selfie?.selfieKey ? 'Uploaded' : 'Missing' %>
+      </span>
+    </li>
+  </ul>
+
+  <% if (!user.isVerified) { %>
+    <button id="viewDocumentsBtn">👁️ View documents</button>
+    <button id="reuploadBtn">♻️ Re-upload</button>
+  <% } else { %>
+    <p class="locked-note">🔒 Documents verified and locked</p>
+  <% } %>
+</section>
+
+
+
+
+
+<div id="previewModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Your documents</h3>
+
+    <img id="passportPreview" hidden />
+    <img id="idCardPreview" hidden />
+    <img id="licensePreview" hidden />
+    <img id="selfiePreview" hidden />
+
+    <button id="closePreview">Close</button>
+  </div>
+</div>
+

@@ -1,0 +1,90 @@
+### Access protected route with token
+GET http://localhost:3000/api/auth/dashboard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQsImVtYWlsIjoidmljdG9yLnZpYTdAZ21haWwuY29tIiwiaWF0IjoxNzU2OTQzMzQ5LCJleHAiOjE3NTY5NDQyNDl9.h5esfxD_FYCrtJ0fmZ4yEb28YUM_Kk4XsKpRKuxkDd4
+
+
+
+### Logout request to invalidate the token
+DELETE http://localhost:3000/auth/logout
+Content-Type: application/json
+
+{
+  "token": ""
+}
+
+
+
+
+#### Refresh token request to get a new token
+POST http://localhost:3000/api/user/refresh-token
+Content-Type: application/json
+
+
+{
+  "token": ""
+}
+
+
+### Register request to create a new user
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+ {
+    "name": "IDYLLAC",
+  "email": "victor.via7@gmail.com",
+  "password": "333639"
+}
+
+
+### Login request to get the token
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+ {
+  "email": "victor.via7@gmail.com",
+  "password": "333639"
+}
+
+
+### Register request to create a new user
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+ {
+    "name": "Test",
+  "email": "fawzistuka@yahoo.com",
+  "password": "2244"
+}
+
+
+### Login request to get the token
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+ {
+  "email": "fawzistuka@yahoo.com",
+  "password": "123"
+}
+
+
+
+### Login request to get the token
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+ {
+  "email": "",
+  "password": ""
+}
+
+
+
+### Login request to get the token
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+
+ {
+  "email": "",
+  "password": ""
+}

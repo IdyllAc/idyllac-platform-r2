@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Card</title>
+    <style>
+        body {
+            background-color:color-mix(in srgb,blue 40%, skyblue 60%);
+        }
+    .review-card {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+  }
+  
+  .badge.ok {
+    background: #22c55e;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  
+  .badge.pending {
+    background: #f59e0b;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  
+  .modal.hidden {
+    display: none;
+  }
+
+  .admin-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #111;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  opacity: 0.95;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
+.admin-toast.success { 
+  background: #22c55e; 
+}
+
+.admin-toast.error { 
+  background: #ef4444; 
+}
+
+.admin-toast.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.review-card.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.4s ease;
+}
+
+</style>
+</head>
+<body> 
+<section class="admin-reviews">
+    <h2>🛂 Pending Verification Reviews</h2>
+  
+    <% if (!reviews || reviews.length === 0) { %>
+      <p>No pending reviews.</p>
+    <% } %>
+
+
+    <% reviews.forEach(r => { %>
+      <div class="review-card" data-user="<%= r.id %>">
+    
+        <h3>
+          User #<%= r.id %> — <%= r.email || 'Unknown email' %>
+        </h3>
+    
+        <div class="doc-status">
+          <span class="badge <%= r.documentsVerified ? 'ok' : 'pending' %>">
+            Documents: <%= r.documentsVerified ? 'Verified' : 'Pending' %>
+          </span>
+    
+          <span class="badge <%= r.selfieVerified ? 'ok' : 'pending' %>">
+            Selfie: <%= r.selfieVerified ? 'Verified' : 'Pending' %>
+          </span>
+        </div>
+    
+        <div class="actions">
+          <button class="viewDocsBtn">👁 View Documents</button>
+          <button class="approveBtn">✅ Approve</button>
+          <button class="rejectBtn">❌ Reject</button>
+        </div>
+    
+      </div>
+    <% }) %>
+
+    
+    <!-- <% reviews.forEach(r => { %>
+      <div class="review-card" data-user="<%= r.id %>">
+        <h3>
+          User #<%= r.id %> — <%= r.email || 'Unknown email' %>
+        </h3>
+  
+        <div class="doc-status">
+          <span class="badge <%= r.documentsVerified ? 'ok' : 'pending' %>">
+            Documents: <%= r.documentsVerified ? 'Verified' : 'Pending' %>
+          </span>
+  
+          <span class="badge <%= r.selfieVerified ? 'ok' : 'pending' %>">
+            Selfie: <%= r.selfieVerified ? 'Verified' : 'Pending' %>
+          </span>
+        </div>
+  
+        <div class="actions">
+          <button class="viewDocsBtn">👁 View Documents</button>
+          <button class="approveBtn">✅ Approve</button>
+          <button class="rejectBtn">❌ Reject</button>
+        </div>
+      </div>
+    <% }) %> -->
+  </section>
+  
+  
+  <!-- Preview Modal -->
+  <div id="adminPreviewModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>User Documents</h3>
+  
+      <img id="adminPassportPreview" hidden />
+      <img id="adminIdCardPreview" hidden />
+      <img id="adminLicensePreview" hidden />
+      <img id="adminSelfiePreview" hidden />
+  
+      <button id="adminClosePreview">Close</button>
+    </div>
+  </div>
+
+  <div id="adminToast" class="admin-toast hidden"></div>
+
+  
+  <script src="/js/admin-reviews.js"></script>
+  
+</body>
+</html> 
