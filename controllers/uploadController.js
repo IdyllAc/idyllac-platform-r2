@@ -23,11 +23,12 @@ exports.getPresignedUrl = async (req, res) => {
     const key = `users/${userId}/${type}/${uuidv4()}.${ext}`;
 
     const command = new PutObjectCommand({
-      Bucket: process.env.R2_BUCKET_NAME,
+      Bucket: BUCKET,
       Key: key,
       ContentType: mimeType,
+      ChecksumAlgorithm: undefined,
     });
-
+    
     const uploadUrl = await getSignedUrl(r2, command, {
       expiresIn: 300,
     });

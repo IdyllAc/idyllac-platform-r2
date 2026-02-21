@@ -20,7 +20,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
-const methodOverride = require('method-override');
+// const methodOverride = require('method-override');
 const session = require('express-session');
 const passport = require('passport');
 const pgSession = require('connect-pg-simple')(session);
@@ -248,7 +248,7 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use(methodOverride('_method'));
+// app.use(methodOverride('_method'));
 
 // Apply before your protected routes
 app.use(inactivityMiddleware);
