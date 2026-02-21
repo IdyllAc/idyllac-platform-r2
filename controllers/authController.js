@@ -97,7 +97,7 @@ exports.postRegister = async (req, res) => {
       password: hashedPassword,
       confirmationToken,  // Sequelize will save in DB as confirmation_token
       confirmationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000), // ⬅ 24h
-      isConfirmed: false, // Sequelize will save in DB as is_confirmed
+      isConfirmed: process.env.SKIP_EMAIL_VERIFICATION === 'true', // Sequelize will save in DB as is_confirmed
     });
 
     console.log(`✅ New user created: ID ${newUser.id}, email: ${newUser.email}`);
