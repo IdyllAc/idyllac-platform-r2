@@ -1,8 +1,9 @@
 /***********************
  *  LOAD ENV & CORE
  ***********************/
-require('dotenv').config();
-
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 console.log('🌍 NODE_ENV:', process.env.NODE_ENV);
 console.log('🌍 R2_ACCOUNT_ID exists:', !!process.env.R2_ACCOUNT_ID);
 
