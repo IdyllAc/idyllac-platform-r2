@@ -5,6 +5,7 @@ const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { v4: uuidv4 } = require("uuid");
 const r2 = require("../services/r2Client");
 
+// const BUCKET = process.env.R2_BUCKET;
 
 exports.getPresignedUrl = async (req, res) => {
   console.log("📥 presign body:", req.body);
@@ -23,7 +24,7 @@ exports.getPresignedUrl = async (req, res) => {
     const key = `users/${userId}/${type}/${uuidv4()}.${ext}`;
 
     const command = new PutObjectCommand({
-      Bucket: BUCKET,
+      Bucket: process.env.R2_BUCKET,
       Key: key,
       ContentType: mimeType,
       ChecksumAlgorithm: undefined,
@@ -202,7 +203,7 @@ exports.getPreviewUrl = async (req, res) => {
     }
 
     const command = new GetObjectCommand({
-      Bucket: process.env.R2_BUCKET_NAME,
+      Bucket: process.env.R2_BUCKET,
       Key: key,
     });
 
