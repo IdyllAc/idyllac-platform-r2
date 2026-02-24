@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 console.log('🌍 NODE_ENV:', process.env.NODE_ENV);
 console.log('🌍 R2_ACCOUNT_ID exists:', !!process.env.R2_ACCOUNT_ID);
 
-  
+
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -155,7 +155,7 @@ let pgPool;
 const store = new pgSession({
   pool: pgPool,
   tableName: "session",
-  createTableIfMissing: true,  // ✅ auto-create table if missing in dev but not prod (ensure it exists in prod) and should run a migration instead of auto-creating.
+  createTableIfMissing: true,  
 });
 
 /***********************

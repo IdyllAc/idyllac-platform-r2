@@ -32,15 +32,7 @@ router.get('/twitter', passport.authenticate('twitter'));
 router.get(
   '/twitter/callback',
   passport.authenticate('twitter', { failureRedirect: '/subscribe.html', session: false }),
-  (req, res) => {
-    // // Twitter OAuth successful
-    // // req.user contains the SocialUser record
-
-    // console.log("🐦 Twitter login success:", req.user?.email || req.user?.id);
-
-    // // Redirect to dashboard or your unified login success page
-   res.redirect('/default');
-  }
+  (req, res) => res.redirect('/default')
 );
 
 // ✅ LINKEDIN

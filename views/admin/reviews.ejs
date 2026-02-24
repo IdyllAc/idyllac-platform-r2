@@ -68,7 +68,7 @@
 </style>
 </head>
 <body> 
-<section class="admin-reviews">
+ <section class="admin-reviews">
     <h2>🛂 Pending Verification Reviews</h2>
   
     <% if (!reviews || reviews.length === 0) { %>
@@ -101,32 +101,7 @@
     
       </div>
     <% }) %>
-
-    
-    <!-- <% reviews.forEach(r => { %>
-      <div class="review-card" data-user="<%= r.id %>">
-        <h3>
-          User #<%= r.id %> — <%= r.email || 'Unknown email' %>
-        </h3>
-  
-        <div class="doc-status">
-          <span class="badge <%= r.documentsVerified ? 'ok' : 'pending' %>">
-            Documents: <%= r.documentsVerified ? 'Verified' : 'Pending' %>
-          </span>
-  
-          <span class="badge <%= r.selfieVerified ? 'ok' : 'pending' %>">
-            Selfie: <%= r.selfieVerified ? 'Verified' : 'Pending' %>
-          </span>
-        </div>
-  
-        <div class="actions">
-          <button class="viewDocsBtn">👁 View Documents</button>
-          <button class="approveBtn">✅ Approve</button>
-          <button class="rejectBtn">❌ Reject</button>
-        </div>
-      </div>
-    <% }) %> -->
-  </section>
+  </section> 
   
   
   <!-- Preview Modal -->

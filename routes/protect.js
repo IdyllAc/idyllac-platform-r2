@@ -15,7 +15,6 @@ const { personalValidator } = require('../validators/personalValidator');
 const { documentValidator } = require('../validators/documentValidator');
 const uploadProfilePhoto = require('../middleware/uploadProfilePhoto');
 const { saveSelfieValidator } = require('../validators/saveSelfieValidator');
-// const profileController = require('../controllers/profileController');
 
 // ✅ Show Personal Info form
 router.get('/personal_info', combinedAuth, noCache, (req, res) => {
@@ -31,18 +30,10 @@ router.post(
   personalInfoController.submitPersonalInfo);
 
 
-  // router.post(
-  //   "/api/upload/presign",
-  //   combinedAuth,
-  //   uploadController.getPresignedDocumentUrl
-  // );
-
   router.post("/api/upload/presign", async (req, res ) => {
     combinedAuth,
     uploadController.getPresignedDocumentUrl
   });
-
-  
 
 
 // ✅ Show Upload Document form
@@ -50,7 +41,6 @@ router.get('/upload/document', combinedAuth, noCache, (req, res) => {
     res.render('document', { user: req.user });
   });
   
-
 
 // ✅ Upload Documents
 router.post(
@@ -81,6 +71,7 @@ router.post(
 
 // ✅ Completed Page (from controller)
 router.get('/completed', combinedAuth, noCache, registrationController.showCompletedPage);
+
 
 // ✅ Final step: Complete Registration
 router.post('/complete', combinedAuth, noCache, registrationController.completeRegistration);

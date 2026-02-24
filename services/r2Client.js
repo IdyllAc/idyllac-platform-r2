@@ -30,33 +30,3 @@ module.exports = r2;
 
 
 
-// // services/r2Service.js
-// const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-// const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-
-// const client = new S3Client({
-//   region: "auto",
-//   endpoint: process.env.R2_ENDPOINT,
-//   credentials: {
-//     accessKeyId: process.env.R2_ACCESS_KEY,
-//     secretAccessKey: process.env.R2_SECRET_KEY,
-//   },
-// });
-
-// async function getPresignedUploadUrl(key, mime) {
-//   const command = new PutObjectCommand({
-//     Bucket: process.env.R2_BUCKET,
-//     Key: key,
-//     ContentType: mime,
-//   });
-
-//   return getSignedUrl(client, command, { expiresIn: 300 });
-// }
-
-// module.exports = { getPresignedUploadUrl };
-
-
-
-
-
-
