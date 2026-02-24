@@ -77,6 +77,9 @@ exports.uploadDocuments = async (req, res) => {
         idCardKey: idCardKey ?? null,
         licenseKey: licenseKey ?? null,
       });
+      await req.user.update({
+        verificationStatus: 'pending'
+      });
     }
 
     return res.json({ success: true });

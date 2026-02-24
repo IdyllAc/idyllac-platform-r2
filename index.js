@@ -7,16 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 console.log('🌍 NODE_ENV:', process.env.NODE_ENV);
 console.log('🌍 R2_ACCOUNT_ID exists:', !!process.env.R2_ACCOUNT_ID);
 
-  // const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
-  // require('dotenv').config({ path: envFile });
-  // console.log(`🌍 Running in ${process.env.NODE_ENV} mode using ${envFile}`);
-
-
-  // console.log('R2 endpoint:',
-  //   `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`
-  // );
   
-
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -84,29 +75,6 @@ if (process.env.NODE_ENV === "production") {
   app.set("trust proxy", 1);
 }
 
-// // Ensure upload directories exist
-// const uploadDirs = [
-//   path.join(__dirname, 'uploads'),
-//   path.join(__dirname, 'uploads', 'profile_photos'),
-//   // add other upload subfolders here if needed, e.g.
-//   // path.join(__dirname, 'uploads', 'documents'),
-//   // path.join(__dirname, 'uploads', 'selfies')
-// ];
-
-// uploadDirs.forEach(dir => {
-//   try {
-//     if (!fs.existsSync(dir)) {
-// fs.mkdirSync(dir, { recursive: true });
-// console.log(`✔ Created upload folder: ${dir}`);
-// } else {
-//   console.log(`ℹ️ Upload folder exists: ${dir}`);
-// }
-// } catch (err) {
-// console.error(`❌ Failed to ensure folder ${dir}:`, err);
-// // optional: process.exit(1) if you want startup to fail hard
-// }
-// });
-
 
 // ensure and serve
 ['uploads', path.join('uploads','profile_photos')].forEach(dir => {
@@ -164,33 +132,6 @@ baseUri: ["'self'"]
  ***********************/
 let pgPool;
 
-// const isProd =
-//   process.env.NODE_ENV === 'production' &&
-//   !!process.env.DATABASE_URL;
-
-// const pgPool = new Pool(
-//   isProd
-//     ? {
-//         connectionString: process.env.DATABASE_URL,
-//         ssl: { rejectUnauthorized: false },
-//       }
-//     : {
-//         host: "127.0.0.1",
-//         port: 5432,
-//         user: "stidyllac",
-//         password: null,
-//         database: "idyllac_db_e081",
-//         ssl: false,
-//       }
-// );
-
-// const store = new pgSession({
-//   pool: pgPool,
-//   tableName: "session",
-//   createTableIfMissing: true,
-// });
-
-
 
 // //  if (process.env.NODE_ENV === 'production') {
   if (process.env.DATABASE_URL) {
@@ -208,13 +149,6 @@ let pgPool;
     password: process.env.DB_PASSWORD || null,
     database: process.env.DB_NAME || "idyllac_db_e081",
     ssl: false, // explicitly off in dev
-    // pgPool = new Pool({
-    // host: "127.0.0.1",
-    // port: 5432,
-    // user: "stidyllac",
-    // password: null,
-    // database: "idyllac_db_e081",
-    // ssl: false,
   });
 }
 
@@ -302,19 +236,6 @@ app.get('/', (req, res) => {
   const lang = req.acceptsLanguages('ar', 'en', 'fr') || 'en';
   const fileMap = { ar: 'indexAr.html', fr: 'indexFr.html', en: 'indexEn.html' };
 
-  // let fileName;
-  // switch (lang) {
-  //   case 'ar':
-  //     fileName = 'indexAr.html';
-  //     break;
-  //   case 'fr':
-  //     fileName = 'indexFr.html';
-  //     break;
-  //   case 'en':
-  //   default:
-  //     fileName = 'indexEn.html';
-  //     break;
-  // }
 
   res.sendFile(path.join(__dirname, 'public', fileMap[lang] || 'indexEn.html'));
 });

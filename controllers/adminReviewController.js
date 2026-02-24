@@ -52,30 +52,40 @@ exports.getReviewsPage = async (req, res) => {
 
 
 
-  exports.approveDocuments = async (req, res) => {
-    const { userId } = req.params;
-  
-    await Document.update(
-      { isVerified: true },
-      { where: { userId } }
-    );
-  
-    res.json({ success: true });
-  };
+exports.approveDocuments = async (req, res) => {
+  const { userId } = req.params;
+
+  await Document.update(
+    { isVerified: true },
+    { where: { userId } }
+  );
+
+  await User.update(
+    { verificationStatus: 'approved' },
+    { where: { id: userId } }
+  );
+
+  res.json({ success: true });
+};
 
 
 
 
-  exports.rejectDocuments = async (req, res) => {
-    const { userId } = req.params;
-  
-    await Document.update(
-      { isVerified: false },
-      { where: { userId } }
-    );
-  
-    res.json({ success: true });
-  };
+exports.rejectDocuments = async (req, res) => {
+  const { userId } = req.params;
+
+  await Document.update(
+    { isVerified: false },
+    { where: { userId } }
+  );
+
+  await User.update(
+    { verificationStatus: 'rejected' },
+    { where: { id: userId } }
+  );
+
+  res.json({ success: true });
+};
   
   
   

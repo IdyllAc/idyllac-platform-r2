@@ -158,7 +158,6 @@ footer { margin-top: 3rem; text-align: center; }
  
   </style>
 </head>
-
 <body> 
     <!-- 🔄 Spinner (initially visible) -->
     <div id="loading-spinner" 
@@ -169,7 +168,7 @@ footer { margin-top: 3rem; text-align: center; }
     </div>
 
      <!-- ✅ Dashboard Content -->
-    <p style="margin-top: 12px; color: white;">Loading your dashboard...</p>
+    <!-- <p style="margin-top: 12px; color: white;">Loading your dashboard...</p> -->
 
   <!-- ✅ Actual dashboard (hidden until data loads) -->
   <div id="dashboard-content" style="display: none; text-align: center; padding: 1rem;">
@@ -223,8 +222,73 @@ footer { margin-top: 3rem; text-align: center; }
   <section id="dashboard-main" style="text-align:center; margin-top:20px;">
     <a href="/profile" class="btn btn-primary">Go to Profile</a><a href="/profile/settings" class="btn btn-primary">Go to Settings</a>
   </section>
-  
+
       <br>
+
+      <section class="documents-section">
+   <h3>Verification Documents</h3>
+
+  <% if (user.verification_status === 'pending') { %>
+
+    <div class="verification-pending">
+          <p class="badge pending">🟡 Identity Verification In Review</p> 
+     <!-- <p class="badge warning">⏳ Pending Review</p> -->
+
+      <p class="pending-note">
+        Your submitted identity documents are currently under compliance review.
+      </p>
+
+      <p class="pending-subnote">
+        You will be notified once the verification process has been completed.
+      </p>
+
+    </div>
+  
+  <% } else if (user.verification_status === 'approved') { %>
+  
+    <div class="verification-locked">
+      <p class="badge ok">✅ Identity Verified</p>  
+      
+      <p class="locked-note">
+        👍 Your identity documents have been successfully reviewed and approved by our compliance team.
+      </p>
+
+      <p class="locked-success">
+        🔒 Approved documents are now locked and can no longer be modified.
+      </p>
+
+      <p class="locked-subnote">
+        Your account is now eligible to proceed to the next stage of onboarding.
+      </p>
+
+      <p class="locked-subnote">
+        If any additional verification is required, you will be notified by email.
+      </p>
+
+    </div>
+  
+  <% } else if (user.verification_status === 'rejected') { %>
+  
+    <div class="verification-rejected">
+      <p class="badge error">❌ Verification Requires Attention</p>
+
+      <p class="rejected-note">
+        One or more of your submitted documents could not be verified.
+      </p>
+
+      <p class="rejected-subnote">
+        Please upload a valid document to continue.
+      </p>
+
+    </div>
+  
+    <a href="/protect/upload/document" class="btn btn-primary">
+      ♻️ Re-upload Documents
+    </a>
+
+  <% } %>
+</section>
+    
 
   <!-- Server-side rendered logout link/button -->
 <% if (user) { %> 
@@ -234,6 +298,7 @@ Log out
 </a>
 <% } %>
 </div>
+
 
   <footer>
     <span class="nowrap">&copy;<time id="year"></time> IdyllAc</span>
@@ -253,75 +318,6 @@ Log out
 
 
 
-<!-- <button id="logout-btn">Log out</button> -->
-
-  <!-- <form id="logout-btn" action="/logout" method="POST">
-  <button id="logout-btn">Log out</button> 
-  </form> -->
 
 
-
-<!-- <% if (true) { %>  Replace 'true' with your actual condition 
- <button id="logout-btn" class="btn btn-logout">Log out</button> 
- <% } %> -->
-
-
-
- <section class="documents-section">
-  <h3>Verification Documents</h3>
-
-  <ul class="doc-list">
-    <li>
-      Passport:
-      <span class="badge <%= documents?.passportKey ? 'ok' : 'missing' %>">
-        <%= documents?.passportKey ? 'Uploaded' : 'Missing' %>
-      </span>
-    </li>
-
-    <li>
-      ID Card:
-      <span class="badge <%= documents?.idCardKey ? 'ok' : 'missing' %>">
-        <%= documents?.idCardKey ? 'Uploaded' : 'Missing' %>
-      </span>
-    </li>
-
-    <li>
-      License:
-      <span class="badge <%= documents?.licenseKey ? 'ok' : 'missing' %>">
-        <%= documents?.licenseKey ? 'Uploaded' : 'Missing' %>
-      </span>
-    </li>
-
-    <li>
-      Selfie:
-      <span class="badge <%= selfie?.selfieKey ? 'ok' : 'missing' %>">
-        <%= selfie?.selfieKey ? 'Uploaded' : 'Missing' %>
-      </span>
-    </li>
-  </ul>
-
-  <% if (!user.isVerified) { %>
-    <button id="viewDocumentsBtn">👁️ View documents</button>
-    <button id="reuploadBtn">♻️ Re-upload</button>
-  <% } else { %>
-    <p class="locked-note">🔒 Documents verified and locked</p>
-  <% } %>
-</section>
-
-
-
-
-
-<div id="previewModal" class="modal hidden">
-  <div class="modal-content">
-    <h3>Your documents</h3>
-
-    <img id="passportPreview" hidden />
-    <img id="idCardPreview" hidden />
-    <img id="licensePreview" hidden />
-    <img id="selfiePreview" hidden />
-
-    <button id="closePreview">Close</button>
-  </div>
-</div>
-
+ 

@@ -50,7 +50,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
       field: 'confirmation_expires', // ⬅ important
-    },    
+    }, 
+    verificationStatus: {
+      type: DataTypes.STRING,
+      field: 'verification_status',
+      defaultValue: 'pending'
+    }   
   }, {
     tableName: 'users',
     underscored: true,   // ✅ same as other models
