@@ -76,10 +76,14 @@ exports.uploadDocuments = async (req, res) => {
         passportKey: passportKey ?? null,
         idCardKey: idCardKey ?? null,
         licenseKey: licenseKey ?? null,
-      });
-      await req.user.update({
-        verificationStatus: 'pending'
-      });
+      }
+    );
+
+      // 🔁 Always reset review cycle after upload
+       await User.update(
+         { verificationStatus: 'pending' },
+         { where: { id: userId } }
+    );
     }
 
     return res.json({ success: true });

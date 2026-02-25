@@ -65,7 +65,7 @@ exports.approveDocuments = async (req, res) => {
     { where: { id: userId } }
   );
 
-  res.json({ success: true });
+  res.json({ success: true });     // res.json({ success: true, status: 'approved' });
 };
 
 
@@ -80,11 +80,11 @@ exports.rejectDocuments = async (req, res) => {
   );
 
   await User.update(
-    { verificationStatus: 'rejected' },
+    { verificationStatus: 'pending' },  // ⬅️ NOT rejected
     { where: { id: userId } }
   );
 
-  res.json({ success: true });
+  res.json({ success: true });          // res.json({ success: true, status: 'rejected' });
 };
   
   
