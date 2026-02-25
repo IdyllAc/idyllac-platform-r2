@@ -35,7 +35,6 @@ exports.getReviewsPage = async (req, res) => {
         u.document?.idCardKey ||
         u.document?.licenseKey
       ),
-
       documentsVerified: u.document?.isVerified ?? false,
 
       selfieUploaded: !!u.selfie?.selfieKey,
@@ -56,6 +55,11 @@ exports.approveDocuments = async (req, res) => {
   const { userId } = req.params;
 
   await Document.update(
+    { isVerified: true },
+    { where: { userId } }
+  );
+
+  await Selfie.update(
     { isVerified: true },
     { where: { userId } }
   );
