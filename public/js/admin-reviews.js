@@ -55,7 +55,7 @@ document.querySelectorAll(".review-card").forEach(card => {
   const viewBtn = card.querySelector(".viewDocsBtn");
   const approveBtn = card.querySelector(".approveBtn");
   const rejectBtn = card.querySelector(".rejectBtn");
-
+});
   /* =============================================
      VIEW DOCUMENTS
   ============================================= */
@@ -455,7 +455,5 @@ document.querySelectorAll(".review-card").forEach(card => {
 //   //   } catch {}
 //   // }, 15000); // every 15 sec
   
-
-
 
 
