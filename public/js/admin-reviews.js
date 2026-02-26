@@ -55,7 +55,7 @@ document.querySelectorAll(".review-card").forEach(card => {
   const viewBtn = card.querySelector(".viewDocsBtn");
   const approveBtn = card.querySelector(".approveBtn");
   const rejectBtn = card.querySelector(".rejectBtn");
-});
+
   /* =============================================
      VIEW DOCUMENTS
   ============================================= */
@@ -134,6 +134,7 @@ document.querySelectorAll(".review-card").forEach(card => {
       rejectBtn.disabled = false;
     }
   });
+});
 
   // approveBtn?.addEventListener("click", async () => {
 
