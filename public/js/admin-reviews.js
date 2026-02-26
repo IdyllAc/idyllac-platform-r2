@@ -1,6 +1,8 @@
 // public/js/admin-reviews.js
 console.log("👮 Admin reviews JS loaded");
 
+let decisionInProgress = false;   // >> To prevent multiple clicks while processing
+
 /* =================================================
    TOAST SYSTEM
 ================================================= */
@@ -102,91 +104,165 @@ document.querySelectorAll(".review-card").forEach(card => {
   ============================================= */
   approveBtn?.addEventListener("click", async () => {
 
+    if (decisionInProgress) return;
     if (!confirm("Approve documents?")) return;
-
+  
+    decisionInProgress = true;
+  
     try {
       approveBtn.disabled = true;
       rejectBtn.disabled = true;
-
+  
       const res = await fetch(
         `/admin/documents/${userId}/approve`,
         { method: "POST", credentials: "include" }
       );
-
+  
       if (!res.ok) throw new Error("Approve failed");
-
-      /* ---- Update Badge ---- */
-      const badges = card.querySelectorAll(".badge");
-
-      badges.forEach(b => {
-        if (b.textContent.includes("Documents")) {
-          b.textContent = "Documents: Verified";
-          b.classList.remove("pending");
-          b.classList.add("ok");
-        }
-      });
-
-      /* ---- UX Polish ---- */
-      showToast("Documents approved ✓", "success");
-
-      modal?.classList.add("hidden");
-      resetPreviewImages();
-
-      /* ---- Optional: remove card smoothly ---- */
+  
+      showToast("Verification approved ✓", "success");
+  
       card.classList.add("fade-out");
       setTimeout(() => card.remove(), 400);
-
+  
     } catch (err) {
       console.error(err);
       showToast("Approve failed", "error");
+  
+      decisionInProgress = false;
       approveBtn.disabled = false;
       rejectBtn.disabled = false;
     }
   });
+
+  // approveBtn?.addEventListener("click", async () => {
+
+  //   if (!confirm("Approve documents?")) return;
+
+  //   try {
+  //     approveBtn.disabled = true;
+  //     rejectBtn.disabled = true;
+
+  //     const res = await fetch(
+  //       `/admin/documents/${userId}/approve`,
+  //       { method: "POST", credentials: "include" }
+  //     );
+
+  //     if (!res.ok) throw new Error("Approve failed");
+
+  //     /* ---- Update Badge ---- */        // Badge removed completly This is optional since we're removing the card, but it gives instant feedback if the admin wants to keep reviewing before the card disappears
+  //     const badges = card.querySelectorAll(".badge");
+
+  //     badges.forEach(b => {
+  //       if (b.textContent.includes("Documents")) {
+  //         b.textContent = "Documents: Verified";
+  //         b.classList.remove("pending");
+  //         b.classList.add("ok");
+  //       }
+  //     });
+
+  //     /* ---- UX Polish ---- */
+  //     showToast("Documents approved ✓", "success");
+
+  //     modal?.classList.add("hidden");
+  //     resetPreviewImages();
+
+  //     /* ---- Optional: remove card smoothly ---- */
+  //     card.classList.add("fade-out");
+  //     setTimeout(() => card.remove(), 400);
+
+  //   } catch (err) {
+  //     console.error(err);
+  //     showToast("Approve failed", "error");
+  //     approveBtn.disabled = false;
+  //     rejectBtn.disabled = false;
+  //   }
+  // });
+
+
 
   /* =============================================
      REJECT
   ============================================= */
   rejectBtn?.addEventListener("click", async () => {
 
+    if (decisionInProgress) return;
     if (!confirm("Reject documents?")) return;
-
+  
+    decisionInProgress = true;
+  
     try {
       approveBtn.disabled = true;
       rejectBtn.disabled = true;
-
+  
       const res = await fetch(
         `/admin/documents/${userId}/reject`,
         { method: "POST", credentials: "include" }
       );
-
+  
       if (!res.ok) throw new Error("Reject failed");
-
-      /* ---- Update Badge ---- */
-      const badges = card.querySelectorAll(".badge");
-
-      badges.forEach(b => {
-        if (b.textContent.includes("Documents")) {
-          b.textContent = "Documents: Pending";
-          b.classList.remove("ok");
-          b.classList.add("pending");
-        }
-      });
-
-      showToast("Documents rejected ✗", "error");
-
-      modal?.classList.add("hidden");
-      resetPreviewImages();
-
+  
+      showToast("Verification rejected ✗", "error");
+  
+      card.classList.add("fade-out");
+      setTimeout(() => card.remove(), 400);
+  
     } catch (err) {
       console.error(err);
       showToast("Reject failed", "error");
+  
+      decisionInProgress = false;
       approveBtn.disabled = false;
       rejectBtn.disabled = false;
     }
   });
 
-});
+//   rejectBtn?.addEventListener("click", async () => {
+
+//     if (!confirm("Reject documents?")) return;
+
+//     try {
+//       approveBtn.disabled = true;
+//       rejectBtn.disabled = true;
+
+//       const res = await fetch(
+//         `/admin/documents/${userId}/reject`,
+//         { method: "POST", credentials: "include" }
+//       );
+
+//       if (!res.ok) throw new Error("Reject failed");
+
+//       /* ---- Update Badge ---- */   // Remove badge manipulation if you want to remove the card immediately, but it gives instant feedback if the admin wants to keep reviewing before the card disappears
+//       const badges = card.querySelectorAll(".badge");
+
+//       badges.forEach(b => {
+//         if (b.textContent.includes("Documents")) {
+//           b.textContent = "Documents: Pending";
+//           b.classList.remove("ok");
+//           b.classList.add("pending");
+//         }
+//       });
+
+//       showToast("Documents rejected ✗", "error");
+
+//       modal?.classList.add("hidden");
+//       resetPreviewImages();
+
+//     } catch (err) {
+//       console.error(err);
+//       showToast("Reject failed", "error");
+//       approveBtn.disabled = false;
+//       rejectBtn.disabled = false;
+//     }
+//   });
+
+// });
+
+
+
+
+
+
 
 
 
