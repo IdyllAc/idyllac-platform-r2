@@ -149,8 +149,8 @@ html {
 } 
 
   h1 {
-    text-align: center;
-    color:blanchedalmond;
+    text-align: right;
+    color:bisque;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-image:-webkit-repeating-linear-gradient( skyblue, brown); 
     max-width: 50vw;
@@ -162,10 +162,10 @@ html {
     border-radius: 10px;
 }
 
-h2 {
+ h2 {
 	text-align: right;
 	color: bisque;
-}
+} 
 
 
 h3 {
