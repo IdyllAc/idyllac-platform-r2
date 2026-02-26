@@ -134,7 +134,6 @@ document.querySelectorAll(".review-card").forEach(card => {
       rejectBtn.disabled = false;
     }
   });
-});
 
   // approveBtn?.addEventListener("click", async () => {
 
@@ -217,6 +216,7 @@ document.querySelectorAll(".review-card").forEach(card => {
       rejectBtn.disabled = false;
     }
   });
+});
 
 //   rejectBtn?.addEventListener("click", async () => {
 
