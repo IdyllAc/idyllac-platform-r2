@@ -87,7 +87,7 @@
        </head>
        <body> 
         <h1 class="mb-3 h3">Connexion</h1>  
-        <p style="margin-top: 15vh; background-color: green">Have account signin?</p> 
+        <p style="margin-top: 15vh; background-color: green">Vous avez un compte ? Connectez-vous.</p> 
         
         <!-- login.ejs -->
         <% if (messages.error && messages.error.length > 0) { %>
@@ -127,17 +127,17 @@
         <form action="/login" method="POST">
         <label for="email">Email</label>
         <input type="email" name="email" id="email" autocomplete="off" required></input>
-        <label for="password">Password</label>
+        <label for="password">Mot de Pass</label>
         <input type="password" name="password" id="password" autocomplete="new-password" required></input>
         <br>
     <br>
-        <button type="submit">Login</button>
+        <button type="submit">Connexion</button>
       </form> 
      
     <br>   
     
-    <div id="message"><p style="background-color: green;">haven't yet account? Clic here to
-      <a href="/registerFr" style= "color: orange;">S’inscrire</a></p>
+    <div id="message"><p style="background-color: green;">Vous n’avez pas encore de compte ? Cliquez ici pour vous
+      <a href="/registerFr" style= "color: orange;">inscrire</a></p>
       </div>
 
       <footer class="footer">

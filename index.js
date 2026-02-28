@@ -257,7 +257,8 @@ app.get('/internationalFr', (req, res) => res.sendFile(path.join(__dirname, 'pub
 app.get('/about', (req, res) => res.sendFile(path.join(__dirname, 'public', 'about.html')));
 app.get('/aboutEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'aboutEn.html')));
 app.get('/aboutFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'aboutFr.html')));
-app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contact.html')));
+app.get('/contact', (req,
+   res) => res.sendFile(path.join(__dirname, 'public', 'contact.html')));
 app.get('/contactEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contactEn.html')));
 app.get('/contactFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contactFr.html')));
 app.get('/hours', (req, res) => res.sendFile(path.join(__dirname, 'public', 'hours.html')));
