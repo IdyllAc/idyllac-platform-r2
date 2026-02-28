@@ -273,7 +273,11 @@ app.get('/tosFr', (req, res) => res.sendFile(path.join(__dirname, 'public/legal'
 
 // Auth entry pages
 app.get('/login', checkNotAuthenticated, (req, res) => res.render('login'));
+app.get('/loginEn', checkNotAuthenticated, (req, res) => res.render('loginEn'));
+app.get('/loginFr', checkNotAuthenticated, (req, res) => res.render('loginFr'));
 app.get('/register', checkNotAuthenticated, (req, res) => res.render('register'));
+app.get('/registerEn', checkNotAuthenticated, (req, res) => res.render('registerEn'));
+app.get('/registerFr', checkNotAuthenticated, (req, res) => res.render('registerFr'));
 
 
 /***********************

@@ -86,8 +86,8 @@
        </style>                              
        </head>
        <body> 
-        <h1 class="mb-3 h3">الدخول</h1>  
-        <p style="margin-top: 15vh; background-color: green">لديك حسابك الخاص؟ قم بالدخول</p> 
+        <h1 class="mb-3 h3">Login</h1>  
+        <p style="margin-top: 15vh; background-color: green">Have account? sign in</p> 
         
         <!-- login.ejs -->
         <% if (messages.error && messages.error.length > 0) { %>
@@ -121,31 +121,29 @@
               <% } %>
               
          
-        <h1 style="font-family: cursive;">إدخال</h1>
+        <h1 style="font-family: cursive;">Log in here</h1>
 
 
         <form action="/login" method="POST">
-        <label for="email">الإيميل</label>
+        <label for="email">Email</label>
         <input type="email" name="email" id="email" autocomplete="off" required></input>
-        <label for="password">كلمة المرور</label>
+        <label for="password">Password</label>
         <input type="password" name="password" id="password" autocomplete="new-password" required></input>
         <br>
     <br>
-        <button type="submit">الدخول</button>
+        <button type="submit">Login</button>
       </form> 
      
     <br>   
-    <h3>
-    <p style="background-color: green;">
-    ليس لديك حساب بعد؟ <a href="/register" style= "color: orange;">تسجيل الإشتراك</a>
-      
-     </p>
-    </h3>
+    
+    <div id="message"><p style="background-color: green;">haven't yet account? Clic here to
+      <a href="/registerEn" style= "color: orange;">Register</a></p>
+      </div>
 
-    <footer class="footer">
-      <span class="nowrap">حقوق النشر&copy; <time id="year"></time></span>
-      <span class="nowrap">إيديلك</span>
-    </footer>
+      <footer class="footer">
+        <span class="nowrap">Copyrights &copy; <time id="year"></time></span>
+        <span class="nowrap">IdyllAc</span>  
+      </footer> 
    
       <!-- <script src="https://kit.fontawesome.com/283a7ae800.js" crossorigin="anonymous"></script> -->
 

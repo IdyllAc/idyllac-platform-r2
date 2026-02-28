@@ -77,11 +77,12 @@
 </head>
 <body>
     <!-- <h1 style="display: block; color: whitesmoke; margin-top: 70px;">مرحباً بك على منصة تطبيق إيديلك</h1> -->
-    <h1 style="color: whitesmoke;">مرحباً بك في إيديلك</h1>
+    <h1 style="color: whitesmoke;">Bienvenue chez IdyllAc</h1>
 
-    <p style="background-color:green">مازلت لم تشترك بعد؟ إملاء النمودج</p>
+    <p style="background-color:green">Vous n’êtes toujours pas abonné(e) jusqu’à présent ?
+        Veuillez remplir le formulaire.</p>
 
-    <h1 class="mb-3 h3">للإشتراك</h1>
+    <h1 class="mb-3 h3">S’inscrire</h1>
 
      <!-- register.ejs -->
     <% if (messages.error) { %>
@@ -94,37 +95,37 @@
          </div>
       </div> 
       <% } %>
-            <h1 style="font-family: cursive;">: إملاء بيانات التعريف </h1>
+            <h1 style="font-family: cursive;">Inscrivez-vous ici :</h1>
 
               <!-- <form id="register-form"> -->  
               <form action="/register" method="POST">
-                <label for="name">:إسم المستخدم  </label>
+                <label for="name">Nom d’utilisateur:</label>
                 <input type="text" name="name" id="name" autocomplete="on" placeholder="Enter your name" required>
                           
-                <label for="email">:الإيميل</label>
+                <label for="email">E-mail:</label>
                 <input type="email" name="email" id="email" maxlength="150" autocomplete="on" placeholder="Enter your email" required>
                           
-                <label for="cemail">:تأكيد الإيميل</label>
+                <label for="cemail">E-mail de confirmation:</label>
                 <input type="email" name="cemail" id="cemail" maxlength="150" autocomplete="on" placeholder="Re-enter confirmation email" required>
                           
-                <label for="password">:كلمة السر الخاصة بك</label>
+                <label for="password">Mot de pass:</label>
                 <input type="password" name="password" id="password" maxlength="150" autocomplete="off" placeholder="Enter strong password and remember it" required>
                           
                 <br><br>
-                <button type="submit">إرسال</button>
+                <button type="submit">Envoyer</button>
               </form>
                           
                  <!-- <p><small>Password 8 characters minimum. Must include at least one uppercase one lower case and one of: # @ & ! $ % ?</small></p>
                            -->
                   <h3>
                       <p style="background-color:green;">
-                        لديك إشتراك سلفاً؟  <a href="/login" style="color: orange;">الدخول</a>
+                        Vous avez déjà un compte ? Connectez-vous.<a href="/loginFr" style="color: orange;">Connectez-vous.</a>
                       </p>
                   </h3>
                           
                 <footer class="footer">
-                  <span class="nowrap">حقوق النشر&copy; <time id="year"></time></span>
-                  <span class="nowrap">إيديلك</span>
+                  <span class="nowrap">Copyrights &copy; <time id="year"></time></span>
+                  <span class="nowrap">IdyllAc</span>
                 </footer>
 
                   <!-- <script src="https://kit.fontawesome.com/283a7ae800.js" crossorigin="anonymous"></script> -->  
