@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 console.log('🌍 NODE_ENV:', process.env.NODE_ENV);
 console.log('🌍 R2_ACCOUNT_ID exists:', !!process.env.R2_ACCOUNT_ID);
-.
+
 
 const express = require('express');
 const fs = require('fs');
