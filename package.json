@@ -1,7 +1,7 @@
 {
   "name": "idyllac-platform-r2",
   "version": "1.0.0",
-  "main": "node index.js",
+  "main": "index.js",
   "scripts": {
     "migrate": "sequelize db:migrate",
     "down": "npx sequelize-cli db:migrate:undo",

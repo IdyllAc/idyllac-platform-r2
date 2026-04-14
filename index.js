@@ -245,25 +245,38 @@ app.get('/default', (req, res) => res.sendFile(path.join(__dirname, 'public', 'i
 app.get('/ar', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexAr.html')));
 app.get('/fr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexFr.html')));
 app.get('/en', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexEn.html')));
+
 app.get('/subscribe', (req, res) => res.sendFile(path.join(__dirname, 'public', 'subscribe.html')));
 app.get('/subscribeEn', (req, res) => res.sendFile(path.join(__dirname,  'public', 'subscribeEn.html')));
 app.get('/subscribeFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'subscribeFr.html')));
+
 app.get('/local', (req, res) => res.sendFile(path.join(__dirname, 'public', 'local.html')));
 app.get('/localEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'localEn.html')));
 app.get('/localFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'localFr.html')));
-app.get('/international', (req, res) => res.sendFile(path.join(__dirname, 'public', 'international.html')));
+
+app.get('/internationalAr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'internationalAr.html')));
 app.get('/internationalEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'internationalEn.html')));
 app.get('/internationalFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'internationalFr.html')));
-app.get('/about', (req, res) => res.sendFile(path.join(__dirname, 'public', 'about.html')));
+
+app.get('/aboutAr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'aboutAr.html')));
 app.get('/aboutEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'aboutEn.html')));
 app.get('/aboutFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'aboutFr.html')));
-app.get('/contact', (req,
-   res) => res.sendFile(path.join(__dirname, 'public', 'contact.html')));
+
+app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contact.html')));
 app.get('/contactEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contactEn.html')));
 app.get('/contactFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contactFr.html')));
+
 app.get('/hours', (req, res) => res.sendFile(path.join(__dirname, 'public', 'hours.html')));
 app.get('/hoursEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'hoursEn.html')));
 app.get('/hoursFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'hoursFr.html')));
+
+app.get('/menuAr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'menuAr.html')));
+app.get('/menuEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'menuEn.html')));
+app.get('/menuFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'menuFr.html')));
+
+app.get('/appAr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'appAr.html')));
+app.get('/appEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'appEn.html')));
+app.get('/appFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'appFr.html')));
 
 app.get('/privacy', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'privacy.html')));
 app.get('/privacyEn', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'privacyEn.html')));
