@@ -33,6 +33,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       field: 'confirmation_token', // ✅ important for consistency
     },
+    confirmationExpires: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: 'confirmation_expires', // ⬅ important
+    }, 
     registration_method: {
       type: DataTypes.STRING
     },
@@ -46,13 +51,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true
     },    
-    confirmationExpires: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      field: 'confirmation_expires', // ⬅ important
-    }, 
     verificationStatus: {
       type: DataTypes.STRING,
+      allowNull: false,
       field: 'verification_status',
       defaultValue: 'pending'
     }   

@@ -310,17 +310,15 @@ async function doLogout() {
 
   // STEP 2 — allow DOM to repaint (same 100ms as auto!)
   setTimeout(async () => {
-
     // STEP 3 — backend logout
     try {
-      await fetch(`${API_BASE}/logout`, {
+      const res = await fetch(`${API_BASE}/logout`, {
         method: 'POST',
         credentials: 'include',
         headers: { Accept: 'application/json' }
       });
-    } catch (err) {
-      console.error("Logout error (ignored):", err);
-    }
+
+      const data = await res.json();
 
     // Always remove JWT tokens
     localStorage.removeItem('accessToken');
@@ -328,12 +326,13 @@ async function doLogout() {
 
     // STEP 4 — keep spinner visible for smooth UX
     setTimeout(() => {
-
       // STEP 5 — redirect to login
-      window.location.href = "/login";
-
-    }, 1000);
-
+      window.location.href = data.redirect || "/loginEn";
+    }, 800);
+  } catch (err) {
+    console.error("Logout error:", err);
+    window.location.href = "/loginEn"; // Redirect anyway on error
+  }
   }, 100); // SAME repaint delay as auto logout
 }
 

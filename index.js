@@ -228,23 +228,54 @@ function checkNotAuthenticated(req, res, next) {
   next();
 }
 
+
+app.use((req, res, next) => {
+  if (!req.session.lang) {
+    req.session.lang = req.acceptsLanguages('ar', 'en', 'fr') || 'en';
+  }
+  next();
+});
+
+
+
 /***********************
  *  SIMPLE PAGE ROUTES
  ***********************/
 // Auto language detection for root route
 app.get('/', (req, res) => {
   const lang = req.acceptsLanguages('ar', 'en', 'fr') || 'en';
-  const fileMap = { ar: 'indexAr.html', fr: 'indexFr.html', en: 'indexEn.html' };
 
+  // ✅ STORE language in session
+  req.session.lang = lang;
 
-  res.sendFile(path.join(__dirname, 'public', fileMap[lang] || 'indexEn.html'));
+  const fileMap = { 
+    ar: 'indexAr.html', 
+    fr: 'indexFr.html', 
+    en: 'indexEn.html' 
+  };
+
+  res.sendFile(path.join(__dirname, 'public', fileMap[lang] || 'indexEn.html')); // Serve the appropriate file based on detected language
 });
 
 // Public static pages
 app.get('/default', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
-app.get('/ar', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexAr.html')));
-app.get('/fr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexFr.html')));
-app.get('/en', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexEn.html')));
+// app.get('/ar', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexAr.html')));
+// app.get('/fr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexFr.html')));
+// app.get('/en', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexEn.html')));
+app.get('/ar', (req, res) => {
+  req.session.lang = 'ar';
+  res.sendFile(path.join(__dirname, 'public', 'indexAr.html'));
+});
+
+app.get('/fr', (req, res) => {
+  req.session.lang = 'fr';
+  res.sendFile(path.join(__dirname, 'public', 'indexFr.html'));
+});
+
+app.get('/en', (req, res) => {
+  req.session.lang = 'en';
+  res.sendFile(path.join(__dirname, 'public', 'indexEn.html'));
+});
 
 app.get('/subscribe', (req, res) => res.sendFile(path.join(__dirname, 'public', 'subscribe.html')));
 app.get('/subscribeEn', (req, res) => res.sendFile(path.join(__dirname,  'public', 'subscribeEn.html')));
@@ -286,13 +317,42 @@ app.get('/tosEn', (req, res) => res.sendFile(path.join(__dirname, 'public/legal'
 app.get('/tosFr', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'tosFr.html')));
 
 // Auth entry pages
-app.get('/login', checkNotAuthenticated, (req, res) => res.render('login'));
-app.get('/loginEn', checkNotAuthenticated, (req, res) => res.render('loginEn'));
-app.get('/loginFr', checkNotAuthenticated, (req, res) => res.render('loginFr'));
-app.get('/register', checkNotAuthenticated, (req, res) => res.render('register'));
-app.get('/registerEn', checkNotAuthenticated, (req, res) => res.render('registerEn'));
-app.get('/registerFr', checkNotAuthenticated, (req, res) => res.render('registerFr'));
+// app.get('/login', checkNotAuthenticated, (req, res) => res.render('login'));
+// app.get('/loginEn', checkNotAuthenticated, (req, res) => res.render('loginEn'));
+// app.get('/loginFr', checkNotAuthenticated, (req, res) => res.render('loginFr'));
+app.get('/login', checkNotAuthenticated, (req, res) => {
+  req.session.lang = 'ar';
+  res.render('login');
+});
 
+app.get('/loginEn', checkNotAuthenticated, (req, res) => {
+  req.session.lang = 'en';
+  res.render('loginEn');
+});
+
+app.get('/loginFr', checkNotAuthenticated, (req, res) => {
+  req.session.lang = 'fr';
+  res.render('loginFr');
+});
+
+
+// app.get('/register', checkNotAuthenticated, (req, res) => res.render('register'));
+// app.get('/registerEn', checkNotAuthenticated, (req, res) => res.render('registerEn'));
+// app.get('/registerFr', checkNotAuthenticated, (req, res) => res.render('registerFr'));
+app.get('/register', checkNotAuthenticated, (req, res) => {
+  req.session.lang = 'ar';
+  res.render('register');
+});
+
+app.get('/registerEn', checkNotAuthenticated, (req, res) => {
+  req.session.lang = 'en';
+  res.render('registerEn');
+});
+
+app.get('/registerFr', checkNotAuthenticated, (req, res) => {
+  req.session.lang = 'fr';
+  res.render('registerFr');
+});
 
 /***********************
  *  ROUTE MOUNTING

@@ -97,7 +97,7 @@ exports.postRegister = async (req, res) => {
       password: hashedPassword,
       confirmationToken,  // Sequelize will save in DB as confirmation_token
       confirmationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000), // ⬅ 24h
-      isConfirmed: process.env.SKIP_EMAIL_VERIFICATION === 'true', // Sequelize will save in DB as is_confirmed
+      isConfirmed: process.env.SKIP_EMAIL_VERIFICATION === 'false', // Sequelize will save in DB as is_confirmed
       //  isConfirmed: process.env.NODE_ENV === 'production' ? true : false,
     });
 
@@ -325,7 +325,7 @@ exports.refreshToken = async (req, res) => {
 
 // Unified logout - handles both session + JWT
 exports.unifiedLogout = async (req, res) => {
-  try {
+  // try {
     // --- SESSION LOGOUT ---
     if (req.isAuthenticated && req.isAuthenticated()) {
       console.log("🔒 Logging out Session user...");
@@ -385,19 +385,38 @@ exports.unifiedLogout = async (req, res) => {
     });
     console.log("✅ Access token cookie cleared");
 
-    // --- RESPONSE ---
-    if (req.headers.accept?.includes("application/json")) {
-      return res.json({ message: "Logged out successfully", redirect: "/login" });
-    }
-    return res.redirect("/login");
-  } catch (err) {
-    console.error("Unified logout error:", err);
-    if (req.headers.accept?.includes("application/json")) {
-      return res.status(500).json({ message: "Logout failed." });
-    }
-    return res.redirect("/login");
-  }
+
+    // 🌍 Detect language from session
+const lang = req.session?.lang || 'en';
+
+const loginRoutes = {
+  ar: '/login',
+  en: '/loginEn',
+  fr: '/loginFr'
 };
+
+const redirectUrl = loginRoutes[lang] || '/loginEn';
+
+// --- RESPONSE ---
+if (req.headers.accept?.includes("application/json")) {
+  return res.json({ 
+    message: "Logged out successfully", 
+    redirect: redirectUrl 
+  });
+}
+
+return res.redirect(redirectUrl);
+  };
+
+//   } catch (err) {
+//     console.error("Unified logout error:", err);
+//     if (req.headers.accept?.includes("application/json")) {
+//       return res.status(500).json({ message: "Logout failed." });
+//     }
+//     return res.redirect(redirectUrl);
+//   }
+// };
+
 
 
 // GET /api/auth/confirm-email/:token
