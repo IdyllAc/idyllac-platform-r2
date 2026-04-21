@@ -197,6 +197,10 @@ app.use((req, res, next) => {
   next();
 });
 
+
+app.use(flash());
+
+
 // Make flash messages available in all templates
 app.use((req, res, next) => {
   res.locals.messages = req.flash();
@@ -229,130 +233,94 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 
-app.use((req, res, next) => {
-  if (!req.session.lang) {
-    req.session.lang = req.acceptsLanguages('ar', 'en', 'fr') || 'en';
-  }
+
+/***********************
+ *  LANGUAGE MIDDLEWARE
+ ***********************/
+app.use('/:lang', (req, res, next) => {
+  const allowed = ['ar', 'en', 'fr'];
+  const lang = allowed.includes(req.params.lang) ? req.params.lang : 'en';
+
+  req.session.lang = lang;
+  req.lang = lang;
+
   next();
 });
 
+/***********************
+ *  ROOT REDIRECT
+ ***********************/
+app.get('/', (req, res) => {
+  const lang = req.acceptsLanguages('ar', 'en', 'fr') || 'en';
+  res.redirect(`/${lang}`);
+});
 
 
 /***********************
- *  SIMPLE PAGE ROUTES
+ *  PAGE RENDERERS
  ***********************/
 // Auto language detection for root route
-app.get('/', (req, res) => {
-  const lang = req.acceptsLanguages('ar', 'en', 'fr') || 'en';
+const renderPage = (page) => {
+  return (req, res) => {
+    const lang = req.params.lang || 'en';
 
-  // ✅ STORE language in session
-  req.session.lang = lang;
-
-  const fileMap = { 
-    ar: 'indexAr.html', 
-    fr: 'indexFr.html', 
-    en: 'indexEn.html' 
+    res.render(`${page}${lang === 'ar' ? 'AR' : lang.charAt(0).toUpperCase() + lang.slice(1)}`);
+    //  res.render(`${page}${lang === 'ar' ? '' : lang.toUpperCase()}`);
+    // res.render(`${page}${lang.toUpperCase()}`);
   };
+};
 
-  res.sendFile(path.join(__dirname, 'public', fileMap[lang] || 'indexEn.html')); // Serve the appropriate file based on detected language
+
+const serveStaticPage = (page) => {
+  return (req, res) => {
+    const lang = req.lang || 'en';
+
+    const fileMap = {
+      ar: `${page}.html`,
+      en: `${page}En.html`,
+      fr: `${page}Fr.html`
+    };
+
+    res.sendFile(path.join(__dirname, 'public', fileMap[lang])); // Serve the appropriate file based on detected language
+  };
+};
+
+/***********************
+ *  PUBLIC PAGES (NO AUTH)
+ ***********************/
+app.get('/:lang', serveStaticPage('index'));
+app.get('/:lang/index', serveStaticPage('index'));
+app.get('/:lang/subscribe', serveStaticPage('subscribe'));
+app.get('/:lang/local', serveStaticPage('local'));
+app.get('/:lang/international', serveStaticPage('international'));
+app.get('/:lang/about', serveStaticPage('about'));
+app.get('/:lang/contact', serveStaticPage('contact'));
+app.get('/:lang/hours', serveStaticPage('hours'));
+app.get('/:lang/menu', serveStaticPage('menu'));
+app.get('/:lang/app', serveStaticPage('app'));
+
+/***********************
+ *  LEGAL PAGES
+ ***********************/
+app.get('/:lang/privacy', (req, res) => {
+  const lang = req.lang || 'en';
+  const file = lang === 'ar' ? 'privacy.html' : `privacy${lang.toUpperCase()}.html`;
+  res.sendFile(path.join(__dirname, 'public/legal', file));
 });
 
-// Public static pages
-app.get('/default', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
-// app.get('/ar', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexAr.html')));
-// app.get('/fr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexFr.html')));
-// app.get('/en', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexEn.html')));
-app.get('/ar', (req, res) => {
-  req.session.lang = 'ar';
-  res.sendFile(path.join(__dirname, 'public', 'indexAr.html'));
+app.get('/:lang/tos', (req, res) => {
+  const lang = req.lang || 'en';
+  const file = lang === 'ar' ? 'tos.html' : `tos${lang.toUpperCase()}.html`;
+  res.sendFile(path.join(__dirname, 'public/legal', file));
 });
 
-app.get('/fr', (req, res) => {
-  req.session.lang = 'fr';
-  res.sendFile(path.join(__dirname, 'public', 'indexFr.html'));
-});
-
-app.get('/en', (req, res) => {
-  req.session.lang = 'en';
-  res.sendFile(path.join(__dirname, 'public', 'indexEn.html'));
-});
-
-app.get('/subscribe', (req, res) => res.sendFile(path.join(__dirname, 'public', 'subscribe.html')));
-app.get('/subscribeEn', (req, res) => res.sendFile(path.join(__dirname,  'public', 'subscribeEn.html')));
-app.get('/subscribeFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'subscribeFr.html')));
-
-app.get('/local', (req, res) => res.sendFile(path.join(__dirname, 'public', 'local.html')));
-app.get('/localEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'localEn.html')));
-app.get('/localFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'localFr.html')));
-
-app.get('/internationalAr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'internationalAr.html')));
-app.get('/internationalEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'internationalEn.html')));
-app.get('/internationalFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'internationalFr.html')));
-
-app.get('/aboutAr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'aboutAr.html')));
-app.get('/aboutEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'aboutEn.html')));
-app.get('/aboutFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'aboutFr.html')));
-
-app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contact.html')));
-app.get('/contactEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contactEn.html')));
-app.get('/contactFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contactFr.html')));
-
-app.get('/hours', (req, res) => res.sendFile(path.join(__dirname, 'public', 'hours.html')));
-app.get('/hoursEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'hoursEn.html')));
-app.get('/hoursFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'hoursFr.html')));
-
-app.get('/menuAr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'menuAr.html')));
-app.get('/menuEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'menuEn.html')));
-app.get('/menuFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'menuFr.html')));
-
-app.get('/appAr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'appAr.html')));
-app.get('/appEn', (req, res) => res.sendFile(path.join(__dirname, 'public', 'appEn.html')));
-app.get('/appFr', (req, res) => res.sendFile(path.join(__dirname, 'public', 'appFr.html')));
-
-app.get('/privacy', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'privacy.html')));
-app.get('/privacyEn', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'privacyEn.html')));
-app.get('/privacyFr', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'privacyFr.html')));
-app.get('/tos', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'tos.html')));
-app.get('/tosEn', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'tosEn.html')));
-app.get('/tosFr', (req, res) => res.sendFile(path.join(__dirname, 'public/legal', 'tosFr.html')));
-
-// Auth entry pages
-// app.get('/login', checkNotAuthenticated, (req, res) => res.render('login'));
-// app.get('/loginEn', checkNotAuthenticated, (req, res) => res.render('loginEn'));
-// app.get('/loginFr', checkNotAuthenticated, (req, res) => res.render('loginFr'));
-app.get('/login', checkNotAuthenticated, (req, res) => {
-  req.session.lang = 'ar';
-  res.render('login');
-});
-
-app.get('/loginEn', checkNotAuthenticated, (req, res) => {
-  req.session.lang = 'en';
-  res.render('loginEn');
-});
-
-app.get('/loginFr', checkNotAuthenticated, (req, res) => {
-  req.session.lang = 'fr';
-  res.render('loginFr');
-});
+/***********************
+ *  AUTH PAGES (WITH GUARD)
+ ***********************/
+app.get('/:lang/login', checkNotAuthenticated, renderPage('login'));
+app.get('/:lang/register', checkNotAuthenticated, renderPage('register'));
 
 
-// app.get('/register', checkNotAuthenticated, (req, res) => res.render('register'));
-// app.get('/registerEn', checkNotAuthenticated, (req, res) => res.render('registerEn'));
-// app.get('/registerFr', checkNotAuthenticated, (req, res) => res.render('registerFr'));
-app.get('/register', checkNotAuthenticated, (req, res) => {
-  req.session.lang = 'ar';
-  res.render('register');
-});
-
-app.get('/registerEn', checkNotAuthenticated, (req, res) => {
-  req.session.lang = 'en';
-  res.render('registerEn');
-});
-
-app.get('/registerFr', checkNotAuthenticated, (req, res) => {
-  req.session.lang = 'fr';
-  res.render('registerFr');
-});
 
 /***********************
  *  ROUTE MOUNTING

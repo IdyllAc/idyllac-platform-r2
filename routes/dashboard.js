@@ -6,7 +6,6 @@ const { checkAuthenticated } = require('../middleware/authMiddleware'); // Adjus
 const noCache = require('../middleware/noCache');
 
 // EJS session (passport) dashboard 
-router.get('/dashboard', checkAuthenticated, noCache, dashboardController.getDashboardPage);
-
+router.get('/:lang/dashboard', checkAuthenticated, noCache, dashboardController.getDashboardPage);
 
 module.exports = router;

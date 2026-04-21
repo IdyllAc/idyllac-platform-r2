@@ -422,13 +422,14 @@ h4 {
  .hero__h1 {
     background-image:-webkit-repeating-linear-gradient( lime, orange,green,green,green, green,
 				 green,green, green, green, green, green , green, green, green, green,
-					 green,whitesmoke,green, whitesmoke, lime);
+	
+				 green,whitesmoke,green, whitesmoke, lime);			 
     color:#333;
     padding: 0.25em 0.5em;
     letter-spacing: 0.1rem;
     text-shadow: 2px 2px 5px;
     position: absolute;
-    margin-top: 60px;
+    margin-top: 75px;
     right: 0%;
     animation: showWelcome 0.5s ease-in-out 1s forwards;
 }  

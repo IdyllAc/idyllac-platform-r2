@@ -298,19 +298,29 @@ async function loadDashboard() {
   }
 }
 
+// ----------------------------------------------------------
+// FALLBACK REDIRECT (Fallback login global scope)
+// ----------------------------------------------------------
+function fallbackRedirect() {
+  const path = window.location.pathname;
+  const langMatch = path.match(/^\/(ar|en|fr)/);
 
+  const lang = langMatch ? langMatch[1] : 'en';
+
+  window.location.href = `/${lang}/login`;
+}
 // ----------------------------------------------------------
 // MANUAL LOGOUT (logout button)
 // ----------------------------------------------------------
 async function doLogout() {
   console.log("🚪 Manual logout triggered");
 
-  // STEP 1 — show spinner immediately (same as auto)
+   // STEP 1 — show spinner immediately (same as auto)
   showLogoutSpinner();
 
-  // STEP 2 — allow DOM to repaint (same 100ms as auto!)
+    // STEP 2 — allow DOM to repaint (same 100ms as auto!)
   setTimeout(async () => {
-    // STEP 3 — backend logout
+     // STEP 3 — backend logout
     try {
       const res = await fetch(`${API_BASE}/logout`, {
         method: 'POST',
@@ -318,24 +328,36 @@ async function doLogout() {
         headers: { Accept: 'application/json' }
       });
 
-      const data = await res.json();
+      // const data = await res.json();
+      let data = {};
+      try {
+        data = await res.json();
+     } catch (e) {
+       console.warn("Invalid JSON response");
+     }
 
-    // Always remove JWT tokens
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
 
-    // STEP 4 — keep spinner visible for smooth UX
-    setTimeout(() => {
-      // STEP 5 — redirect to login
-      window.location.href = data.redirect || "/loginEn";
-    }, 800);
-  } catch (err) {
-    console.error("Logout error:", err);
-    window.location.href = "/loginEn"; // Redirect anyway on error
-  }
-  }, 100); // SAME repaint delay as auto logout
+      // ✅ Always clean tokens
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+
+        // STEP 4 — keep spinner visible for smooth UX
+      setTimeout(() => {
+        // ✅ Use backend redirect if available
+        if (data?.redirect) {
+           // STEP 5 — redirect to login
+          window.location.href = data.redirect;
+        } else {
+          fallbackRedirect(); // safety
+        }
+      }, 800);
+
+    } catch (err) {
+      console.error("Logout error:", err);
+      fallbackRedirect(); // ✅ smart fallback
+    }
+  }, 100);
 }
-
 
 // ----------------------------------------------------------
 // AUTO-LOGOUT ON INACTIVITY (15 minutes)
@@ -429,32 +451,6 @@ async function loadPreview(imgEl, key) {
 }
 
 
-
-// async function loadPreview(imgId, key) {
-//   if (!key) return;
-
-//   const img = document.getElementById(imgId);
-//   if (!img) return;
-
-//   try {
-//     const res = await fetch(
-//       `/api/upload/preview?key=${encodeURIComponent(key)}`, 
-//       { credentials: 'include' }
-//     );
-
-//     if (!res.ok) return;
-
-//     const { url } = await res.json();
-//     if (!url) return;
-
-//     img.src = url;
-//     img.style.display = "block";
-//   } catch (err) {
-//     console.error(`Preview failed for ${imgId}`, err);
-//   }
-// }
-
- 
     
     
     

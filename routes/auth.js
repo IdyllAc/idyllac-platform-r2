@@ -7,6 +7,9 @@ const dashboardController = require('../controllers/dashboardController');
 const socialController = require('../controllers/socialController');
 const noCache = require('../middleware/noCache');
 
+
+console.log("📌 authRoutes loaded");
+
 // API: Register (JSON)
 router.post('/register', apiAuthController.postRegister);
 
@@ -30,7 +33,18 @@ router.get('/dashboard', jwtMiddleware, noCache, dashboardController.getDashboar
 router.get('/session', dashboardController.getSessionApi);
 
 // API: Email confirmation
-router.get('/confirm-email/:token', apiAuthController.confirmEmail);
+ router.get('/:lang/confirm-email/:token', apiAuthController.confirmEmail);
+
+ 
+ // router.get('/:lang/confirm-email/:token', confirmEmail);
+
+
+// router.get('/:lang/confirm-email/:token', (req, res, next) => {
+//     console.log("📌 confirm route hit:", req.originalUrl);
+//     next();
+//   }, apiAuthController.confirmEmail);
+
+
 
 // TikTok Callback
 router.get('/tiktok/callback', socialController.tiktokCallback);

@@ -51,7 +51,9 @@ async function sendEmail(to, subject, token) {
     throw new Error("sendEmail(token) must be a valid token string");
   }
 
-  const confirmUrl = `${BASE_URL}/api/auth/confirm-email/${token}`;
+  const lang = 'en'; // or dynamic later
+  // const confirmUrl = `${BASE_URL}/${lang}/confirm-email/${token}`;
+  const confirmUrl = `${BASE_URL}/api/auth/${lang}/confirm-email/${token}`;
 
   const html = `
     <h2>Email Confirmation</h2>

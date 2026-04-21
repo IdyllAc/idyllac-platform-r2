@@ -22,10 +22,15 @@ exports.getRegister = (req, res) => res.render('register');
 
 // POST /register
 exports.postRegister = async (req, res) => {
+
+  const lang = ['ar','en','fr'].includes(req.session?.lang)
+  ? req.session.lang
+  : 'en';
   // 🛑 BLOCK register if already logged in (session exists)
   if (req.isAuthenticated && req.isAuthenticated()) {
     console.warn("⚠️ Register blocked for logged-in user");
-    return res.redirect("/dashboard");
+    // return res.redirect('/dashboard');
+    return res.redirect(`/${lang}/dashboard`);
   }
 
   try {
@@ -40,7 +45,8 @@ exports.postRegister = async (req, res) => {
         return res.status(400).json({ message: msg });
       }
       req.flash('error', msg);
-      return res.redirect('/register');
+      // return res.redirect('/register');
+      return res.redirect(`/${lang}/register`);
     }
 
     if (cemail && email.trim().toLowerCase() !== cemail.trim().toLowerCase()) {
@@ -49,7 +55,8 @@ exports.postRegister = async (req, res) => {
         return res.status(400).json({ message: msg });
       }
       req.flash('error', msg);
-      return res.redirect('/register');
+      // return res.redirect('/register');
+      return res.redirect(`/${lang}/register`);
     }
 
     // 2️⃣ Check existing user
@@ -62,10 +69,7 @@ exports.postRegister = async (req, res) => {
         existingUser.confirmationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
         await existingUser.save();
     
-        await sendEmail(
-          existingUser.email,
-          'Confirm your email',
-          existingUser.confirmationToken
+        sendEmail(existingUser.email, 'Confirm your email', existingUser.confirmationToken
         );
     
         if (req.headers.accept?.includes('application/json')) {
@@ -75,7 +79,8 @@ exports.postRegister = async (req, res) => {
       }
 
       req.flash('info', 'Confirmation email resent. Please check your inbox.');
-    return res.redirect('/login');
+    // return res.redirect('/login');
+    return res.redirect(`/${lang}/login`);
   }
 
   // ❌ Already confirmed → block
@@ -84,7 +89,8 @@ exports.postRegister = async (req, res) => {
     return res.status(409).json({ message: msg });
   }
   req.flash('error', msg);
-  return res.redirect('/register');
+  // return res.redirect('/register');
+  return res.redirect(`/${lang}/register`);
 }
 
     // 3️⃣ Hash password & create user
@@ -106,11 +112,9 @@ exports.postRegister = async (req, res) => {
 
     // 4️⃣ Send confirmation email (await so you SEE logs before redirect)
     try {
-      await sendEmail(
-        newUser.email, 
-        'Confirm your email', 
-        confirmationToken
-      );
+      sendEmail(newUser.email, 'Confirm your email', confirmationToken)
+        .catch(err => console.error("Email error:", err));
+    
 
   //       newUser.email,
   //   'Confirm your email',
@@ -122,22 +126,25 @@ exports.postRegister = async (req, res) => {
       console.error('❌ sendEmail() failed:', mailErr.message || mailErr);
     }
 
-    // // 5️⃣ Decide response
-    // if (req.headers.accept?.includes('application/json')) {
-    //   return res
-    //     .status(201)
-    //     .json({ message: 'Registration successful. Please check your email to confirm.' });
-    // } else {
-      req.flash('info', 'Registration successful! Please check your email to confirm.');
-      return res.redirect('/login');
-    // }
+    // // // 5️⃣ Decide response
+    // // if (req.headers.accept?.includes('application/json')) {
+    // //   return res
+    // //     .status(201)
+    // //     .json({ message: 'Registration successful. Please check your email to confirm.' });
+    // // } else {
+    // // };
+
+      req.flash('info', '📧 Registration successful. Confirmation email sent. Please check your email to confirm.');
+      return res.redirect(`/${lang}/login`);
+    
   } catch (err) {
     console.error('❌ Registration error:', err);
     if (req.headers.accept?.includes('application/json')) {
       return res.status(500).json({ message: 'Registration failed', error: err.message });
     }
     req.flash('error', 'Something went wrong. Please try again.');
-    return res.redirect('/register');
+    // return res.redirect('/register');
+    return res.redirect(`/${lang}/register`);
   }
 };
 
@@ -159,6 +166,11 @@ exports.getLoginForm = (req, res) => {
  * Uses req.login() and redirects to /dashboard
  */
 exports.postLoginForm = (req, res, next) => {
+
+  const lang = ['ar','en','fr'].includes(req.session?.lang)
+    ? req.session.lang
+    : 'en';
+
   console.log('📥 POST /login (form) attempt:', req.body.email);
 
   passport.authenticate('local', async (err, user, info) => {
@@ -169,14 +181,16 @@ exports.postLoginForm = (req, res, next) => {
 
     if (!user) {
       const msg = info?.message || 'Invalid email or password';
+
       if (req.headers.accept?.includes('application/json')) {
         return res.status(401).json({ error: msg });
       }
+
       req.flash('error', msg);
-      return res.redirect('/login');
+      // return res.redirect('/login');
+      return res.redirect(`/${lang}/login`);
     }
 
-    // console.log("req.login() user:", user);
 
     // Establish session for this user
     req.login(user, async (err) => {
@@ -218,10 +232,12 @@ exports.postLoginForm = (req, res, next) => {
       
        // at this point session is established
        req.flash('success', 'Welcome back!');
-       return res.redirect('/dashboard');
-   });
- })(req, res, next);
-}
+       //  return res.redirect('/dashboard');
+       return res.redirect(`/${lang}/dashboard`);
+     });
+
+   })(req, res, next);
+ };
 
 
 /**
@@ -325,7 +341,12 @@ exports.refreshToken = async (req, res) => {
 
 // Unified logout - handles both session + JWT
 exports.unifiedLogout = async (req, res) => {
-  // try {
+
+  // 🌍 SAVE LANG BEFORE session destroy
+  const lang = ['ar', 'en', 'fr'].includes(req.session?.lang)
+  ? req.session.lang
+  : 'en';
+ 
     // --- SESSION LOGOUT ---
     if (req.isAuthenticated && req.isAuthenticated()) {
       console.log("🔒 Logging out Session user...");
@@ -333,12 +354,11 @@ exports.unifiedLogout = async (req, res) => {
       await new Promise((resolve) => {
         // Passport 0.6+ requires a callback
         req.logout((err) => {
-          if (err) {
-            console.error("Session logout error:", err);
-          }
+          if (err) console.error("Session logout error:", err);
+        
 
         // Defensive patch: ensure req.user is cleared even if an adapter uses old API
-      req.user = null;
+          req.user = null;
 
           req.session.destroy(() => {
             res.clearCookie("connect.sid", {
@@ -349,7 +369,6 @@ exports.unifiedLogout = async (req, res) => {
             });
 
             console.log("✅ Session destroyed & cookie cleared & user logged out");
-
             resolve();
           });
         });
@@ -385,51 +404,45 @@ exports.unifiedLogout = async (req, res) => {
     });
     console.log("✅ Access token cookie cleared");
 
+    
+   // ✅ Redirect using saved lang
+   const redirectUrl = `/${lang}/login`;
 
-    // 🌍 Detect language from session
-const lang = req.session?.lang || 'en';
-
-const loginRoutes = {
-  ar: '/login',
-  en: '/loginEn',
-  fr: '/loginFr'
-};
-
-const redirectUrl = loginRoutes[lang] || '/loginEn';
-
-// --- RESPONSE ---
-if (req.headers.accept?.includes("application/json")) {
-  return res.json({ 
+   // --- RESPONSE ---
+   if (req.headers.accept?.includes("application/json")) {
+   return res.json({ 
     message: "Logged out successfully", 
     redirect: redirectUrl 
-  });
-}
+   });
+ }
 
-return res.redirect(redirectUrl);
+  return res.redirect(redirectUrl);
   };
 
-//   } catch (err) {
-//     console.error("Unified logout error:", err);
-//     if (req.headers.accept?.includes("application/json")) {
-//       return res.status(500).json({ message: "Logout failed." });
-//     }
-//     return res.redirect(redirectUrl);
-//   }
-// };
 
-
-
-// GET /api/auth/confirm-email/:token
-exports.confirmEmail = async (req, res) => {
+  // GET /api/auth/confirm-email/:token
+  exports.confirmEmail = async (req, res) => {
   try {
+     // 🔍 DEBUG FIRST
+     console.log("🌍 Confirm route lang:", req.params.lang);
+     console.log("🔥 confirmEmail controller reached");
+
+     // ✅ THEN set language
+     const lang = ['ar','en','fr'].includes(req.params.lang)
+       ? req.params.lang
+       : 'en';
+
+        // ✅ SAVE INTO SESSION
+     req.session.lang = lang;
+ 
     const { token } = req.params;
 
-    console.log('📩 Incoming confirmation request');
-    console.log('Token from URL:', token);
+    // console.log('📩 Incoming confirmation request');
+    // console.log('Token from URL:', token);
 
     if (!token) {
       req.flash('error', 'Invalid or missing confirmation token.');
-      return res.redirect('/register');
+      return res.redirect(`/${lang}/register`);
     }
 
   
@@ -444,38 +457,35 @@ exports.confirmEmail = async (req, res) => {
     if (!user) {
       console.log('❌ No user found with this token in DB');
       req.flash('error', 'Invalid or expired confirmation link.');
-      return res.redirect('/register'); 
+      return res.redirect(`/${lang}/register`);
     }
 
-      
-    console.log('✅ User found in DB:', {
-      id: user.id,
-      email: user.email,
-      isConfirmed: user.isConfirmed,
-      confirmationToken: user.confirmationToken
-    });
 
     // 2️⃣ If already confirmed, avoid re-confirmation
     if (user.isConfirmed) {
       console.log(`ℹ️ User ${user.email} already confirmed`);
       req.flash('info', 'Email is already confirmed. You can log in.');
-      return res.redirect('/login');
-    }
-     // 3️⃣ Update user record
-       user.isConfirmed = true; // mark as confirmed
-       user.confirmationToken = null; // optional: clear the token so it can't be reused 
-       user.confirmationExpires = null;
-       await user.save();
+      return res.redirect(`/${lang}/login`);
+   }
+      
+
+    // ✅ confirm user
+    user.isConfirmed = true;
+    user.confirmationToken = null;
+    user.confirmationExpires = null;
+
+    await user.save();
       
         console.log(`✅ Email confirmed for user: ${user.email}`);
 
     // 4️⃣ Show a nice confirmation message or redirect
-    req.flash('success', '✅ Your email has been successfully confirmed! You can now log in.');
-      return res.redirect('/login'); 
+    req.flash('success', 'Email confirmed! successfully, Please log in.');
+    return res.redirect(`/${lang}/login`);
+
   } catch (error) {
         console.error(`❌ Email confirmation error: ${error.message}`);
-        req.flash('error', 'Something went wrong could not confirm email.');
-    return res.redirect('/register');
+        req.flash('error', 'Something went wrong. Could not confirm email.');
+        return res.redirect(`/${lang}/register`);
   }
 };
 
