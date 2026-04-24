@@ -271,9 +271,24 @@ const renderPage = (page) => {
 };
 
 
+// const serveStaticPage = (page) => {
+//   return (req, res) => {
+//     const lang = req.lang || 'en';
+
+//     const fileMap = {
+//       ar: `${page}.html`,
+//       en: `${page}En.html`,
+//       fr: `${page}Fr.html`
+//     };
+
+//     res.sendFile(path.join(__dirname, 'public', fileMap[lang])); // Serve the appropriate file based on detected language
+//   };
+// };
 const serveStaticPage = (page) => {
   return (req, res) => {
-    const lang = req.lang || 'en';
+    const lang = ['ar','en','fr'].includes(req.params.lang)
+      ? req.params.lang
+      : 'en';
 
     const fileMap = {
       ar: `${page}.html`,
@@ -281,7 +296,9 @@ const serveStaticPage = (page) => {
       fr: `${page}Fr.html`
     };
 
-    res.sendFile(path.join(__dirname, 'public', fileMap[lang])); // Serve the appropriate file based on detected language
+    const fileName = fileMap[lang];
+
+    res.sendFile(path.join(__dirname, 'public', fileName));
   };
 };
 

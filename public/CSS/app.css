@@ -1,11 +1,11 @@
-/* @import url("fontawesome-all.min.css");
+ /* @import url("fontawesome-all.min.css");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,600,600italic"); */
 
 /*
 	IdyllAc workspace of the mean page
 */
 
-  body {
+body {
 	margin: 0;
 	padding: 0; 
 	box-sizing: border-box;
@@ -150,9 +150,9 @@
 
 		/* Banner */
 
-			#banner {
+			/* #banner {
 				height: 18em;
-			}
+			} */
 			
 	}
    
@@ -160,7 +160,7 @@
   
 	    /* Nav */
 
-	/* #nav {
+	#nav {
 		background-color: #333;
 		margin: 0;
 		padding: 0; 
@@ -172,9 +172,9 @@
 			content: '';
 			display: block;
 			width: 100%;
-			height: 0.75em; 
+			height: 0.50em; 
 			background-color: #37c0fb;
-			background-image: url("images/bg01.png");
+			/* background-image: url("images/bg01.png"); */
 		}
 
 		#nav > ul {
@@ -188,11 +188,12 @@
 			}
 
 				#nav > ul > li a {
-					color: #c0c0c0;
+					color: whitesmoke;
 					text-decoration: none;
-					border: 0;
+					border: 0.5em;
 					display: block;
-					padding: 1.5em 0.5em 1.35em 0.5em;
+                    padding: 1em 0.5;
+					padding: 1.2em 0.5em 0.8em 0.5em; 
 				}
 
 				#nav > ul > li:first-child {
@@ -205,11 +206,11 @@
 
 				#nav > ul > li.current {
 					font-weight: 300;
-				}  */
+				} 
 
 
 				
-			    /* #nav > ul > li.current:before {
+			     #nav > ul > li.current:before {
 						-moz-transform: rotateZ(45deg);
 						-webkit-transform: rotateZ(45deg);
 						-ms-transform: rotateZ(45deg);
@@ -223,9 +224,9 @@
 						left: 50%; 
 						margin-left: -0.375em;
 						background-color: #37c0fb;
-				}  */
+				}  
 
-				/* #nav > ul > li.current a {
+				 #nav > ul > li.current a {
 						color: #fff;
 				} 
 
@@ -240,20 +241,21 @@
 				#nav > ul > li > ul {
 					display: none;
 				}  
-				   */
+				   
 
   /* Banner */
 
   #banner {
 		background-image: url("../img/banner.jpg");
-		/* background-position: center; */
 		background-size:cover;
 		/* height:19.5em; */
 		text-align: center;
 		position: relative;
+        align-content: center;
 	}
 
 		  #banner header {
+            /* background-image: url("../img/banner.jpg");  */
 			position: absolute;
 			bottom: 0;
 			left: 0;
@@ -261,11 +263,12 @@
 			background: rgba(27, 27, 27, 0.75);
 			color: #fff;
 			padding: 1.5em 0;
+            align-content: center;
 		} 
 		
 		 #banner header h1 {
 			display:block;
-			margin: 0;
+			margin: auto;
 			font-size: 3em;
 			font-family: Georgia, 'Times New Roman', Times, serif;
 			color:whitesmoke;
@@ -282,7 +285,7 @@
 
 		  #banner  header  h3 { 
 				display: inline-block;
-				margin: 0;
+				margin: auto;
 				font-size: 1em;
 				color: whitesmoke;
 			 }  
@@ -293,6 +296,8 @@
 			background-image: url("../img/banner.jpg");
 			margin: 40px;
 			padding: 5em 0 3em 0;
+            height: 15em;
+            font: 0.9em sans-serif;
 		} 
 
 	
@@ -378,7 +383,7 @@
 
 			body{
 				font-size: 14pt;
-				line-height: 1.5em;
+				line-height: 1em;
 			}
 
 
@@ -399,7 +404,7 @@
     /* Banner */
 
 			#banner {
-				height: 20.5em;
+				height: 17.5rem;
 			}
 
    /* Wrapper */
@@ -411,3 +416,11 @@
 
 
 	
+
+
+
+
+
+
+
+

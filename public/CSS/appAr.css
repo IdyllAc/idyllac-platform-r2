@@ -5,7 +5,7 @@
 	IdyllAc workspace of the mean page
 */
 
-  body {
+body {
 	margin: 0;
 	padding: 0; 
 	box-sizing: border-box;
@@ -18,11 +18,10 @@
   /* header, nav, section {
 	
 	display: block;
-	margin: auto;
-	
-} */
+	margin: auto;	
+ } */
 
-/* Basic */
+ /* Basic */
 
   html {
 	  box-sizing: border-box;
@@ -41,22 +40,49 @@
 			border-bottom-color: transparent;
 		} 
 
-  h1, h2, h3 {
-		display: block;
-		margin: auto;
-		/* color: inherit;
-		font-size: 0.97em;
-		font-weight: 600; */
-		line-height: 1.75em;
-		/* margin-bottom: 1em;
-		letter-spacing: 1px; */
-	    }
+ 
+
+		/* h1 {
+			text-align: center;
+		font-size: 4em;
+			display: block;
+			margin: auto;
+			color: inherit;
+			font-size: 0.97em;
+			font-weight: 600;
+			line-height: 1.75em;
+			margin-bottom: 1em;
+			letter-spacing: 1px;
+			} */
+	
+
+
+			.btn-link {
+				display: block;
+				width: 20%;
+				height: 2em;
+				margin: auto;
+				text-align: center;
+				background-color: green;
+				color: whitesmoke;
+				font-size: 1.25em; 
+				text-justify:auto;
+				border-radius: 5px;
+				border: none;
+				cursor: pointer;
+				line-height: 2.25rem;
+				text-decoration: none; 
+			  }
+			  
+			  .btn-link:hover {
+				background-color: darkgreen;
+			  }
 
 	
 	 h3 a {
-		font-size: large;
+		font-size: 1.4rem;
 		color: lime;
-		text-decoration: underline;
+		text-decoration: none;
 		letter-spacing: 1px;
 		} 
 
@@ -150,17 +176,17 @@
 
 		/* Banner */
 
-			#banner {
+			/* #banner {
 				height: 18em;
-			}
+			} */
 			
 	}
-   
 
   
-	    /* Nav */
+	/* Nav */
+	
 
-	/* #nav {
+	 #nav {
 		background-color: #333;
 		margin: 0;
 		padding: 0; 
@@ -181,18 +207,20 @@
 			margin: 0;
 		}
 
-			#nav > ul > li {
+		/*	#nav > ul > li {
 				position: relative;
 				display: inline-block;
 				margin-left: 1em;
-			}
+			} */
 
 				#nav > ul > li a {
-					color: #c0c0c0;
+					/* color: #c0c0c0; */
+					color: whitesmoke;
 					text-decoration: none;
-					border: 0;
-					display: block;
-					padding: 1.5em 0.5em 1.35em 0.5em;
+					border: none;
+					display:block;
+					/* padding: 1.5em 4.5em 0.3em 0.5em; */
+					padding: 1.5em 5em 1.35em 0.5em;
 				}
 
 				#nav > ul > li:first-child {
@@ -203,13 +231,13 @@
 					color: orange;
 				}
 
-				#nav > ul > li.current {
+			/*	#nav > ul > li.current {
 					font-weight: 300;
-				}  */
+				} */
 
 
 				
-			    /* #nav > ul > li.current:before {
+			    #nav > ul > li.current:before {
 						-moz-transform: rotateZ(45deg);
 						-webkit-transform: rotateZ(45deg);
 						-ms-transform: rotateZ(45deg);
@@ -223,9 +251,9 @@
 						left: 50%; 
 						margin-left: -0.375em;
 						background-color: #37c0fb;
-				}  */
+				} 
 
-				/* #nav > ul > li.current a {
+				#nav > ul > li.current a {
 						color: #fff;
 				} 
 
@@ -239,33 +267,38 @@
 
 				#nav > ul > li > ul {
 					display: none;
-				}  
-				   */
+				} 
+				  
 
   /* Banner */
 
   #banner {
-		background-image: url("../img/banner.jpg");
+	background-image: url("../img/banner.jpg"); 
 		/* background-position: center; */
 		background-size:cover;
-		/* height:19.5em; */
+		height: 7em;
 		text-align: center;
 		position: relative;
+		align-content: center;
 	}
 
 		  #banner header {
-			position: absolute;
+			/* background-image: url("../img/banner.jpg"); */
+			position:absolute;
+			background-size:cover; 
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			background: rgba(27, 27, 27, 0.75);
+		    background: rgba(27, 27, 27, 0.75); 
 			color: #fff;
-			padding: 1.5em 0;
+			padding: O.8em 0;
+			height: 8.3em;
+			align-content: center;
 		} 
 		
 		 #banner header h1 {
 			display:block;
-			margin: 0;
+			margin: auto;
 			font-size: 3em;
 			font-family: Georgia, 'Times New Roman', Times, serif;
 			color:whitesmoke;
@@ -292,8 +325,31 @@
 		 .wrapper {
 			background-image: url("../img/banner.jpg");
 			margin: 40px;
-			padding: 5em 0 3em 0;
+			padding: 2em 0 7em 0;
+			background-size:cover;
+			height: 10em;	
 		} 
+
+
+		.major h2 {
+			display: block;
+		    margin: auto;
+			text-align:center; 
+			color: bisque;
+			font-size:xx-large;
+			line-height:130%;
+			letter-spacing: 1px;
+		}
+		
+        .major h3 {
+		display: block;
+		font-size:x-large;
+		color: lime;
+		font-weight: 600;
+        margin-bottom: 20px;
+		line-height: normal;
+		letter-spacing: 1px;
+        }
 
 	
 
@@ -354,6 +410,7 @@
         /* Wide */
 
   	@media screen and (max-width: 1680px) {
+		
 
 		/* Basic */
 
@@ -399,13 +456,13 @@
     /* Banner */
 
 			#banner {
-				height: 20.5em;
+				height: 8em;
 			}
 
    /* Wrapper */
 
 			.wrapper {
-				padding: 4rem 0 5.5em 0;
+				padding: 2rem 0 5em 0;
 			}
 	}
 
