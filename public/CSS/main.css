@@ -139,13 +139,26 @@
 
   /* Image */
 		
-    img {
+    /* img {
 	    width:1000px;
 	    display: block;
 	    margin: auto;
+		text-align:justify;
+		justify-items: center;
+		justify-content: center;
+		text-justify: auto;
+    } */
 
-
-    }
+	img {
+		width:1000px;
+		display:block;
+		margin: 20px auto;
+		text-align:justify;
+		justify-items: center;
+		justify-content: center;
+		text-justify: auto;
+		
+	}
 
    /* Mobile */
 
@@ -275,7 +288,7 @@
 		background-image: url("../img/banner.jpg");
 		/* background-position: center; */
 		background-size:cover;
-		height: 27em;
+		height: 26em;
 		text-align: center;
 		position: relative;
 	}
@@ -290,7 +303,7 @@
 			background: rgba(27, 27, 27, 0.75);
 			color: #fff;
 			padding: 1.5em 0;
-			height: 20.5em;
+			height: 19.5em;
 		} 
 
 		
@@ -359,7 +372,7 @@
 			margin: 40px;
 			padding: 5em 0 3em 0;
 			background-size:cover; 
-			height: 18em;
+			height: 20em;
 			/* font: 0.9em sans-serif; */
 		} 
 
@@ -462,12 +475,12 @@
 				padding: 2em 0 0 0;
 			}
 
-				
+			
 
     /* Banner */
 
 			#banner {
-				height: 20.5em;
+				height: 16.5em;
 			}
 
    /* Wrapper */
