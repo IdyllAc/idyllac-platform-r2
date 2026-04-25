@@ -105,7 +105,11 @@ body {
 		position: sticky;
 	    } */
 
+		.section {
+			height: 1;
+		}  
 
+		
 	 
 
   /* Mobile (Portrait) */
