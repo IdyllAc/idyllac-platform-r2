@@ -59,8 +59,9 @@
 		.btn-link {
 			display: block;
 			width: 20%;
-			height: 2em;
+			height: 2.2em;
 			margin: 1em auto;
+			padding-top: 0.3em;
 			text-align: center;
 			background-color: green;
 			color: whitesmoke;
@@ -98,7 +99,7 @@
 	
 	
 
-	/* .content {
+	.content {
 		box-sizing: border-box;
 		display: block;
 		margin-top:0;
@@ -109,7 +110,7 @@
 		line-height: 0.5rem;
 		font-size: small;
 		position: sticky;
-	    } */
+	    }
 
 
 	 
@@ -139,15 +140,7 @@
 
   /* Image */
 		
-    /* img {
-	    width:1000px;
-	    display: block;
-	    margin: auto;
-		text-align:justify;
-		justify-items: center;
-		justify-content: center;
-		text-justify: auto;
-    } */
+    
 
 	img {
 		width:1000px;
@@ -157,7 +150,6 @@
 		justify-items: center;
 		justify-content: center;
 		text-justify: auto;
-		
 	}
 
    /* Mobile */
@@ -288,9 +280,10 @@
 		background-image: url("../img/banner.jpg");
 		/* background-position: center; */
 		background-size:cover;
-		height: 26em;
+		height: 29em;
 		text-align: center;
 		position: relative;
+
 	}
 
 		  #banner header{
@@ -300,10 +293,10 @@
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			background: rgba(27, 27, 27, 0.75);
+			background-color: rgba(27, 27, 27, 0.75);
 			color: #fff;
 			padding: 1.5em 0;
-			height: 19.5em;
+			height: 21.5em;
 		} 
 
 		
@@ -369,10 +362,10 @@
    /* Wrapper */
 		 .wrapper {
 			background-image: url("../img/banner.jpg");
-			margin: 40px;
-			padding: 5em 0 3em 0;
+			margin: 50px;
+			padding: 2em 0 5em 0;
 			background-size:cover; 
-			height: 20em;
+			height: 18em;
 			/* font: 0.9em sans-serif; */
 		} 
 
@@ -480,7 +473,7 @@
     /* Banner */
 
 			#banner {
-				height: 16.5em;
+				height: 26em;
 			}
 
    /* Wrapper */
