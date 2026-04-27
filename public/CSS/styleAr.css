@@ -30,7 +30,7 @@ html {
 
 
 .main {
-	background-color: rgb(86, 133, 86);
+	background-color: var(--HEADER-BGCOLOR);
 	color: var(--HEADER-COLOR);
 }
 .header-title-line {
@@ -320,12 +320,15 @@ h4 {
 
 
 				  .header__nav > ul > li.current a {
-						color: #fff;
+						color: blue;
 					} 
 
 
-					  .header__nav > ul > li.active a {
-					    color: lime;
+					  .header__nav > ul > li > a:active {
+					    background-color:green;
+						border-radius: 5px;
+						font-family:cursive;
+						color: white;
 				    } 
 
 					
@@ -646,6 +649,8 @@ h4 {
 		      	} 
 
 
+__________________________________________________
+__________________________________________________
 
 
 

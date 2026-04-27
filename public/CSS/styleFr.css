@@ -94,6 +94,7 @@ html {
 	transform-origin: top center;
 	animation: showMenu 0.5s ease-in-out forwards;
 }
+
 @keyframes showMenu {
 	0% {
 					transform: scaleY(0);
@@ -259,7 +260,7 @@ h4 {
 			content: '';
 			display: block;
 			width: 100%;
-			height: 0.75em;
+			height: 0.50em;
 			background-color: #37c0fb;
 		} 
 
@@ -280,7 +281,6 @@ h4 {
 					border: 0;
 					display: flex;
 					padding-left: 0.8em;
-					
 				}   
 
 				.header__nav > ul > li:first-child {
@@ -308,25 +308,30 @@ h4 {
 						-webkit-transform: rotateZ(45deg);
 						-ms-transform: rotateZ(45deg);
 						transform: rotateZ(45deg);
-						width: 0.75em;
-						height: 0.75em;
+						width: 0.6em;
+						height: 0.6em;
 						content: '';
 						display: block;
 						position: absolute;
-						bottom: -0.90em;
+						bottom: -0.70em;
 						left: 50%;
-						margin-left: -0.375em;
+						margin-left: 0.375em;
 						background-color: #37c0fb;
 					} 
 
 				  .header__nav > ul > li.current a {
-						color: #fff;
+						color: blue;
 					} 
 
 
-					  .header__nav > ul > li.active a {
-					    color: lime;
-				    } 
+					.header__nav > ul > li > a:active {
+						background-color:green;
+						border-radius: 5px;
+						font-family:cursive;
+						color: white;
+					    
+				    }  
+
 
 			        .header__nav > ul > li.active.current:before {
 					opacity: 0;
@@ -355,10 +360,11 @@ h4 {
 		.dropdown {
 			width: 135px;
 			line-height: 2.5rem;
-			padding-left: 0 1.1rem 0 1rem; 
+			padding-left: 2rem 1.1rem 0 1rem; 
 			position: relative;
             display: inline-block;
 		} 
+
 
 	    .dropdown > ul > li > a {
 			    width: 10rem;
@@ -463,8 +469,8 @@ h4 {
               height: 15vh; 
              }							
 
-			 /* Button */
 
+			 /* Button */
 				.button {
 					display: block;
 					margin: auto;
@@ -507,7 +513,8 @@ h4 {
               background:radial-gradient(white, skyblue, orange, whitesmoke, darkgray);
              }
 
-           /* Icons */
+
+     /* Icons */
 
 	       ul.icons {
              text-align: center;
@@ -646,12 +653,13 @@ h4 {
 			      	border-bottom-color: transparent;
 		      	} 
 
-					 
+		
+				
 __________________________________________________________
 ____________________________________________________________
 
 
-
+/* 
  * {
     margin: 0;
 	padding: 0;
@@ -663,7 +671,7 @@ ____________________________________________________________
 
 *, *:before, *:after {
 		box-sizing: inherit;
-	} 
+	}  */
 		
 
  /* Container */
@@ -786,9 +794,9 @@ ____________________________________________________________
 
 		/* Section/Article */
 
-	    section.special, article.special {
+	    /* section.special, article.special {
 		            text-align: center;
-	              }  
+	              }   */
 
 
 	   .header.major {
