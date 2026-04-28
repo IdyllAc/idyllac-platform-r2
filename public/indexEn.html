@@ -92,13 +92,36 @@
    
 
     <figure>
-        <img src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg" alt="" title="We Love IdyllAc!" width="" height=""
-            class="responsive" />
+        <img 
+        src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg"
+        srcset="
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 480w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 768w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 1200w
+        "
+        sizes="
+          (max-width: 480px) 100vw,
+          (max-width: 768px) 80vw,
+          1200px
+        "
+        alt="Example image"
+        class="responsive"/>
 
         <figcaption class="offscreen">
             <h6>Wherever you go IdyllAc willing, welcoming and always with you.. IdyllAc is the lasting solution.</h6>
         </figcaption>
     </figure>
+
+     <!-- <picture>
+        <source media="(max-width: 480px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <source media="(max-width: 768px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <img src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg" alt="Example image" class="responsive">
+
+        <figcaption class="offscreen">
+            <h6>اينما ذهبت إيديلك جاهزة مستعدة ودائماً معك .. ايديلك هي الحل دائماً</h6>
+        </figcaption>
+       </picture> -->
+
 
     <!-- <div class="box sticky"> 
         <img src="./img/400PngdpiLogo.png" alt="logo" width="500" >
@@ -106,7 +129,7 @@
     <br>
     <h1 style="text-align: center; font-size: x-large; ">The path of success is a step started from here.</h1>
     <br>
-    <h2 style="text-align: center;"><a href="index.html">anypay.cards</a></h2>
+    <h2 style="text-align: center; font-size:clamp(2rem,5vw,4rem);"><a href="index.html">anypay.cards</a></h2>
     <br>
   <h3 style="color: lime; font-weight: lighter;">A convenient and secure platform for asset exchange and enhanced trading</h3>
   <h3 style="color: lime; font-weight: lighter;">Make your trading potential a free market with a strong brand</h3>

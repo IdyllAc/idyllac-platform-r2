@@ -26,18 +26,18 @@
            
             <nav class="header__nav">
                 <ul class="header__ul">
-                    <li class="current"><a href="index.html">الصفحة الرسمية</a></li>
+                    <li class="current"><a href="index.html">الواجهة</a></li>
                     <li class="dropdown">دروبوتر</a>
                         <ul class="dropdown-content">
                             <li><a href="carrencies">عمولات</a></li>
                             <li><a href="service">خدمات</a></li>
-                            <li><a href="exchane">اسعار الصرف</a></li>
-                            <li><a href="gallery">المعرض والصور</a></li>
-                            <li><a href="videos">الفيديوات</a></li>
+                            <li><a href="exchane">الفورإكس</a></li>
+                            <li><a href="gallery">المعرض</a></li>
+                            <li><a href="videos">فيديوز</a></li>
                             <li><a href="#">Submenu</a>
                                     <ul class="dropdown-right">
                                            <li><a href="travel">سفر</a></li>
-                                           <li><a href="airlines">خطوط جوية</a></li>
+                                           <li><a href="airlines">خطوط</a></li>
                                            <li><a href="tourist">سياحة</a></li>
                                         </ul>
                                     </li>
@@ -45,7 +45,7 @@
                             </ul>
                         </li>
                     <!-- <li><a href="about.html">حول إيديلك</a></li> -->
-                    <li><a href="hours.html">مواقيت العمل</a></li>
+                    <li><a href="hours.html">الدوام</a></li>
                     <li><a href="contact.html">تواصل</a></li>
                     <li><a href="internationalAr.html">دولية</a></li>
                     <li><a href="local.html">محلية</a></li>
@@ -65,13 +65,37 @@
    
 
     <figure>
-        <img src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg" alt="" title="We Love IdyllAc!" width="" height=""
-            class="responsive" />
+        <img 
+        src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg"
+        srcset="
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 480w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 768w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 1200w
+        "
+        sizes="
+          (max-width: 480px) 100vw,
+          (max-width: 768px) 80vw,
+          1200px
+        "
+        alt="Example image"
+        class="responsive"/>
 
         <figcaption class="offscreen">
             <h6>اينما ذهبت إيديلك جاهزة مستعدة ودائماً معك .. ايديلك هي الحل دائماً</h6>
         </figcaption>
-    </figure>
+    </figure> 
+
+    <!-- <picture>
+        <source media="(max-width: 480px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <source media="(max-width: 768px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <img src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg" alt="Example image" class="responsive">
+
+        <figcaption class="offscreen">
+            <h6>اينما ذهبت إيديلك جاهزة مستعدة ودائماً معك .. ايديلك هي الحل دائماً</h6>
+        </figcaption>
+       </picture> -->
+
+
 
     <!-- <div class="box sticky"> 
         <img src="./img/400PngdpiLogo.png" alt="logo" width="500" >
@@ -79,7 +103,7 @@
 <br>
     <h1 style="text-align:center; font-size: x-large;">طريق النجاح تبداء بخطوة من هنا</h1>
     <br>
-    <h2 style="text-align: center;"><a href="index.html">anypay.cards</a></h2>
+    <h2 style="text-align: center; font-size:clamp(2rem,5vw,4rem);"><a href="index.html">anypay.cards</a></h2>
     <br>
    <p> <h3 style="color: lime; font-weight: lighter;">حلق في عالم الأعمال والتبادل التجاري</h3>
     <h3 style="color: lime; font-weight: lighter; ">منصة مريحة وآمنة للتداول بالأصول ورفع الكفائة</h3>

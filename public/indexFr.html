@@ -46,7 +46,7 @@
                                  <li><a href="#">?????</a></li>
                             </ul>
                         </li>
-                    <li><a href="hoursFr.html">Heuraires</a></li>
+                    <li><a href="hoursFr.html">Horaires</a></li>
                     <li><a href="contactFr.html">Contact</a></li>
                     <!-- <li><a href="aboutFr.html">Propos</a></li> -->
                     <!-- <li><a href="localFr.html">Locale</a></li> -->
@@ -67,13 +67,36 @@
    
 
     <figure>
-        <img src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg" alt="" title="We Love IdyllAc!" width="" height=""
-            class="responsive" />
+        <img 
+        src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg"
+        srcset="
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 480w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 768w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 1200w
+        "
+        sizes="
+          (max-width: 480px) 100vw,
+          (max-width: 768px) 80vw,
+          1200px
+        "
+        alt="Example image"
+        class="responsive"/>
 
         <figcaption class="offscreen">
             <h6>Où que vous alliez, IdyllAc est prêt, accueillante et toujours avec vous. Elle est la solution durable et permanente.</h6>
         </figcaption>
     </figure>
+
+     <!-- <picture>
+        <source media="(max-width: 480px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <source media="(max-width: 768px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <img src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg" alt="Example image" class="responsive">
+
+        <figcaption class="offscreen">
+            <h6>اينما ذهبت إيديلك جاهزة مستعدة ودائماً معك .. ايديلك هي الحل دائماً</h6>
+        </figcaption>
+       </picture> -->
+
 
     
     <!-- <div class="box sticky"> 
@@ -83,7 +106,7 @@
 
     <h1 style="text-align: center; font-size: x-large; ">Le chemin du succès commence à un pas d'ici</h1>
     <br>
-    <h2 style="text-align: center;"><a href="index.html">anypay.cards</a></h2>
+    <h2 style="text-align: center; font-size:clamp(2rem,5vw,4rem);"><a href="index.html">anypay.cards</a></h2>
     <br>
     <p><h3 style="color: lime; font-weight: lighter;;">Une plate-forme pratique et sécurisée pour l'échange d'actifs et le trading amélioré</h3>
     <h3 style="color: lime; font-weight: lighter;">Faites de votre potentiel commercial un marché libre avec une marque forte</h3>
