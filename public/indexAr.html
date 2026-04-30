@@ -19,7 +19,7 @@
 <body>
     <header class="header">
         <section class="hero">
-            <h1 class="hero__h1">مرحبا بك في إيديلك </h1>
+            <h1 class="hero__h1" style="font-size:clamp(1rem,2vw,3rem);">مرحبا بك في إيديلك </h1>
         </section>
 
             <!-- Nav -->
@@ -69,29 +69,40 @@
         src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg"
         srcset="
           ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 480w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 576w,
           ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 768w,
-          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 1200w
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 840w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 1024w,
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 1280w
+          ./img/2e44cb3168434ea7b9e4347067de06e8.jpg 1680w
         "
         sizes="
           (max-width: 480px) 100vw,
+          (max-width: 576px) 90vw,
           (max-width: 768px) 80vw,
-          1200px
-        "
+          (max-width: 840px) 70vw,
+          (max-width: 1024px) 60vw,
+          (max-width; 1280px) 50vw,
+          (max-width; 1680px) 40vw,"
         alt="Example image"
         class="responsive"/>
+    
 
         <figcaption class="offscreen">
-            <h6>اينما ذهبت إيديلك جاهزة مستعدة ودائماً معك .. ايديلك هي الحل دائماً</h6>
+            <h6 style="font-size:clamp(0.5rem,2vw,1.5rem);">اينما ذهبت إيديلك جاهزة ومستعدة ودائماً معك .. ايديلك هي الحل</h6>
         </figcaption>
     </figure> 
 
     <!-- <picture>
         <source media="(max-width: 480px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
-        <source media="(max-width: 768px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <source media="(max-width: 736px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <source media="(max-width: 840px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <source media="(max-width: 1280px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
+        <source media="(max-width: 1680px)" srcset="./img/2e44cb3168434ea7b9e4347067de06e8.jpg">
         <img src="./img/2e44cb3168434ea7b9e4347067de06e8.jpg" alt="Example image" class="responsive">
 
         <figcaption class="offscreen">
-            <h6>اينما ذهبت إيديلك جاهزة مستعدة ودائماً معك .. ايديلك هي الحل دائماً</h6>
+            <h6 style="font-size:clamp(0.5rem,2vw,1.5rem);">اينما ذهبت إيديلك جاهزة مستعدة ودائماً معك .. ايديلك هي الحل دائماً</h6>
         </figcaption>
        </picture> -->
 
@@ -225,18 +236,16 @@
    
         <hr>
         <br>
-        <h2 style="background-color: green; text-align: center; margin-bottom: 0.7rem;">للإكتتاب </h2>
-       
+        <h2 style="background-color: green; font-size:clamp(2rem,3vw,1.5rem);">للإكتتاب </h2>
         <h2 style="text-align: center; margin-bottom: 0.7rem;">:إشترك الأن</h2>
       
         
 
-        <h3 style="background-color: black; display: block; text-align: center; width: auto; 
-       margin: auto; color:whitesmoke; border-radius: 5px; border: 0 ; 
-       cursor: pointer; line-height: 2.75rem"><a href="/ar/register">انقر هنا</a></h3>
-       <h3>.او بالعودة الى اعلى الصفحة والنقر على إشتراك من هناك او الخول إذا سبق لك التسجيل</h3>
-       <hr>
+        <h3 style="background-color: black;"><a href="/ar/register">انقر هنا</a></h3>
         <br>
+       <h3>.وبالعودة الى اعلى الصفحة وبالنقر على رابط الإشتراك للشتراك والدخول من هناك إذا سبق وقمت بالتسجيل</h3>
+       <hr>
+        <br><br>
 
        <section class="wrapper style">
         <div class="container"> 
@@ -246,7 +255,7 @@
               <div class="box highlight">
                 <i class="icon solid major fa-paper-plane"></i>
                 <h3>إرسال الوثائق</h3>
-                <p style="text-align: justify; padding-left: 2.3rem;"> تحميل المستندات رقمياً,  من هاتفك الذكي،. الكاميرا الإعدادات إختر وضع "سكان الرقمي".
+                <p>تحميل المستندات رقمياً,  من هاتفك الذكي،. الكاميرا الإعدادات إختر وضع "سكان الرقمي".
                    عند التنفيذ تكرر خطوات التحميل. الوثائق المذيلة بصورة عن صاحبها مقبولة وسلفي ظاهرة لملامح الوجه وإرسال</p>
               </div>
             </section>
@@ -254,7 +263,7 @@
               <div class="box highlight">
                 <i class="icon solid major fa-pencil-alt"></i>
                 <h3>ملئ الإستمارة</h3>
-                <p style="text-align: justify; padding: 0;">.كما لكي تصلك كل التحديتات من نشرات ومراسلات عن الإشتراك ايديلك لدينا إسثمارة التسجيل والإكتتاب لغرض الحصول على العضوية والمتابعة.
+                <p>.كما لكي تصلك كل التحديتات من نشرات ومراسلات عن الإشتراك ايديلك لدينا إسثمارة التسجيل والإكتتاب لغرض الحصول على العضوية والمتابعة.
                    يرجى ملئ فرغات الإستمارة بالبيانات المطلوبة للوصول للخدمة</p>
               </div>
             </section>
@@ -262,7 +271,7 @@
               <div class="box highlight">
                 <i class="icon solid major fa-wrench"></i>
                 <h3>خطوات العمل</h3>
-                <p style="text-align: justify; padding-right: 2.3rem;"> اولاً المطلوب إستيعاب الإجراء المتبع كمعلومة مهمة في البدية, والشرح التالي يوضح الكيفية. ثم تأتي العملية التنظيمية متمنيين الإستيعاب والأخذ بالأسباب لكل جديد ينفع من إيديلك بالسداد والتوفيق </p>
+                <p>اولاً المطلوب إستيعاب الإجراء المتبع كمعلومة مهمة في البدية, والشرح التالي يوضح الكيفية. ثم تأتي العملية التنظيمية متمنيين الإستيعاب والأخذ بالأسباب لكل جديد ينفع من إيديلك بالسداد والتوفيق</p>
               </div>
             </section>
 
@@ -270,9 +279,8 @@
         </div>
       </section>
     <br>
- <h2>:سؤال وإجابات</h2>
-      <h4 style="background-color: green; display: block;  width: auto; margin: auto; color: #fff; text-align:center;
-       font-family: Arial, Helvetica, sans-serif; border-radius: 5px; cursor: pointer; line-height: 2.75rem ">لمزيد من الأسئلة وطلب الدعم  سجل رسالتك على الرابط التالي: <a href="contact.html">أسئلة وإجابات</a></h4>
+ <h2>:أسئلة وإجاباتأ</h2>
+      <h4>لمزيد من الأسئلة وطلب الدعم  سجل رسالتك على الرابط التالي: <a href="contact.html">أسئلة وإجابات</a></h4>
   
       <br>
 
