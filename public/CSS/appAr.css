@@ -19,53 +19,17 @@ body {
 	font: inherit;
 	background-color: gray;
 	line-height: 1px;
-
 } 
 
-  /* header, nav, section { 
-	      display: block;
-	      margin: auto;	
-    }  */
 
-
-	/* :root {
-		--HEADER-BGCOLOR: #333;
-		--HEADER-COLOR: whitesmoke;
-	}  */
-
-
- /* Basic */
   html {
 	scroll-behavior:smooth;
 	box-sizing: border-box;
 	}  
 
-  /* header > a {
-  color: #37c0fb;
-		font-weight: 400;
-		text-decoration: none;
-		border-bottom: dotted 1px;
- } */
-
-  /* header a:hover {
-			color: orange;
-			border-bottom-color: transparent;
-		}  */
-
-
-	
-     /* a {
-		font-size: 1em;
-		font-weight: 600;
-	    letter-spacing: 1px;
-	    text-decoration: None;
-     } */
-
 
  /* Container */
 	
-	
-
 	/* .content {
 		box-sizing: border-box;
 		display: block;
@@ -81,11 +45,11 @@ body {
 
 
     .responsive {
-	display: block;
-	margin: auto;
-	width: 60%;
-	height:auto;	 
-    } 
+	       display: block;
+	       margin: auto;
+	       width: 60%;
+	       height:auto;	 
+        } 
 
 
   /* Image */
@@ -101,12 +65,13 @@ body {
 
   
 	/* Nav */
+
 	 #nav {
 		background-color: #333;
 		margin: 0;
 		padding: 0; 
 		text-align: center;
-		cursor: default;
+		cursor: pointer;
 	}
 
 		/* #nav:after {
@@ -133,7 +98,7 @@ body {
 					text-decoration: none;
 					border: none;
 					display:block;
-					padding: 1.7em 5.5em 1em 0.5em;
+					padding: 1.7em 2.5em 1em 0.5em;
 					font-size:clamp(1.7rem,3vw,1.5rem);
 					
 				}
@@ -196,7 +161,7 @@ body {
 	background-image: url("../img/banner.jpg"); 
 		/* background-position: center; */
 		background-size:cover;
-		height: 8em;
+		height: 6em;
 		text-align: center;
 		position: relative;
 	}
@@ -209,30 +174,29 @@ body {
 			left: 0;
 			width: 100%;
 		    background: rgba(27, 27, 27, 0.75); 
-			height: 8em;
-		
+			height: 6em;
 		} 
 
 		#banner header h1 {
 		    display: block;
 			margin: auto;
 			color: whitesmoke;
-			padding: 2em 0 2em 0;
+			padding: 1.5em 0 2em 0;
 			font-family: Georgia, 'Times New Roman', Times, serif;
-			font-weight: 600;
 			letter-spacing: 1px;
-			font-size:clamp(1.75rem,3vw,3rem);
-			
+			font-size:clamp(2.75rem,5vw,1.5rem);		
 			}  
 
 
    /* Wrapper */
+
 		 .wrapper {
 			background-image: url("../img/banner.jpg");
-			margin: 30px;
-			padding: 2em 0 7em 0;
 			background-size:cover;
-			height: 14em;	
+			margin: 30px;
+			padding: 1em 0 6em 0;
+			height: 12em;	
+			
 			font-size:clamp(1rem,3vw,3rem);
 		} 
 
@@ -240,10 +204,11 @@ body {
 		.major h2 {
 			display: block;
 		    margin: auto;
-			text-align:center; 
+			text-align: center; 
 			color: bisque;
-			line-height:200%;
-			font-size:clamp(1rem,3vw,3rem);
+			line-height:150%;
+			letter-spacing: 1px;
+			font-size:clamp(1rem,1.5vw,1.5rem);
 		}
 		
         .major h3 {
@@ -251,24 +216,19 @@ body {
 		margin: auto;
 		color: lime;
 		text-align: center;
-		line-height: 250%;
+		padding-left: 25px;
+		padding-right: 25px;
+		line-height: 200%;
 		letter-spacing: 1px;
-		font-size:clamp(1rem,3vw,3rem);
+		font-size:clamp(1rem,1.5vw,1.5rem);
         }
 
-		/* .major a {
-			font-size:clamp(1rem,3vw,3rem);
-			justify-content: center;
-			justify-items: center;
-			padding: 10px;
-			font-size:clamp(1rem,3vw,3rem);			
-		} */
 
 		.btn-link {
 			display: block;
 			margin: auto;
-			width: 50%;
-			height: 2em;
+			width: 40%;
+			height: 1.5em;
 			text-align: center;
 			background-color: green;
 			color: whitesmoke;
@@ -288,3 +248,8 @@ body {
 		  .btn-link:active {
 			background-color: lime;
 		  }
+
+		  header a:hover {
+			color: orange;
+			border-bottom-color: transparent;
+		} 

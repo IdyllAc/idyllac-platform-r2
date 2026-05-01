@@ -79,7 +79,7 @@ body {
 
 
     .responsive {
-	    width: 60%;
+	    width: 70%;
 	    height: auto;
     } 
 
@@ -87,9 +87,10 @@ body {
   /* Image */
 		
     img {
-	    width:1000px;
-	    display: block;
-	    margin: 20px auto;
+		display: block;
+	    margin: 100px auto;
+		width: 50%;
+		height: auto;
     }
 
   
@@ -187,7 +188,7 @@ body {
 		 display: block;
 		 margin: auto;
 		background-size:cover;
-		height:15em;
+		height:10em;
 		text-align: center;
 		position: relative;
         align-content: center;
@@ -251,16 +252,16 @@ body {
 			background-image: url("../img/banner.jpg");
 			background-size:cover; 
 			margin: auto;
-			padding: 1em 0 7em 3em;
-            height: 22em;
+			padding: 30px 0 0 0;
+            height: 25em;
             font: 0.9em sans-serif;
 		} 
 
-		.major hr {
+		/* .major hr {
 			display: block; 
 			margin: auto; 
 			width: 20%;
-		}
+		} */
 		
 
 		.major h2 {

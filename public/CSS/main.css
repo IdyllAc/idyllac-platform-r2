@@ -39,6 +39,22 @@
 		} 
 
 
+ /* Container */
+	
+	/* .content {
+		box-sizing: border-box;
+		display: block;
+		margin-top:0;
+		background-color: rgba(27, 27, 27, 0.75);
+		color: whitesmoke;
+		padding: 1px 8rem;
+		text-align: center;
+		line-height: 0.5rem;
+		font-size: small;
+		position: sticky;
+	    } */
+
+
 	.responsive {
 		width: 100%;
 		height: auto;
@@ -59,6 +75,14 @@
 
   /* BBANNER */
 
+/* BANNER */
+/* .banner{
+	min-height:50vh;
+	display:grid;
+	place-items:center;
+	font-size:clamp(2rem,5vw,4rem);
+  } */
+
     #banner{
 		background-image: url("../img/banner.jpg");
 		/* background-position: center; */
@@ -66,7 +90,7 @@
 		margin: 50px;
 		padding: 30px 1.5rem 0 0;
 		position: relative; 
-		place-items:center;
+		place-items: center;
 		max-height: 24em;
 		font-size:clamp(2rem,5vw,4rem);
 		
@@ -83,7 +107,43 @@
 
 
 		/* WRAPPER*/
-		
+		/* WRAPPER */
+/* .wrapper{
+	display:grid;
+	grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+	gap:1rem;
+	padding:2rem 5%;
+  }
+  
+  .card{
+	padding:2rem;
+	border:1px solid #ccc;
+  } */
+
+  /* .width {
+	width:min(1200px, 100% - 2rem);
+    margin:auto;
+  } */
+
+  /* .grid {
+	display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  } */
+
+  /* .flex {
+	display:flex;
+flex-wrap:wrap;
+gap:1rem;
+  } */
+
+  /* Use This Stack
+Header = Flexbox
+Navigation = Flexbox
+Content sections = Grid
+Banner = min-height + center
+Wrapper = width:min(...)
+Typography = clamp() */
+
 		.wrapper {
 			/* background-image: url("../img/banner.jpg"); */
 			margin: auto;
@@ -144,7 +204,7 @@
 				margin: auto;
 				text-align: center;
 				padding: 0.5em 0;
-				color: bisque;
+				color:blanchedalmond;
 				line-height: normal;
 				font-family: Georgia, 'Times New Roman', Times, serif;
 				letter-spacing: 1px;
