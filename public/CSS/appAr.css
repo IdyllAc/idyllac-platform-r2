@@ -5,6 +5,13 @@
 	IdyllAc workspace of the mean page
 */
 
+/* GLOBAL */
+/* * {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+} */
+
 body {
 	margin: 0;
 	padding: 0; 
@@ -15,16 +22,22 @@ body {
 
 } 
 
-  /* header, nav, section {
+  /* header, nav, section { 
 	      display: block;
 	      margin: auto;	
-    } */
+    }  */
+
+
+	/* :root {
+		--HEADER-BGCOLOR: #333;
+		--HEADER-COLOR: whitesmoke;
+	}  */
+
 
  /* Basic */
-
   html {
-	  box-sizing: border-box;
-	  scroll-behavior:smooth;
+	scroll-behavior:smooth;
+	box-sizing: border-box;
 	}  
 
   /* header > a {
@@ -34,57 +47,13 @@ body {
 		border-bottom: dotted 1px;
  } */
 
-  header a:hover {
+  /* header a:hover {
 			color: orange;
 			border-bottom-color: transparent;
-		} 
+		}  */
 
- 
-
-		 /* h1 {
-			text-align: center;
-		font-size: 4em;
-			display: block;
-			margin: auto;
-			color: inherit;
-			font-size: 0.97em;
-			font-weight: 600;
-			line-height: 1.75em;
-			margin-bottom: 1em;
-			letter-spacing: 1px;
-			}  */
-	
-
-
-			.btn-link {
-				display: block;
-				width: 20%;
-				height: 2em;
-				margin: auto;
-				text-align: center;
-				background-color: green;
-				color: whitesmoke;
-				font-size: 1.25em; 
-				text-justify:auto;
-				border-radius: 5px;
-				border: none;
-				cursor: pointer;
-				line-height: 2.25rem;
-				text-decoration: none; 
-			  }
-			  
-			  .btn-link:hover {
-				background-color: darkgreen;
-			  }
 
 	
-	 h3 a {
-		font-size: 1.4rem;
-		color: lime;
-		text-decoration: none;
-		letter-spacing: 1px;
-		} 
-
      /* a {
 		font-size: 1em;
 		font-weight: 600;
@@ -111,78 +80,27 @@ body {
 	    } */
 
 
-
-  /* Mobile (Portrait) */
-
-	@media screen and (max-width: 480px) {
-		     .container {
-			      width: 100%;
-	        }
-
-	    }
-
-		
-		/* Section/Article */
-
-	header.major {
-		text-align: center;
-		margin: 0 0 2em 0;
-	}
-
     .responsive {
-	    width: 60%;
-	    height: auto;
+	display: block;
+	margin: auto;
+	width: 60%;
+	height:auto;	 
     } 
 
 
   /* Image */
 		
     img {
-	    width:1000px;
 	    display: block;
-	    margin: 20px auto;
+	    margin: auto;
+		width: 60%;
+		height: auto;
+		padding-top: 20px;
 
     }
 
-   /* Mobile */
-
-	@media screen and (max-width: 736px) {
-
-		 .container {
-				width: 90%;
-			}  
-
-
-		/* Basic */
- 
-			 body {
-				font-size: 11pt;
-				line-height: 1.35em;
-			}  
-
-			h2 {
-				font-size: 1.25em;
-				letter-spacing: 0;
-				line-height: 1.35em;
-			}
-
-			h3 {
-				font-size: 1em;
-				letter-spacing: 0;
-				line-height: 1.35em;
-			}
-
-		/* Banner */
-
-			/* #banner {
-				height: 18em;
-			} */
-			
-	}
-
   
 	/* Nav */
-	
 	 #nav {
 		background-color: #333;
 		margin: 0;
@@ -204,28 +122,34 @@ body {
 			margin: 0;
 		}
 
-		/*	#nav > ul > li {
+			#nav > ul > li {
 				position: relative;
 				display: inline-block;
 				margin-left: 1em;
-			} */
+			}
 
 				#nav > ul > li a {
-
 					color: whitesmoke;
 					text-decoration: none;
 					border: none;
 					display:block;
-					padding: 1.7em 5.5em 1em 0.5em; 
+					padding: 1.7em 5.5em 1em 0.5em;
+					font-size:clamp(1.7rem,3vw,1.5rem);
+					
 				}
 
 				#nav > ul > li:first-child {
 					margin-left: 0;
 				}
 
-				#nav > ul > li:hover a {
+				/* #nav > ul > li:hover a {
 					color: orange;
-				}
+				} */
+
+				#nav a:hover {
+					color: orange;
+					border-bottom-color: transparent;
+				} 
 
 			/*	#nav > ul > li.current {
 					font-weight: 300;
@@ -275,7 +199,6 @@ body {
 		height: 8em;
 		text-align: center;
 		position: relative;
-		align-content: center;
 	}
 
 		  #banner header {
@@ -286,45 +209,31 @@ body {
 			left: 0;
 			width: 100%;
 		    background: rgba(27, 27, 27, 0.75); 
-			color: #fff;
-			padding: O.8em 0;
-			height: 8.2em;
-			align-content: center;
-		} 
+			height: 8em;
 		
-		 #banner header h1 {
-			display:block;
+		} 
+
+		#banner header h1 {
+		    display: block;
 			margin: auto;
-			font-size: 3em;
+			color: whitesmoke;
+			padding: 2em 0 2em 0;
 			font-family: Georgia, 'Times New Roman', Times, serif;
-			color:whitesmoke;
-		}
-
+			font-weight: 600;
+			letter-spacing: 1px;
+			font-size:clamp(1.75rem,3vw,3rem);
 			
-		 /* #banner header h2 {
-			 display: inline-block;
-			 margin: 0;
-			 font-size: 1.5em;
-			 vertical-align: middle;
-			 color:#37c0fb;
-			} */
-
-		  #banner  header  h3 { 
-				display: inline-block;
-				margin: 0;
-				font-size: 1em;
-				color: whitesmoke;
-			 }  
+			}  
 
 
    /* Wrapper */
 		 .wrapper {
 			background-image: url("../img/banner.jpg");
-			margin: 40px;
+			margin: 30px;
 			padding: 2em 0 7em 0;
 			background-size:cover;
-			height: 18em;	
-			/* font: 0.9em sans-serif; */
+			height: 14em;	
+			font-size:clamp(1rem,3vw,3rem);
 		} 
 
 
@@ -333,145 +242,49 @@ body {
 		    margin: auto;
 			text-align:center; 
 			color: bisque;
-			font-size:xx-large;
-			line-height:130%;
-			letter-spacing: 1px;
+			line-height:200%;
+			font-size:clamp(1rem,3vw,3rem);
 		}
 		
         .major h3 {
 		display: block;
-		font-size:x-large;
+		margin: auto;
 		color: lime;
-		font-weight: 600;
-        margin-bottom: 20px;
-		line-height: normal;
+		text-align: center;
+		line-height: 250%;
 		letter-spacing: 1px;
+		font-size:clamp(1rem,3vw,3rem);
         }
 
-	
+		/* .major a {
+			font-size:clamp(1rem,3vw,3rem);
+			justify-content: center;
+			justify-items: center;
+			padding: 10px;
+			font-size:clamp(1rem,3vw,3rem);			
+		} */
 
-		@media screen and (max-width: 736px) {
+		.btn-link {
+			display: block;
+			margin: auto;
+			width: 50%;
+			height: 2em;
+			text-align: center;
+			background-color: green;
+			color: whitesmoke;
+			border-radius: 5px;
+			border: none;
+			line-height: 2.5rem;
+			text-decoration: none; 
+			cursor: pointer;
+			font-size:clamp(1rem,3vw,3rem);
+		  }
+		  
+		  .btn-link:hover {
+			background-color: darkgreen;
+			color: #fff;
+		  }
 
-		} 
-
-
-
-
-
-  		@media screen and (max-width: 840px) {
-
-			 /* .container {
-				width: 95%;
-			}  */
-
-		}
-
-		@media screen and (max-width: 840px) {
-
-		/* Banner */
-			
-        }
-
-
-        /* Narrow */
-
-	    @media screen and (max-width: 980px) {
-
-			
-
-	    }
-
-	 
-
-
-  		@media screen and (max-width: 1280px) {
-
-			 /* .row {
-				display: flex;
-				flex-wrap: wrap;
-				box-sizing: border-box;
-				align-items: stretch;
-			}   */
-
-
-		}
-
- 
-
-  @media screen and (max-width: 1680px) {
-
-			/* .container {
-				width: 1200px;
-			} */
-
-		}
-
-
-
-        /* Wide */
-
-  	@media screen and (max-width: 1680px) {
-
-
-		/* Basic */
-
-			body {
-				font-size: 14pt;
-				line-height: 1.5em;
-			}
-
-		/* Banner */
-
-			#banner {
-				height: 24em; 
-				/* height:auto !important; */
-			}
-
-	}
-
-
- /* Normal */
-
- 	@media screen and (max-width: 1680px) {
-
-		/* Basic */
-
-			body{
-				font-size: 14pt;
-				line-height: 1.5em;
-			}
-
-
-    	/* Icons */
-
-			/* ul.icons li a, ul.icons li span {
-				font-size: 1.5em;
-			} */
-
-
-   /* Header */
-
-			#header {
-				padding: 2em 0 0 0; 
-				
-			}
-
-				
-
-    /* Banner */
-
-			#banner {
-				height: 8em; 
-				
-			}
-
-   /* Wrapper */
-
-			.wrapper {
-				 padding: 2rem 0 5em 0; 
-				
-			}
-	}
-
-
-	
+		  .btn-link:active {
+			background-color: lime;
+		  }

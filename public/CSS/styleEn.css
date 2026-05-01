@@ -21,6 +21,13 @@ body {
     font-size: 1.5rem;
     font-family:"Roboto",sans-serif;
 }
+
+
+  /* header, nav, section { 
+	      display: block;
+	      margin: auto;	
+    }  */
+
  
 :root {
 	--HEADER-BGCOLOR: #333;
@@ -164,12 +171,13 @@ html {
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
     border-radius: 10px;
+	font-size:clamp(1rem,3vw,2.5rem);
 }
 
 h2 {
 	text-align: left;
 	color: bisque;
-	font-size:clamp(2rem,3vw,2.5rem);
+	font-size:clamp(2rem,3vw,3rem);
 }
 
 
@@ -212,7 +220,7 @@ h4 {
 	display: block;
 	margin: auto;
 	width: 100%;
-	height:530px;
+	height:auto;
 }
 
     section {
@@ -332,7 +340,7 @@ h4 {
 						bottom: -0.50em;
 						left: 50%;
 						margin-left: 0.375em;
-						background-color: #37c0fb;
+						background-color: brown;
 					} 
 
 				  .header__nav > ul > li.current a {
@@ -442,12 +450,13 @@ h4 {
 					 green,whitesmoke,green, whitesmoke, lime);
     color:#333;
     padding: 0.25em 0.5em;
-    letter-spacing: 0.1rem;
+    letter-spacing: 0.10rem;
     text-shadow: 2px 2px 5px;
     position: absolute;
     margin-top: 75px;
     right: 0%;
     animation: showWelcome 0.5s ease-in-out 1s forwards;
+	font-size:clamp(1rem,3vw,3rem);
 }  
 
   @keyframes showWelcome {

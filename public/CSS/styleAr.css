@@ -152,7 +152,7 @@ html {
 } 
 
   h1 {
-    text-align: right;
+    text-align: center;
     color:bisque;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-image:-webkit-repeating-linear-gradient( skyblue, brown); 
@@ -163,6 +163,7 @@ html {
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
     border-radius: 10px;
+	font-size:clamp(1rem,3vw,2.5rem);
 }
 
  h2 {
@@ -458,14 +459,14 @@ h4 {
 				 green,green, green, green, green,green  ,green,green, green, green,
 					 green,whitesmoke,green, whitesmoke, lime);
     color:#333;
-	font-size:clamp(1rem,5vw,4rem);
     padding: 0.25em 0.5em;
-    letter-spacing: 0.20rem;
+    letter-spacing: 0.10rem;
     text-shadow: 2px 2px 5px;
     position: absolute;
     margin-top: 75px;
     right: 0%;
     animation: showWelcome 0.5s ease-in-out 1s forwards;
+	font-size:clamp(1rem,3vw,3rem);
 }  
 
   @keyframes showWelcome {

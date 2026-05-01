@@ -17,11 +17,7 @@
   <body>
     <div id="page-wrapper">
 
-      <!-- Header -->
-      <!-- <div id="header"> -->
-
-        <!-- Logo -->
-
+     
         <!-- Nav -->
         <!-- <nav id="nav">
           <ul>
@@ -34,27 +30,67 @@
     
 
       <!-- IMAGE -->
-      <section class="wrapper" style="display: block; height:fit-content; grid-template-columnsrepeat(auto-fit,minmax(250px,1fr));">
-        <header>
-          <img src="./img/400PngdpiLogoCropped.png" alt="" class="responsive">
-        </header>
+    
+      <!-- <section class="wrapper"> -->
+         <!-- BANNER -->
+      <section id="banner">
+        
+
+        <figure>
+          <img 
+          src="./img/400PngdpiLogoCropped.png" 
+          srcset="
+          ./img/400PngdpiLogoCropped.png 480w,
+          ./img/400PngdpiLogoCropped.png 576w,
+          ./img/400PngdpiLogoCropped.png 768w,
+          ./img/400PngdpiLogoCropped.png 840w,
+          ./img/400PngdpiLogoCropped.png 1024w,
+          ./img/400PngdpiLogoCropped.png 1280w
+          ./img/400PngdpiLogoCropped.png 1680w
+        "
+        sizes="
+        (max-width: 480px) 100vw,
+        (max-width: 576px) 90vw,
+        (max-width: 768px) 80vw,
+        (max-width: 840px) 70vw,
+        (max-width: 1024px) 60vw,
+        (max-width; 1280px) 50vw,
+        (max-width; 1680px) 40vw,
+        " 
+        alt="Example image" 
+        lass="responsive">
+        </figure> 
+
+
+         <!-- <picture>
+        <source media="(max-width: 480px)" srcset="./img/400PngdpiLogoCropped.png">
+        <source media="(max-width: 576px)" srcset="./img/400PngdpiLogoCropped.png">
+        <source media="(max-width: 768px)" srcset="./img/400PngdpiLogoCropped.png">
+        <source media="(max-width: 840px)" srcset="./img/400PngdpiLogoCropped.png">
+        <source media="(max-width: 1024px)" srcset="./img/400PngdpiLogoCropped.png">
+        <source media="(max-width: 1280px)" srcset="./img/400PngdpiLogoCropped.png">
+        <source media="(max-width: 1680px)" srcset="./img/400PngdpiLogoCropped.png">
+        <img src="./img/400PngdpiLogoCropped.png" alt="Example image" class="responsive">
+       </picture> -->
+
       </section>
 
 
-      
-      <!-- BANNER -->
-      <section id="banner">
+       <!-- CONTENT-->
+       <section class="wrapper">
         <div class="container">
-        <header>
-          <!-- Logo -->
-          <h1 style="font-size:clamp(1rem,3vw,4rem);">IDYLLAC SAS</h1>
+          <header class="major">
+          <h1>IDYLLAC SAS</h1>
          
-           <h3 style="font-size:clamp(1rem,3vw,1.5rem);">The official website of IDYLLAC International Corporation for Banking Operations and Financial Settlements</h3>
-        
-            <h3 style="font-size:clamp(1rem,3vw,1.5rem);">Le site officiel d'IDYLLAC International Corporation pour Banking Operations et Règlements Financiers</h3> 
-            <h2 style="font-size:clamp(1rem,3vw,1.5rem);"><strong>الموقع الرسمي لمؤسسة إيديلك إنترنشنال للعمليات البنكية والتسويات المالية</strong></h2>
-
-              <br>
+           <h2>The official website of IDYLLAC International Corporation for Banking Operations and Financial Settlements.
+           </h2>
+       
+      
+            <h4>Le site officiel d'IDYLLAC International Corporation pour Banking Operations et Règlements Financiers.
+            </h4> 
+          
+            <h2>الموقع الرسمي لمؤسسة إيديلك إنترنشنال للعمليات البنكية والتسويات المالية
+            </h2>
         
             <a href="app.html" class="btn-link">Click here to continue</a>
 
@@ -63,7 +99,8 @@
               Click here
             </button> -->
 
-        </header>
+          </header>
+        </div>
       </section>
 
    </div>
@@ -72,7 +109,7 @@
    </html>
 
 
-
+  
 
 
 

@@ -167,12 +167,13 @@ html {
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
     border-radius: 10px;
+	font-size:clamp(1rem,3vw,2.5rem);
 }
 
 h2 {
-	text-align: right;
+	text-align: center;
 	color: bisque;
-	font-size:clamp(2rem,3vw,2.5rem);
+	font-size:clamp(2rem,3vw,3rem);
 }
 
 h3 {
@@ -466,12 +467,13 @@ h4 {
 				 green,whitesmoke,green, whitesmoke, lime);			 
     color:#333;
     padding: 0.25em 0.5em;
-    letter-spacing: 0.1rem;
+    letter-spacing: 0.10rem;
     text-shadow: 2px 2px 5px;
     position: absolute;
     margin-top: 75px;
     right: 0%;
     animation: showWelcome 0.5s ease-in-out 1s forwards;
+	font-size:clamp(1rem,3vw,3rem);
 }  
 
   @keyframes showWelcome {
