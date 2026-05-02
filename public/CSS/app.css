@@ -36,27 +36,14 @@ body {
 			border-bottom-color: transparent;
 		} 
 
-  h1 {
-		/* display: block;
-		margin: auto; */
-		/* color: inherit;
-		font-size: 0.97em;
-		font-weight: 600; */
-		line-height: 1.75em;
-		/* margin-bottom: 1em;
-		letter-spacing: 1px; */
-	    }
-
-
 		.btn-link {
 			display:inline-block;
-			width: 15%;
+			width: 22%;
 			height: 2em;
 			margin: auto;
 			text-align: center;
 			background-color: green;
 			color: whitesmoke;
-			font-size: 1.25em; 
 			text-justify:auto;
 			border-radius: 5px;
 			border: none;
@@ -65,21 +52,13 @@ body {
 			text-decoration: none; /* remove underline */
 		  }
 		  
-		  .btn-link:hover {
+		  .btn-link a:hover {
 			background-color: darkgreen;
 		  }
 
-	
-	 h3 a {
-		font-size: large;
-		color: lime;
-		text-decoration: underline;
-		letter-spacing: 1px;
-		} 
-
 
     .responsive {
-	    width: 70%;
+	    width: 50%;
 	    height: auto;
     } 
 
@@ -88,7 +67,7 @@ body {
 		
     img {
 		display: block;
-	    margin: 100px auto;
+	    margin: 20px auto;
 		width: 50%;
 		height: auto;
     }
@@ -98,12 +77,12 @@ body {
 
 	#nav {
 		background-color: #333;
-		/* display: block;
-		margin: auto;
-		padding-bottom: 0;  */
+		display: block;
+		margin: 0;
+		padding-bottom: 0; 
 		text-align: center;
 		cursor: default;
-		height: 3em;		
+		height: auto;		
 	}
 
 		/* #nav:after {
@@ -118,8 +97,8 @@ body {
 		#nav > ul {
 			margin: 0;
 		}
-/* 
-			#nav > ul > li {
+       
+		   /* #nav > ul > li {
 				position: relative;
 				display: inline-block;
 				margin-left: 1em;
@@ -128,18 +107,21 @@ body {
 				#nav > ul > li a {
 					color: whitesmoke;
 					text-decoration: none;
-					/* border: 0.5em; */
 					display: block; 
-					padding: 1.7em 1.8em 1.8em 0.5em;  
+					padding: 1.5em 1em 0.8em 0;
+					font-size: 2em !important; 
 				}
 
 				/* #nav > ul > li:first-child {
 					margin-left: 0;
 				} */
-/* 
-				#nav > ul > li:hover a {
+
+				#nav > ul > li a:hover {
 					color: orange;
-				} */
+				} 
+				#nav > ul > li a:active {
+					color: limegreen;
+				} 
 
 				/* #nav > ul > li.current {
 					font-weight: 300;
@@ -185,66 +167,68 @@ body {
   #banner {
 		background-image: url("../img/banner.jpg");
 		 /* background-position: center; */
-		 display: block;
-		 margin: auto;
 		background-size:cover;
-		height:10em;
+		margin:0;
+		padding: 0;
+		width: 100%;
+		height: auto;
 		text-align: center;
-		position: relative;
-        align-content: center;
+		/* position: relative;
+        align-content: center; */
+		/* font-size:clamp(0.8rem,3vw,1.65rem);  */
 	}
 
 		  #banner header {
-			position:relative;
 			background-size:cover; 
-			bottom: 0;
-			top: 0;
-			left: 0;
-			width: 100%;
 			background: rgba(27, 27, 27, 0.75);
-			color: #fff;
-			padding: 0.5em 0;
-            align-content: center;
+			padding: 1rem 0 2rem 0;
 		} 
 		
 		 #banner header h1 {
 			display:block;
 			margin: auto;
-			font-size:clamp(1rem,3vw,4rem);
+			padding: 1rem 0 0.25rem 0;
 			font-family: Georgia, 'Times New Roman', Times, serif;
+			line-height: normal;
 			color:whitesmoke;
+			font-size:clamp(1.25rem,3vw,5rem);
+			
 		}
 
 			
-		 /* #banner header h2 {
-			 display: inline-block;
-			 margin: 0;
-			 font-size: 1.5em;
-			 vertical-align: middle;
-			 color:#37c0fb;
-			} */
-
 		  #banner  header  h3 { 
-				display: inline-block;
-				margin: 2rem 0 0 0;
-				padding: 0.3em 0;
-				font-size:clamp(1rem,3vw,1.5rem);
+				display: block;
+				margin: auto;
+				padding: 1rem 0 0.25rem 0;
+				font-family: Georgia, 'Times New Roman', Times, serif;
+				line-height: normal;
 				color: whitesmoke;
+				font-size:clamp(1.25rem,2vw,1.65rem);
 			 }  
 
 			 #banner  header a {
 				background-color: green;
 				display: inline-block;
-				font-size: 1.25rem; 
+				margin: 1rem 0 0 0;
+				text-indent: 0;
 				color: whitesmoke;
 				text-decoration:none;
-				letter-spacing: 1px;
-				margin: 2rem 0 0 0;
+				letter-spacing: 0.7px;
 				border-radius: 5px;
 				border: none;
 				cursor: pointer;
-				
+				font-size:clamp(1rem,2vw,1.5rem);	
 			 }
+
+			#banner header a:hover {
+				background-color: darkgreen;
+				color: orange;
+			  }
+
+			#banner header a:active {
+				background-color: orange;
+				color: #000;
+			  }
 
 
    /* Wrapper */
@@ -269,9 +253,9 @@ body {
 		    margin: auto;
 			text-align:center; 
 			color: bisque;
-			font-size:clamp(1rem,3vw,1.5rem);
 			line-height: normal;
 			letter-spacing: 1px;
+			font-size:clamp(1rem,3vw,1.5rem);
 		}
 
         .major h3 {
@@ -279,10 +263,10 @@ body {
 		margin: auto;
 		text-align: center;
 		padding: 0 0 1rem 0;
-		font-size:clamp(1rem,3vw,1.5rem);
 		color: lime;		
 		line-height: normal;
 		letter-spacing: 1px;
+		font-size:clamp(1rem,3vw,1.5rem);
         }
 	
 
