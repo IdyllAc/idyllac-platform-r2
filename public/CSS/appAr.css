@@ -195,8 +195,7 @@ body {
 			background-size:cover;
 			margin: 30px;
 			padding: 1em 0 6em 0;
-			height: 12em;	
-			
+			height: auto;	
 			font-size:clamp(1rem,3vw,3rem);
 		} 
 
@@ -206,22 +205,26 @@ body {
 		    margin: auto;
 			text-align: center; 
 			color: bisque;
-			line-height:150%;
+			line-height: normal;
 			letter-spacing: 1px;
-			font-size:clamp(1rem,1.5vw,1.5rem);
+			font-size:clamp(1.5rem,1.5vw,1.5rem);
 		}
 		
-        .major h3 {
-		display: block;
-		margin: auto;
-		color: lime;
-		text-align: center;
-		padding-left: 25px;
-		padding-right: 25px;
-		line-height: 200%;
-		letter-spacing: 1px;
-		font-size:clamp(1rem,1.5vw,1.5rem);
-        }
+       
+
+		.major h3 {
+			display: block;
+			margin: auto;
+			color: blanchedalmond;
+			text-align: center;
+			padding-left: 25px;
+			padding-right: 25px;
+			line-height: 150%;
+			letter-spacing: 1px;
+			font-size:clamp(1rem,1.5vw,1.5rem);
+			}
+
+
 
 
 		.btn-link {

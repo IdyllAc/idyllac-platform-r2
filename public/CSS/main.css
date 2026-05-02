@@ -151,7 +151,7 @@ Typography = clamp() */
 			padding: 10px 0px;
 			background-color: rgba(27, 27, 27, 0.75);
 			background-size:cover; 
-			height: 19em;
+			height: auto;
 			font-size:clamp(1rem,3vw,1.5rem);
 		} 
 

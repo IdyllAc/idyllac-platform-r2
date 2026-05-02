@@ -208,9 +208,10 @@ body {
 			background-size:cover; 
 			margin: 30px;
 			padding: 0.8em 0 7em 0; 
-			height: 12em;
+			height: auto;
 			font-size:clamp(1rem,3vw,3rem);
-		} 
+		}
+		
 
 		.major h2 {
 			display: block;
@@ -225,7 +226,7 @@ body {
         .major h3 {
 			display: block;
 			margin: auto;
-			color: lime;
+			color:blanchedalmond;
 			text-align: center;
 			padding-left: 5px;
 			padding-right: 5px;

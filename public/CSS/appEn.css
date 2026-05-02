@@ -200,7 +200,7 @@ body {
 			background-size:cover; 
 			margin: 30px;
 			padding: 0.8em 0 7em 0; 
-			height: 8em;
+			height: auto;
 			font-size:clamp(1rem,3vw,3rem);
 		} 
 
@@ -211,19 +211,20 @@ body {
 			color: bisque;
 			line-height: 130%;
 			letter-spacing: 1px;
-			font-size:clamp(1.5rem,1.5vw,1.5rem);
+			font-size:clamp(2rem,1.5vw,1.5rem);
 		}
+
 
         .major h3 {
 		display: block;
 		margin: auto;
-		color: lime;
+		color: blanchedalmond;
 		text-align: center;
 		padding-left: 5px;
 		padding-right: 5px;
 		line-height: 130%;
 		letter-spacing: 1px;
-		font-size:clamp(1.5rem,1.5vw,1.5rem);
+		font-size:clamp(2rem,1.5vw,1.5rem);
         }
 
 		
