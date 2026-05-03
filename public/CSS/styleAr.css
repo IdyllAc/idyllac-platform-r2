@@ -27,7 +27,7 @@ body {
 		 .header__nav {
 			margin-top: 3vh;
 			position: sticky;
-			height: 3.5rem;
+			height: auto;
 			background-image:-webkit-radial-gradient(orange,blanchedalmond, skyblue, orange);
 			justify-content: center;
 			font-weight: bold;
@@ -35,6 +35,7 @@ body {
 			font-weight: bolder;
 			box-shadow: 0 6px 5px -5px #333;
 			cursor: default;
+			font-size:clamp(1rem,5vw,2rem);
 		  }
 		
 		
