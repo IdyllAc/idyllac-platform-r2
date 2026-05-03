@@ -24,19 +24,16 @@
 } 
 
 
-
-/* Basic */
-
   html {
 	  box-sizing: border-box;
 	  scroll-behavior:smooth;
 	}  
 
   
-  header a:hover {
+  /* header a:hover {
 			color: orange;
 			border-bottom-color: transparent;
-		} 
+		}  */
 
 
  /* Container */
@@ -56,9 +53,9 @@
 
 
 	.responsive {
+		display: block;
 		width: 100%;
 		height: auto;
-		display: block;
 	  }
 
 
@@ -88,21 +85,34 @@
 		/* background-position: center; */
 		background-size:cover;
 		margin: 50px;
-		padding: 30px 1.5rem 0 0;
+		padding: 50px 1.5rem 0 0;
 		position: relative; 
-		place-items: center;
-		max-height: 24em;
+		/* place-items: center; */
+		min-height: 6em;
 		font-size:clamp(2rem,5vw,4rem);
 		
 	}
 
-	  #banner header{
-			/* background-image: url("../img/banner.jpg"); */
+	  /* #banner header{
+			background-image: url("../img/banner.jpg");
 			position: absolute;
 			background-size:cover; 
 			background-color: rgba(27, 27, 27, 0.75);
-			height: 22.5em;
+			height: auto;
 		} 
+
+		
+
+		#banner h1 {
+			display:block;
+			margin:auto;
+			text-align: center;
+			padding:1rem 0.5rem 0.5rem 0;
+			line-height: 100%;
+			font-family: Georgia, 'Times New Roman', Times, serif;
+			color:whitesmoke;
+			letter-spacing: 1px;
+		} */
 
 
 
@@ -151,8 +161,7 @@ Typography = clamp() */
 			padding: 10px 0px;
 			background-color: rgba(27, 27, 27, 0.75);
 			background-size:cover; 
-			height: auto;
-			font-size:clamp(1rem,3vw,1.5rem);
+			height: auto;		
 		} 
 
 
@@ -166,7 +175,7 @@ Typography = clamp() */
 			font-family: Georgia, 'Times New Roman', Times, serif;
 			color:whitesmoke;
 			letter-spacing: 1px;
-			font-size:clamp(1rem,3vw,1.5rem);
+			font-size:clamp(1rem,3vw,4rem);
 		}
 		
 

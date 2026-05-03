@@ -6,11 +6,11 @@
 */
 
 /* GLOBAL */
-/* * {
+* {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-} */
+}
 
 body {
 	margin: 0;
@@ -27,11 +27,6 @@ body {
 	  box-sizing: border-box;
 	  scroll-behavior:smooth;
 	}  
-
-  header a:hover {
-			color: orange;
-			border-bottom-color: transparent;
-		} 
 
 
  /* Container */
@@ -66,6 +61,7 @@ body {
 	    margin: auto;
 		width: 60%;
 		height: auto;
+		padding-top:  20px;
     }
 
   
@@ -113,10 +109,6 @@ body {
 					margin-left: 0;
 				}
 
-				#nav a:hover {
-					color: orange;
-					border-bottom-color: transparent;
-				}
 
 			/*	#nav > ul > li.current {
 					font-weight: 300;
@@ -140,7 +132,18 @@ body {
 						background-color: #37c0fb;
 				}  */
 
-				#nav > ul > li.current a {
+				#nav a:hover {
+					color: orange;
+					border-bottom-color: transparent;
+				} 
+
+				#nav a:active{
+					color: limegreen;
+					border-bottom-color: transparent;
+				} 
+
+
+				/* #nav > ul > li.current a {
 						color: #fff;
 				} 
 
@@ -155,6 +158,11 @@ body {
 				#nav > ul > li > ul {
 					display: none;
 				}
+
+				header a:hover {
+					color: orange;
+					border-bottom-color: transparent;
+			   }  */
 				  
 
   /* Banner */
@@ -163,7 +171,7 @@ body {
 	background-image: url("../img/banner.jpg");
         /* background-position: center; */
 		background-size:cover;
-		height: 5.7em;
+		height: 5.8em;
 		text-align: center;
 		position: relative;
 		align-content: center;
@@ -191,23 +199,13 @@ body {
 			font-size:clamp(2.75rem,5vw,1.5rem);
 		}
 
-		#banner header h1 {
-			display:block;
-			margin: auto;
-			color:whitesmoke;
-			padding: 1.5em 0 2em 0;
-			font-family: Georgia, 'Times New Roman', Times, serif;
-			letter-spacing: 1px;
-			font-size:clamp(2.75rem,5vw,1.5rem);
-		}
-
 
    /* Wrapper */
 		 .wrapper {
 			background-image: url("../img/banner.jpg");
 			background-size:cover; 
 			margin: 30px;
-			padding: 0.8em 0 7em 0; 
+			padding: 1em 0 1em 0; 
 			height: auto;
 			font-size:clamp(1rem,3vw,3rem);
 		}
@@ -240,16 +238,17 @@ body {
 				display: block;
 				margin: auto;
 				width: 40%;
-				height: 1.5em;
+				height: 3rem;
 				text-align: center;
 				background-color: green;
 				color: whitesmoke;
 				border-radius: 5px;
 				border: none;
-				line-height: 2.5rem;
+				padding: 6px;
+				line-height: 2rem;
 				text-decoration: none; /* remove underline */
 				cursor: pointer;
-				font-size:clamp(1rem,3vw,3rem);
+				font-size:clamp(1rem,3vw,2rem);
 			  }
 			  
 			  .btn-link:hover {
@@ -261,11 +260,7 @@ body {
 				background-color: lime;
 			  }
 
-			  header a:hover {
-				color: orange;
-				border-bottom-color: transparent;
-			} 
-	
+			
 
 	  
 

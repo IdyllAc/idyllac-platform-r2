@@ -6,11 +6,11 @@
 */
 
 /* GLOBAL */
-/* * {
+* {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-} */
+}
 
 body {
 	margin: 0;
@@ -98,7 +98,7 @@ body {
 					text-decoration: none;
 					border: none;
 					display:block;
-					padding: 1.7em 2.5em 1em 0.5em;
+					padding: 1.7em 0 1em 0;
 					font-size:clamp(1.7rem,3vw,1.5rem);
 					
 				}
@@ -107,21 +107,12 @@ body {
 					margin-left: 0;
 				}
 
-				/* #nav > ul > li:hover a {
-					color: orange;
-				} */
-
-				#nav a:hover {
-					color: orange;
-					border-bottom-color: transparent;
-				} 
 
 			/*	#nav > ul > li.current {
 					font-weight: 300;
 				} */
 
 
-				
 			    /* #nav > ul > li.current:before {
 						-moz-transform: rotateZ(45deg);
 						-webkit-transform: rotateZ(45deg);
@@ -138,7 +129,18 @@ body {
 						background-color: #37c0fb;
 				}  */
 
-				#nav > ul > li.current a {
+
+				#nav a:hover {
+					color: orange;
+					border-bottom-color: transparent;
+				} 
+
+				#nav a:active{
+					color: limegreen;
+					border-bottom-color: transparent;
+				} 
+
+				/* #nav > ul > li.current a {
 						color: #fff;
 				} 
 
@@ -153,6 +155,12 @@ body {
 				#nav > ul > li > ul {
 					display: none;
 				} 
+
+
+				header a:hover {
+					color: orange;
+					border-bottom-color: transparent;
+				}  */
 				  
 
   /* Banner */
@@ -161,13 +169,13 @@ body {
 	background-image: url("../img/banner.jpg"); 
 		/* background-position: center; */
 		background-size:cover;
-		height: 6em;
+		height: 5.8em;
 		text-align: center;
 		position: relative;
 	}
 
 		  #banner header {
-			/* background-image: url("../img/banner.jpg"); */
+			/* background-image: url("../img/banner.jpg");  */
 			position:absolute;
 			background-size:cover; 
 			bottom: 0;
@@ -194,7 +202,7 @@ body {
 			background-image: url("../img/banner.jpg");
 			background-size:cover;
 			margin: 30px;
-			padding: 1em 0 6em 0;
+			padding: 1rem 0 1rem 0;
 			height: auto;	
 			font-size:clamp(1rem,3vw,3rem);
 		} 
@@ -203,9 +211,9 @@ body {
 		.major h2 {
 			display: block;
 		    margin: auto;
-			text-align: center; 
+			text-align: center;
 			color: bisque;
-			line-height: normal;
+			line-height: 130%;
 			letter-spacing: 1px;
 			font-size:clamp(1.5rem,1.5vw,1.5rem);
 		}
@@ -218,12 +226,10 @@ body {
 			color: blanchedalmond;
 			text-align: center;
 			padding-left: 25px;
-			padding-right: 25px;
-			line-height: 150%;
+			line-height: 200%;
 			letter-spacing: 1px;
 			font-size:clamp(1rem,1.5vw,1.5rem);
 			}
-
 
 
 
@@ -231,28 +237,24 @@ body {
 			display: block;
 			margin: auto;
 			width: 40%;
-			height: 1.5em;
+			height: 3rem;
 			text-align: center;
 			background-color: green;
 			color: whitesmoke;
 			border-radius: 5px;
 			border: none;
-			line-height: 2.5rem;
+			padding: 6px;
+			line-height: 2rem;
 			text-decoration: none; 
 			cursor: pointer;
-			font-size:clamp(1rem,3vw,3rem);
+			font-size:clamp(1rem,3vw,2rem);
 		  }
 		  
 		  .btn-link:hover {
-			background-color: darkgreen;
+			background-color:darkgreen;
 			color: #fff;
 		  }
 
 		  .btn-link:active {
-			background-color: lime;
+			background-color: limegreen;
 		  }
-
-		  header a:hover {
-			color: orange;
-			border-bottom-color: transparent;
-		} 
