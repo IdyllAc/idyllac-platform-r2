@@ -29,12 +29,6 @@
 	  scroll-behavior:smooth;
 	}  
 
-  
-  /* header a:hover {
-			color: orange;
-			border-bottom-color: transparent;
-		}  */
-
 
  /* Container */
 	
@@ -70,7 +64,7 @@
 
 				  
 
-  /* BBANNER */
+  /* BANNER */
 
 /* BANNER */
 /* .banner{
@@ -224,17 +218,16 @@ Typography = clamp() */
 			 .btn-link {
 			    display: block;
 				width: 60%;
-				height: 2.5em;
+				height: 2em;
 				margin: 1em auto;
-				padding-top: 0.3em;
+				padding: 4px;
 				text-align: center;
 				background-color: green;
 				color: whitesmoke;
-				text-justify:auto;
 				border-radius: 5px;
 				border: none;
 				cursor: pointer;
-				line-height: 2.35rem;
+				line-height: 1.6em;
 				text-decoration: none; /* remove underline */
 				font-size:clamp(1rem,3vw,1.5rem);
 			  }

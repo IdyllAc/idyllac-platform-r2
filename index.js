@@ -373,7 +373,7 @@ app.use((err, req, res, next) => {
  *  DATABASE CONNECT
  ***********************/
 sequelize.authenticate()
-  .then(() => console.log('✅ Database connected'))
+  .then(() => console.log('✅ Database connected'))add .
   .catch(err => console.error('❌ DB connection error:', err));
 
 sequelize.sync()
