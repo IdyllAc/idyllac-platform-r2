@@ -7,6 +7,8 @@ if (process.env.NODE_ENV !== 'production') {
 console.log('🌍 NODE_ENV:', process.env.NODE_ENV);
 console.log('🌍 R2_ACCOUNT_ID exists:', !!process.env.R2_ACCOUNT_ID);
 
+console.log('Auth routes loaded');
+
 
 const express = require('express');
 const fs = require('fs');
@@ -26,7 +28,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const inactivityMiddleware = require("./middleware/inactivityMiddleware");
 const rateLimit = require('express-rate-limit').default;
-const uploadRoutes = require('./routes/upload');
+const { generateCardNumber } = require('./utils/cardGenerator');
 
 /***********************
  *  ROUTES
@@ -41,6 +43,9 @@ const profileRoutes = require('./routes/profile');
 const dashboardRoutes = require('./routes/dashboard');
 const socialAuthRoutes = require('./routes/authSocial');
 const adminAuthRoutes = require('./routes/admin');
+const uploadRoutes = require('./routes/upload');
+const cardRoutes = require('./routes/card');
+const transferRoutes = require('./routes/transfers');
 
 
 
@@ -49,11 +54,10 @@ const adminAuthRoutes = require('./routes/admin');
  ***********************/
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 /* ===============================
    RATE LIMITERS (DEFINE FIRST)
 ================================ */
-
-
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
   max: 10,                 // 10 requests per IP
@@ -67,7 +71,8 @@ const authLimiter = rateLimit({
 
 app.use('/api/auth/register', authLimiter);
 app.use('/api/auth/login', authLimiter);
-app.use('/login', authLimiter);
+app.use('/api/auth', authLimiter);   // API only
+// app.use('/login', authLimiter);
 
 
 // Enable trust proxy ONLY in production (needed if you’re behind Nginx/Render/Heroku/Cloudflare)
@@ -81,6 +86,11 @@ if (process.env.NODE_ENV === "production") {
   const full = path.join(__dirname, dir);
   if (!fs.existsSync(full)) fs.mkdirSync(full, { recursive: true });
 });
+
+// app.use(
+//   '/node_modules',
+//   express.static(path.join(__dirname, 'node_modules'))
+// );
 
 
 /***********************
@@ -113,17 +123,26 @@ app.use(
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"], // only if you have inline <style>
+      styleSrc: [
+        "'self'", 
+        "'unsafe-inline'", 
+        "https://fonts.googleapis.com",
+       ], // only if you have inline <style>
+       fontSrc: [
+        "'self'",
+        "https://fonts.gstatic.com",
+        "data:"
+      ],
       imgSrc: ["'self'", "data:", "blob"], // allow base64 images (e.g. selfie preview)
       connectSrc: [
         "'self'",
         "https://*.r2.cloudflarestorage.com"
-], // for R2 uploads
-objectSrc: ["'none'"],
-baseUri: ["'self'"]
-    },
-  })
-);
+      ], // for R2 uploads
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"]
+         },
+      })
+   );
 
 // console.log("NODE_ENV =", process.env.NODE_ENV);
 
@@ -357,8 +376,8 @@ app.use('/', dashboardRoutes); // dashboard (session protected)
 app.use('/protect', combinedAuth, protectRoutes);
 app.use('/profile', combinedAuth, profileRoutes); // or app.use('/api', profileRoutes) depending on your structure
 app.use('/api/upload', uploadRoutes);
-
-
+app.use('/api/cards', cardRoutes);
+app.use('/api/transfers', transferRoutes);
 
 
 /***********************

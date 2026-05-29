@@ -222,14 +222,26 @@ body {
         .major h3 {
 		display: block;
 		margin: auto;
-		color: blanchedalmond;
+		color:lime;
 		text-align: center;
-		padding-left: 5px;
-		padding-right: 5px;
+		padding: 1rem;
+		/* padding-right: 5px; */
 		line-height: 130%;
 		letter-spacing: 1px;
 		font-size:clamp(1rem,1.5vw,1.5rem);
         }
+
+		.major h4 {
+			display: block;
+		margin: auto;
+		color:blanchedalmond;
+		text-align: center;
+		padding: 1rem;
+		padding-right: 5px;
+		line-height: 130%;
+		letter-spacing: 1px;
+		font-size:clamp(1rem,1.5vw,1.5rem);
+		}
 
 		
 	

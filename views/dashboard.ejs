@@ -4,166 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>User Dashboard</title>
+   <link rel="stylesheet" href="/CSS/dashboard.css">
+   <link rel="stylesheet" href="/CSS/card1.css">
+   <link
+rel="stylesheet"
+href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
     crossorigin="anonymous" referrerpolicy="no-referrer"/>  -->
 
-  <style>
-   body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.2rem;
-  background: #333;
-  color: #fff;
-}
-
-h1, h2, h3, h4, h6, p { text-align: center;
-}
-
-.container {
-      max-width: 700px;
-      margin: 60px auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      padding: 25px;
-      text-align: center;
-    }
-
-
-    /* 🔄 Spinner styles */
-    #loading-spinner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 150px;
-      color: #777;
-      font-size: 1.1em;
-      gap: 12px;
-      opacity: 1;
-      transition: opacity 0.6s ease;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid #ccc;
-      border-top: 4px solid #007bff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-
-#dashboard-content {
-  margin: 2rem auto;
-  max-width: 600px;
-  padding: 1rem;
-  background: #444;
-  border-radius: 8px;
-}
-
-button {
-  display: block;
-  margin: 1rem auto;
-  padding: 0.5rem 1rem;
-  font: inherit;
-  color: #fff;
-  background: orange;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.a { 
-  color: #1f7d5f; 
-  text-decoration: none;
-  text-align: center; 
-}
-
-footer { margin-top: 3rem; text-align: center; }
-
-/* Unified button styles */
-.btn {
-  display: inline-block;
-  padding: 12px 25px;
-  margin: 10px;
-  font-size: 1rem;
-  font-weight: bold;
-  /* text-align: center; */
-  border-radius: 6px;
-  text-decoration: none;
-  border: none;
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background-color: orange;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #e69500;
-}
-
-.btn-secondary {
-  background-color: #1f7d5f;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background-color: #145c45;
-}
-
-.btn-outline {
-  background-color: transparent;
-  border: 2px solid #1f7d5f;
-  color: #1f7d5f;
-}
-
-.btn-outline:hover {
-  background-color: #1f7d5f;
-  color: white;
-}
-
-/* Progress bar */
-.progress-wrap {
-  max-width: 720px;
-  margin: 1rem auto;
-  text-align: center;
-}
-
-.progress-bar-bg {
-  width: 100%;
-  height: 12px;
-  background: #e6e6e6;
-  border-radius: 8px;
-  overflow: hidden;
-  margin: 10px 0;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #00c6ff, #0072ff);
-  width: 0%;
-  transition: width .5s ease-in-out;
-}
- 
-  </style>
 </head>
 <body> 
     <!-- 🔄 Spinner (initially visible) -->
-    <div id="loading-spinner" 
-    style="display: flex; align-items: center; justify-content: center; flex-direction: column; height: 100vh;">
-      <div class="spinner"
-      style="width: 40px; height: 40px; border: 4px solid #ccc; border-top-color: #0072ff; border-radius: 50%; animation: spin 1s linear infinite;">
+    <div id="loading-spinner">
+      <div class="spinner">
       </div>
     </div>
 
@@ -171,7 +25,7 @@ footer { margin-top: 3rem; text-align: center; }
     <!-- <p style="margin-top: 12px; color: white;">Loading your dashboard...</p> -->
 
   <!-- ✅ Actual dashboard (hidden until data loads) -->
-  <div id="dashboard-content" style="display: none; text-align: center; padding: 1rem;">
+  <div id="dashboard-content">
     <div id="user-info"></div>
     <h1 class="text-3xl font-bold mb-2">👋 Welcome back, <%= user ? user.name : 'Guest' %>!</h1>
  <!-- <p class="text-lg text-gray-600">Your personal dashboard is ready.</p> -->
@@ -186,15 +40,17 @@ footer { margin-top: 3rem; text-align: center; }
   <p><a href="/protect/personal_info" class="btn btn-primary">🚀 Start Registration</a></p>
   
   <!-- Progress bar -->
-<div class="progress-bar-bg" aria-hidden="true" style="margin-top: 1rem; background: #ddd; height: 10px; border-radius: 6px;">
+<div class="progress-bar-bg" aria-hidden="true">
   <!-- <p>DEBUG: "<%= progress %>"</p> -->
-        <div class="progress-bar-fill" 
-       style="background: #0072ff; height: 10px; border-radius: 6px; width:<%= (typeof progress !== 'undefined' && typeof progress === 'number' ? progress : 0) %>%">
+        
+     <div 
+     class="progress-bar-fill"
+     data-progress="<%= typeof progress === 'number' ? progress : 0 %>">
       </div> 
 </div>
 
   <!-- Registration flow buttons -->
-  <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; justify-content: center;">
+  <div class="registration-actions">
     <% if (progress < 100) { %>
       <% let nextStep = '/protect/personal_info'; %>
       <% if (progress >= 25 && progress < 50) nextStep = '/protect/upload/document'; %>
@@ -202,25 +58,27 @@ footer { margin-top: 3rem; text-align: center; }
       <% if (progress >= 75 && progress < 100) nextStep = '/protect/completed'; %>
 
       <a href="<%= nextStep %>" 
-         class="btn btn-primary" 
-         style="background:#0072ff; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+        class="btn btn-primary">
         <%= progress === 0 ? '🚀 Start Registration' : '➡ Continue Registration' %>
        </a> 
 
-      <a href="/protect/completed" class="btn btn-outline" 
-         style="border:1px solid #0072ff; color:#0072ff; padding:10px 20px; border-radius:6px; text-decoration:none;">
+      <a href="/protect/completed" class="btn btn-outline">
          Review Progress
       </a>
     <% } else { %>
-      <a href="/protect/completed" class="btn btn-success" 
-         style="background:green; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+      <a href="/protect/completed" class="btn btn-success">
          ✅ View Completed Profile
         </a>
     <% } %>
   </div>
 
-  <section id="dashboard-main" style="text-align:center; margin-top:20px;">
-    <a href="/profile" class="btn btn-primary">Go to Profile</a><a href="/profile/settings" class="btn btn-primary">Go to Settings</a>
+  <section id="dashboard-main">
+    <a href="/profile" class="btn btn-primary">
+      Go to Profile
+    </a>
+    <a href="/profile/settings" class="btn btn-primary">
+      Go to Settings
+    </a>
   </section>
 
       <br>
@@ -290,19 +148,131 @@ footer { margin-top: 3rem; text-align: center; }
 </section>
 
 
+<section id="dashboard-main"></section>
+
+
+<!-- BANK CARDS -->
+<section id="banking-cards-section">
+
+  <div class="cards-header">
+    <h2>💳 My Banking Cards</h2>
+
+    <button id="createCardBtn" class="btn btn-primary">
+      + Create Card
+    </button>
+  </div>
+
+  <div class="cards-slider">
+    <div class="cards-track" id="cardsTrack">
+      <!-- Cards injected dynamically -->
+    </div>
+  </div>
+
+
+  <div class="bank-card-wrapper">
+    <!-- <img src="./../img/400PngdpiLogoCroppedBW.png" alt="" width=""> -->
+    <div class="bank-card">
+  
+      <!-- FRONT -->
+      <div class="card-face card-front">
+        <div class="card-top">
+          <span>AnyPay</span>
+         
+        </div>
+
+      
+        <div class="chip"></div>
+
+       <div class="card-number">1234 5678 9012 3456</div> 
+  
+        <div class="card-bottom">
+          
+          <!-- <div>
+            <span>MR</span>
+            <p>FAWZI STUKA</p>
+          </div> -->
+
+          <div>
+            <span>VALID FROM</span>
+            <p>05/26</p>
+          </div>
+
+          <div>
+            <span>EXPIRES END</span>
+            <p>12/28</p>
+            </div>
+            </div>
+            
+          
+            <div class="card-bottom">
+              <div>
+            <span>MR</span>
+            <p>FAWZI STUKA</p>
+            <p>Account n°: 123456</p>
+            </div>
+            <div>
+            <h1>VISA</h1>
+          </div>
+          </div>
+        </div>
+      
+  
+      <!-- BACK -->
+      <div class="card-face card-back">
+        <div class="magnetic-strip"></div>
+        <div class="back-top">
+        <strong>AUTHORISED SIGNATURE - NOT VALID UNLESS SIGNED BELOW</strong>
+        </div>
+        <div class="cvv-box">
+          <span>CVV</span>
+          <div class="cvv">123</div>
+        </div>
+        
+        <h6>IMPORTANT:<small>carte strictement personnelles. propriété de la carte <br> qui peut la retirer à tout moment. toute personne trouvant cette Carte est <br> priée de vouloir sous pli non affranchi à l'adresse ou appeler les numéro ci-dessous:</small></h6>
+
+        <div class="back-bottom">
+          <ul>
+            <strong>You can use your debit card:</strong>
+            <li> Abroud on your holidays</li>
+            <li>Online for goods and services</li>
+            <li>Shopping on the high street</li>
+            <li>On commerce</li>
+        </ul>
+     
+
+     <p>
+        <strong>Any problems using your card abroud call:<br>0033 (0) 644037931<br>00218 21 373 3339</strong>
+      </p>
+    </div>
+        <br>
+       
+
+        <!-- <div class=" bottom-back"></div>
+        <small>anypay.cards</small>from IdyllAc
+        -->
+  
+        <!-- <div class="card-type-back">VISA</div> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<br><br>
+
+
+
   <!-- Server-side rendered logout link/button -->
 <% if (user) { %> 
-<a href="/logout" class="btn btn-logout" 
-style="display:inline-block; margin-top:20px; background:#ff4d4d; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+<a href="/logout" class="btn btn-logout">
 Log out
 </a>
 <% } %>
 </div>
 
 
-  <footer>
+  <!-- <footer>
     <span class="nowrap">&copy;<time id="year"></time> IdyllAc</span>
-  </footer>
+  </footer> -->
 
 
   <!-- ✅ Inject server-side user object. Place your script *at the very bottom*, right before </body> -->

@@ -3,6 +3,11 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 
 module.exports = async function combinedAuth(req, res, next) {
+
+  console.log("COOKIE accessToken:", req.cookies?.accessToken);
+  console.log("AUTH HEADER:", req.headers.authorization);
+  console.log("COOKIES:", req.cookies);
+ 
   try {
     // 1️⃣ SESSION AUTH (Passport)
     if (req.isAuthenticated && req.isAuthenticated()) {
@@ -27,7 +32,7 @@ module.exports = async function combinedAuth(req, res, next) {
       return res.status(401).json({ error: "Invalid token user" });
     }
 
-    req.user = user;
+    if (!req.user) req.user = user;
     console.log("✅ combinedAuth → JWT auth OK:", user.email);
     next();
   } catch (err) {

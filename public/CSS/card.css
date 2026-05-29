@@ -1,0 +1,283 @@
+body {
+   margin: 0;
+   padding: 0;
+    /* background: #0f172a; */
+    background: #333;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+  }
+
+
+  /*  BANKING CARDS SECTION */
+  #banking-cards-section {
+    margin-top: 40px;
+    padding: 20px;
+  }
+  
+  .cards-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+  
+  .cards-slider {
+    width: 100%;
+    overflow-x: auto;
+    /* display: flex; */
+    padding: 20px 0;
+  }
+  
+  .cards-track {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  /* WRAPPER */
+  .bank-card-wrapper {
+    display: block;
+    margin: auto;
+    width: 570px;
+    height: 350px;
+    perspective: 1200px;
+    flex-shrink: 0;
+  }
+  
+  /* CARD */
+  .bank-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
+    cursor: pointer;
+  }
+
+
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+  
+  /* FLIP ON HOVER */
+  .bank-card-wrapper:hover .bank-card {
+    transform: rotateY(180deg);
+  }
+  
+  /* BOTH SIDES */
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+     /* overflow: hidden;   */
+    padding: 20px;
+    backface-visibility: hidden;
+     box-sizing: border-box;
+     /* box-shadow: 0 15px 35px rgba(0,0,0,.4); */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+  
+  /* FRONT */
+  .card-front {
+    background: 
+    linear-gradient(
+      135deg, 
+      #1e3a8a, 
+      #2563eb, 
+      #3b82f6
+      );
+
+    color: white;
+  }
+  
+  /* BACK */
+  .card-back {
+    background: 
+    linear-gradient(
+      135deg, 
+      #111, 
+      #333
+      );
+
+    color: white;
+
+    transform: rotateY(180deg);
+  }
+
+  /* TOP */
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: white;
+    font-size:clamp(1rem,3vw,3rem);
+  }
+
+  img {
+    width: 60%;
+    height:auto;
+  }
+  
+  
+  /* CHIP */
+  .chip {
+    width: 60px;
+    height: 40px;
+    background: gold;
+     /* background:
+        linear-gradient(
+          135deg,
+          gold,
+          #facc15
+        ); */
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+  
+  /* NUMBER */
+  .card-number {
+    font-size: 40px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    font-size:clamp(1rem,3vw,3rem);
+  }
+  
+  /* BOTTOM */
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-size:clamp(1rem,0.5vw,0.5rem);
+  }
+
+  .card-bottom span {
+   display: block; 
+   font-size: 14px;
+   opacity: 0.7; 
+   /* font-size:clamp(1rem,0.5vw,0.5rem); */
+  }
+  
+  .card-bottom p {
+    display: block; 
+    font-size: 14px;
+    /* margin: 5px 0 0; */
+    /* font-size:clamp(1rem,0.5vw,0.5rem); */
+  }
+
+  .card-bottom h1 {
+    display: inline; 
+    margin-right: 15px;
+    font-weight:900; 
+    color: white;
+    font-size:clamp(1rem,3vw,3rem);
+  }
+
+
+  .content-bottom {
+    display: flex;
+    margin-top: 1rem;
+    /* justify-content: space-evenly; */
+  }
+
+  .content-bottom span {
+    display: block; 
+    font-size: 14px;
+    margin-right: 250px;
+    justify-content: space-evenly;
+    /* font-size:clamp(1rem,1vw,1.5rem); */
+  }
+  .content-bottom p {
+    display:block; 
+   justify-content: space-evenly;
+   margin-right: 250px;
+   margin-top: 2px;
+   margin-bottom: 2px;
+   font-size:clamp(1rem,3vw,3rem);
+  }
+ 
+
+  .back-top {
+    padding: 0;
+    font-size: small;
+  }
+
+  
+
+  .back-bottom {
+    display:flex;
+    justify-content: space-evenly;
+  }
+  .back-bottom ul {
+    text-align: left;
+    font-size: small;
+  }
+  .back-bottom p {
+    display:inline;
+    text-align: center;
+    font-size: small;
+  }
+  
+  
+  .card-bottom p {
+    display: block; 
+    font-size: 14px;
+    /* margin-top: 5px;*/
+    margin: 5px 0 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:clamp(0.5rem,2vw,1rem);
+  }
+  
+  
+  /* BACK SIDE */
+  .magnetic-strip {
+     /* margin: 20px -20px 30px; */
+    height: 50px;
+    background: black;
+    margin-bottom: 10px;
+  }
+  
+  .cvv-box {
+    background: white;
+    /* width: 60%; */
+    height: 40px;
+    font: bold;
+    color: black;
+    padding: 20px;
+    border-radius: 6px;
+  }
+  
+  .cvv {
+    text-align: right;
+    font-weight:300;
+    font-size:xx-large;
+  }
+  
+  .card-type-back {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  h6 {
+    margin: 15px;
+  }
+
+
+
+  @media (max-width: 768px) {
+
+    .bank-card-wrapper {
+  
+      width: 280px;
+  
+      height: 170px;
+  
+    }
+  
+  }
+
+
+  

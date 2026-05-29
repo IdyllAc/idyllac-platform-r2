@@ -73,14 +73,15 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // ✅ Associations in the same style as Subscriber & Message
-  User.associate = (models) => {
+    User.associate = (models) => {
+    User.hasMany(models.Card,           {foreignKey: 'userId', as: 'cards', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     User.hasOne(models.UserProfile,     { foreignKey: 'user_id', as: 'profile', onDelete: 'CASCADE' });
     User.hasOne(models.UserSettings,    { foreignKey: 'user_id', as: 'settings', onDelete: 'CASCADE' });
     User.hasOne(models.PersonalInfo,    { foreignKey: 'user_id', as: 'personalInfo', onDelete: 'CASCADE' });
     User.hasOne(models.Document,        { foreignKey: 'user_id', as: 'document', onDelete: 'CASCADE' });
     User.hasOne(models.Selfie,          { foreignKey: 'user_id', as: 'selfie', onDelete: 'CASCADE' });
     User.hasMany(models.RefreshToken,   { foreignKey: 'user_id', as: 'refreshTokens', onDelete: 'CASCADE' });
-
+    
     // Optional, only if SocialUser links to User
     // User.hasMany(models.SocialUser, { foreignKey: 'user_id', as: 'socialAccounts', onDelete: 'CASCADE' });
   };

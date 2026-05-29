@@ -5,7 +5,9 @@
 
 // Auto year
 const yearEl = document.getElementById("year");
-if (yearEl) yearEl.textContent = new Date().getFullYear();
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
 
 console.log("✅ dashboard.js loaded and running!");
 
@@ -24,9 +26,11 @@ if (userDataScript) {
 }
 
 // API base
-const API_BASE = window.location.hostname === 'localhost'
-  ? 'http://localhost:3000'
-  : window.location.origin;
+   const API_BASE = window.location.origin;
+// const API_BASE = 
+// window.location.hostname === 'localhost'
+//   ? 'http://localhost:3000'
+//   : window.location.origin;
 
 // Helper to refresh access token using HttpOnly refresh token cookie
 async function refreshAccessToken() {
@@ -88,7 +92,7 @@ async function loadDashboard() {
     if (sp) sp.style.display = 'flex';
     dashboard.style.display = 'none';
   };
-  const hideSpinner = () => {
+  const hideDashboardSpinner = () => {
     const sp = document.getElementById('loading-spinner');
     if (sp) sp.style.display = 'none';
     dashboard.style.display = 'block';
@@ -239,22 +243,6 @@ async function loadDashboard() {
     });
     
 
-    // //
-    // // ===========================================
-    // // 5️⃣  SUCCESS — PARSE DASHBOARD DATA
-    // // ===========================================
-    // //
-    // const data = await res.json();
-    // console.log("✅ Dashboard data:", data);
-
-    // if (data.uploads) {
-    //   loadPreview(data.uploads.passport, document.getElementById("passportPreview"));
-    //   loadPreview(data.uploads.idCard, document.getElementById("idCardPreview"));
-    //   loadPreview(data.uploads.passport, document.getElementById("licensePreview"));
-    //   loadPreview(data.uploads.passport, document.getElementById("selfiePreview"));
-    // }
-    
-
     // update DOM
     const userSection = document.getElementById('user-info');
     if (userSection && data.user) {
@@ -268,7 +256,7 @@ async function loadDashboard() {
       userSection.innerHTML = `<h2>Hello, ${escapeHtml(serverUser.name || '')}</h2><p>Email: ${escapeHtml(serverUser.email || '')}</p>`;
     }
 
-    hideSpinner();
+    hideDashboardSpinner();
   } catch (err) {
     console.error('❌ Dashboard load error:', err);
 
@@ -298,6 +286,125 @@ async function loadDashboard() {
   }
 }
 
+/* =========================================
+   LOAD BANK CARDS
+========================================= */
+
+async function loadCards() {
+
+  try {
+
+    const res = await fetch('/api/cards', {
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to load cards');
+    }
+
+    const cards = await res.json();
+
+    if (!Array.isArray(cards)) {
+      throw new Error('Invalid cards response');
+    }
+
+    console.log('💳 Cards:', cards);
+
+    renderCards(cards);
+
+  } catch (err) {
+
+    console.error('❌ loadCards:', err);
+
+  }
+
+}
+
+
+
+/* =========================================
+   RENDER CARDS
+========================================= */
+
+function renderCards(cards) {
+
+  const track = document.getElementById('cardsTrack');
+
+  if (!track) return;
+
+  track.innerHTML = '';
+
+  cards.forEach(card => {
+
+    const el = document.createElement('div');
+
+    el.className = 'bank-card-wrapper';
+
+    el.innerHTML = `
+
+      <div class="bank-card">
+
+        <!-- FRONT -->
+        <div class="card-face card-front">
+
+          <div class="card-top">
+            <span>IDYLLIC BANK</span>
+            <span>VISA</span>
+          </div>
+
+          <div class="card-chip"></div>
+
+          <div class="card-number">
+            ${escapeHtml(card.maskedNumber)}
+          </div>
+
+          <div class="card-bottom">
+
+            <div>
+              <span>Card Holder</span>
+              <p>${escapeHtml(serverUser.name || 'USER')}</p>
+            </div>
+
+            <div>
+              <span>Expires</span>
+              <p>${escapeHtml(card.expiry)}</p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- BACK -->
+        <div class="card-face card-back">
+
+          <div class="magnetic-strip"></div>
+
+          <div class="cvv-box">
+            <span>CVV</span>
+            <div class="cvv">
+              ***
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+    // FLIP EFFECT
+    const bankCard = el.querySelector('.bank-card');
+
+    bankCard.addEventListener('click', () => {
+      bankCard.classList.toggle('flipped');
+    });
+
+    track.appendChild(el);
+
+  });
+
+}
+
+
 // ----------------------------------------------------------
 // FALLBACK REDIRECT (Fallback login global scope)
 // ----------------------------------------------------------
@@ -309,6 +416,7 @@ function fallbackRedirect() {
 
   window.location.href = `/${lang}/login`;
 }
+
 // ----------------------------------------------------------
 // MANUAL LOGOUT (logout button)
 // ----------------------------------------------------------
@@ -405,33 +513,97 @@ function resetInactivityTimer() {
   window.addEventListener(evt, resetInactivityTimer);
 });
 
-// Start timer on load
-resetInactivityTimer();
-
 
 // DOM ready wiring
 document.addEventListener('DOMContentLoaded', () => {
+
+  // PROGRESS BAR
+  const progressBar =
+    document.querySelector('.progress-bar-fill');
+
+  if (progressBar) {
+
+    const progress =
+      progressBar.dataset.progress || 0;
+
+    progressBar.style.width = `${progress}%`;
+  }
+
   console.log("📦 DOM ready — calling loadDashboard once");
 
-  // call loadDashboard once
-  loadDashboard().catch(err => console.error("Initial load failed:", err));
+  // CREATE CARD BUTTON
+  const createBtn =
+  document.getElementById('createCardBtn');
 
-  // periodic silent refresh of access token (optional)
+if (createBtn) {
+
+  createBtn.addEventListener('click', async () => {
+
+    try {
+
+      const res = await fetch('/api/cards/create', {
+        method: 'POST',
+        credentials: 'include'
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create card');
+      }
+
+      await loadCards();
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  });
+
+
+
+  // LOAD DASHBOARD
+  loadDashboard()
+    .then(() => {
+
+      loadCards();
+
+    })
+    .catch(err => {
+
+      console.error("Initial load failed:", err);
+
+    });
+
+  // TOKEN REFRESH
   setInterval(() => {
+
     refreshAccessToken().catch(() => {});
+
   }, 14 * 60 * 1000);
 
+  // LOGOUT BUTTON
   const logoutBtn = document.querySelector('.btn-logout');
+
   if (logoutBtn) {
+
     logoutBtn.addEventListener('click', (e) => {
+
       e.preventDefault();
+
       doLogout();
+
     });
+
   }
+
+  // START INACTIVITY TIMER
+  resetInactivityTimer();
+
+}
 });
 
-
-async function loadPreview(imgEl, key) {
+async function loadPreview(key, imgEl) {
   if (!key || !imgEl) return;
 
   console.log("🖼️ loadPreview called with:", key);
@@ -449,6 +621,9 @@ async function loadPreview(imgEl, key) {
     // imgEl.style.display = 'block';
     imgEl.hidden = false;
 }
+
+
+
 
 
     

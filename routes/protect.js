@@ -30,10 +30,12 @@ router.post(
   personalInfoController.submitPersonalInfo);
 
 
-  router.post("/api/upload/presign", async (req, res ) => {
+  router.post(
+    "/api/upload/presign", 
     combinedAuth,
-    uploadController.getPresignedDocumentUrl
-  });
+    noCache,
+    uploadController.getPresignedUrl
+  );
 
 
 // ✅ Show Upload Document form

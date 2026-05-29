@@ -97,6 +97,8 @@ exports.postRegister = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const confirmationToken = uuidv4();
 
+    console.log("🚀 About to create user...");
+
     const newUser = await User.create({
       name,
       email,
@@ -245,7 +247,7 @@ exports.postLoginForm = (req, res, next) => {
  * No req.login (no session). Returns JSON tokens.
  */
 exports.postLoginApi = (req, res, next) => {
-  console.log('📥 POST /api/auth/login attempt:', req.body.email);
+  console.log('📥 POST /api/auth/login attempt:', req.body); // This was the origin req.body.email
 
   passport.authenticate('local', async (err, user, info) => {
     if (err) {
@@ -488,6 +490,7 @@ exports.unifiedLogout = async (req, res) => {
         return res.redirect(`/${lang}/register`);
   }
 };
+
 
 
 

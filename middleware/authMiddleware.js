@@ -1,6 +1,13 @@
 // middleware/authMiddleware.js
 function checkNotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) return res.redirect('/dashboard');
+    if (req.isAuthenticated && req.isAuthenticated()) {
+      const lang =
+      ['ar', 'en', 'fr'].includes(req.session?.lang) 
+      ? req.session.lang
+      : 'en';
+      
+      return res.redirect(`/${lang}/dashboard`);
+    }
     next();
   }
 
