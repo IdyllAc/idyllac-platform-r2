@@ -11,10 +11,10 @@ const noCache = require('../middleware/noCache');
 console.log("📌 authRoutes loaded");
 
 // API: Register (JSON)
-router.post('/api/auth/register', apiAuthController.postRegister);
+router.post('/register', apiAuthController.postRegister);
 
 // API: Login (JSON)
-router.post('/api/auth/login', apiAuthController.postLoginApi);
+router.post('/login', apiAuthController.postLoginApi);
 
 // API: Refresh token
 router.post('/refresh-token', apiAuthController.refreshToken);

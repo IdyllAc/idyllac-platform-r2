@@ -274,13 +274,23 @@ function checkNotAuthenticated(req, res, next) {
  ***********************/
 app.use('/:lang', (req, res, next) => {
   const allowed = ['ar', 'en', 'fr'];
-  const lang = allowed.includes(req.params.lang) ? req.params.lang : 'en';
 
-  req.session.lang = lang;
-  req.lang = lang;
+  req.lang = allowed.includes(req.params.lang)
+    ? req.params.lang
+    : 'en';
 
   next();
 });
+// app.use('/:lang', (req, res, next) => {
+//   const allowed = ['ar', 'en', 'fr'];
+//   const lang = allowed.includes(req.params.lang) ? req.params.lang : 'en';
+
+//   req.session.lang = lang;
+//   req.lang = lang;
+
+//   next();
+// });
+
 
 /***********************
  *  ROOT REDIRECT
@@ -366,6 +376,10 @@ app.get('/:lang/tos', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/legal', file));
 });
 
+app.get('/test-route', (req, res) => {
+  res.send('OK');
+});
+
 /***********************
  *  AUTH PAGES (WITH GUARD)
  ***********************/
@@ -411,9 +425,9 @@ sequelize.authenticate()
   .then(() => console.log('✅ Database connected'))
   .catch(err => console.error('❌ DB connection error:', err));
 
-sequelize.sync()
-  .then(() => console.log('✅ ALL models synced'))
-  .catch(err => console.error('❌ Sync error:', err));
+// sequelize.sync()
+//   .then(() => console.log('✅ ALL models synced'))
+//   .catch(err => console.error('❌ Sync error:', err));
 
 /***********************
  *  START SERVER
