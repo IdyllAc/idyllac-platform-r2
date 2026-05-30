@@ -146,51 +146,71 @@ app.use(
 // console.log("NODE_ENV =", process.env.NODE_ENV);
 
 /***********************
- *  SESSION STORE
+ * SESSION STORE
  ***********************/
 let pgPool;
 
+if (process.env.DATABASE_URL) {
 
-// //  if (process.env.NODE_ENV === 'production') {
-  if (process.env.DATABASE_URL) {
-  // Render/Postgres in production
-  // pgPool = new Pool({
-  //   connectionString: process.env.DATABASE_URL,
-  //  ssl: { rejectUnauthorized: false },
-  // });
+  // =========================
+  // RENDER / PRODUCTION
+  // =========================
   pgPool = new Pool({
     connectionString: process.env.DATABASE_URL,
-  
+
     ssl: {
       require: true,
       rejectUnauthorized: false,
     },
-  
-    max: 20,
+
+    max: 10,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 10000,
-  });
-
-  pgPool.on("error", (err) => {
-    console.error("Unexpected PG Pool Error:", err);
+    keepAlive: true,
   });
 
 } else {
-  // Local development DB
-   pgPool = new Pool({
+
+  // =========================
+  // LOCAL DEVELOPMENT
+  // =========================
+  pgPool = new Pool({
     host: process.env.DB_HOST || "127.0.0.1",
     port: process.env.DB_PORT || 5432,
     user: process.env.DB_USER || "stidyllac",
     password: process.env.DB_PASSWORD || null,
     database: process.env.DB_NAME || "idyllac_db_e081",
-    ssl: false, // explicitly off in dev
+
+    ssl: false,
+
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+    keepAlive: true,
   });
 }
 
+// =========================
+// GLOBAL PG POOL ERROR HANDLER
+// =========================
+pgPool.on("error", (err) => {
+  console.error("Unexpected PG Pool Error:", err);
+});
+
+// =========================
+// SESSION STORE
+// =========================
 const store = new pgSession({
   pool: pgPool,
   tableName: "session",
-  createTableIfMissing: false,  
+  createTableIfMissing: false,
+});
+
+// =========================
+// SESSION STORE ERROR HANDLER
+// =========================
+store.on("error", (err) => {
+  console.error("SESSION STORE ERROR:", err);
 });
 
 /***********************
@@ -415,6 +435,11 @@ app.use('/api/transfers', transferRoutes);
  ***********************/
 app.use((err, req, res, next) => {
   console.error('💥 Uncaught error:', err.stack);
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
   res.status(500).send('Something went wrong!');
 });
 

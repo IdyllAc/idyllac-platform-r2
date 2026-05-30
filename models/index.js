@@ -16,6 +16,8 @@ if (!config) {
 
 let sequelize;
 
+console.log("DATABASE_URL =", process.env.DATABASE_URL);
+
 // ✅ Prefer DATABASE_URL if explicitly configured
 if (config.use_env_variable) {
   const url = process.env[config.use_env_variable];
