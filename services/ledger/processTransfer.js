@@ -13,7 +13,8 @@ const {
     const sequelize = BankAccount.sequelize;
   
     const t = await sequelize.transaction({
-      isolationLevel: sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE
+      isolationLevel: 
+      sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE
     });
   
     try {

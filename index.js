@@ -155,10 +155,27 @@ let pgPool;
 // //  if (process.env.NODE_ENV === 'production') {
   if (process.env.DATABASE_URL) {
   // Render/Postgres in production
+  // pgPool = new Pool({
+  //   connectionString: process.env.DATABASE_URL,
+  //  ssl: { rejectUnauthorized: false },
+  // });
   pgPool = new Pool({
     connectionString: process.env.DATABASE_URL,
-   ssl: { rejectUnauthorized: false },
+  
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
   });
+
+  pgPool.on("error", (err) => {
+    console.error("Unexpected PG Pool Error:", err);
+  });
+
 } else {
   // Local development DB
    pgPool = new Pool({
@@ -174,7 +191,7 @@ let pgPool;
 const store = new pgSession({
   pool: pgPool,
   tableName: "session",
-  createTableIfMissing: true,  
+  createTableIfMissing: false,  
 });
 
 /***********************
