@@ -42,7 +42,7 @@ const protectRoutes = require('./routes/protect');      // Docs, selfie
 const profileRoutes = require('./routes/profile');
 const dashboardRoutes = require('./routes/dashboard');
 const socialAuthRoutes = require('./routes/authSocial');
-const adminAuthRoutes = require('./routes/admin');
+// const adminAuthRoutes = require('./routes/admin');
 const uploadRoutes = require('./routes/upload');
 const cardRoutes = require('./routes/card');
 const transferRoutes = require('./routes/transfers');
@@ -382,7 +382,7 @@ app.use('/', publicRoutes); // EJS routes (login, register, static pages)
 app.use('/subscribe', subscribeRoutes); // subscription forms (email/social)
 app.use('/auth', socialAuthRoutes);
 app.use('/message', messageRoutes); // contact/message forms 
-app.use('/admin', adminAuthRoutes); // admin login + review dashboard ???/??
+// app.use('/admin', adminAuthRoutes); // admin login + review dashboard ???/??
 
 
 // JSON API
