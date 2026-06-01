@@ -4,114 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Profile</title>
+  <link rel="stylesheet" href="/CSS/profile.css">
   <link
 rel="stylesheet"
 href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
   <!-- <script src="https://kit.fontawesome.com/cbdd759dc1.js" crossorigin="anonymous"></script> -->
- <style>
-   body {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 1.1rem;
-      background-image: linear-gradient(#1f7d5f, whitesmoke);
-    }
-    h2 { text-align: center; color: orange; }
-
-    .locked-field {
-        background-color: #f3f3f3;
-        color: #555;
-        cursor: not-allowed;
-    }
-
-    p { text-align: center; color: #555; margin-bottom: 2em; }
-    
-    .container {
-      width: 100%;
-      min-height: 85vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .profile-card {
-      width: 520px;
-      padding: 25px 35px;
-      border-radius: 6px;
-      background: #1f7d5f;
-      box-shadow: 10px 20px 20px rgba(0,0,0,0.4);
-      color: #fff;
-      position: relative;
-    }
-    .fa-user-circle {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: orange;
-      color: #1f7d5f;
-      font-size: 34px;
-      padding: 15px;
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-    .input-group {
-      margin: 15px 0;
-      text-align: left;
-    }
-    .input-group label {
-      display: block;
-      font-size: 14px;
-      color: #eee;
-      margin-bottom: 4px;
-    }
-    .input-group input,
-    .input-group select {
-      width: 100%;
-      padding: 8px 10px;
-      border: none;
-      border-bottom: 1px solid #999;
-      background: transparent;
-      font-size: 16px;
-      color: chartreuse;
-      outline: none;
-    }
-    ::placeholder { color: wheat; }
-    .btn {
-      display: inline-block;
-      padding: 12px 25px;
-      margin: 15px 5px 5px 0;
-      font-size: 1rem;
-      font-weight: bold;
-      text-align: center;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease-in-out;
-      text-decoration: none;
-      border: none;
-    }
-    .btn-primary {
-      background-color: orange;
-      color: white;
-    }
-    .btn-primary:hover { background-color: #e69500; }
-    .btn-outline {
-      background-color: transparent;
-      border: 2px solid orange;
-      color: orange;
-    }
-    .btn-outline:hover {
-      background-color: orange;
-      color: white;
-    }
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      color: #1f7d5f;
-      font-size: 0.9em;
-    }
-    small.required { color: orange; } 
-  </style>
 </head>
 <body>
   <div class="container">
@@ -124,15 +21,15 @@ href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
         <!-- Unchangeable -->
        <div class="input-group">
           <label for="first_name">First Name *</label>
-          <input type="text" id="first_name" name="first_name" autocomplete="on" readonly class="locked-field" />
+          <input type="text" id="first_name" name="first_name" autocomplete="off" readonly class="locked-field" />
         </div>
         <div class="input-group">
           <label for="last_name">Last Name *</label>
-          <input type="text" id="last_name" name="last_name" autocomplete="on" readonly class="locked-field" /> 
+          <input type="text" id="last_name" name="last_name" autocomplete="off" readonly class="locked-field" /> 
         </div>
         <div class="input-group">
           <label for="date_of_birth">Date of Birth *</label>
-          <input type="date" id="date_of_birth" name="date_of_birth" autocomplete="on" readonly class="locked-field" />
+          <input type="date" id="date_of_birth" name="date_of_birth" autocomplete="off" readonly class="locked-field" />
         </div>
 
         <!-- Editable -->

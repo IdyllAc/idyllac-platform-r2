@@ -6,6 +6,7 @@ const router = express.Router();
 // const { v4: uuidv4 } = require('uuid');
 
 const { postTransaction } = require('../services/ledger/postTransaction');
+const { appendLedgerEvent } = require('../services/ledger/eventAppender');
 
 const {
   Sequelize,
@@ -136,17 +137,17 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
       pendingBalance: Number(senderAccount.pendingBalance) + parsedAmount
     }, { transaction: t });
 
-    await Transaction.create({     //commiitted suposed
-      bankAccountId: senderAccount.id,
-      reference: transfer.reference,
-      type: 'TRANSFER',
-      direction: 'DEBIT',
-      amount: parsedAmount,
-      currency: senderAccount.currency,
-      status: 'PENDING',
-      balanceBefore: senderAccount.availableBalance,
-      balanceAfter: Number(senderAccount.availableBalance) - parsedAmount
-    }, { transaction: t });
+    // await Transaction.create({     //commiitted suposed
+    //   bankAccountId: senderAccount.id,
+    //   reference: transfer.reference,
+    //   type: 'TRANSFER',
+    //   direction: 'DEBIT',
+    //   amount: parsedAmount,
+    //   currency: senderAccount.currency,
+    //   status: 'PENDING',
+    //   balanceBefore: senderAccount.availableBalance,
+    //   balanceAfter: Number(senderAccount.availableBalance) - parsedAmount
+    // }, { transaction: t });
 
     await createEvent({
       t,
@@ -416,7 +417,7 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
     // Sequelize.Transaction.ISOLATION_LEVELS.REPEATABLE_READ
     Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE
   });
-  
+
       try {
   
         const transfer =
@@ -443,15 +444,29 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
           });
   
         }
+
+        console.log("SETTLE STATUS:", transfer.status);
   
-        if (transfer.status !== 'PROCESSING') {
-  
-          await t.rollback();
-  
-          return res.status(400).json({
-            error: 'Transfer must be PROCESSING'
+          // =========================
+          // IDEMPOTENCY GUARD (CRITICAL)
+          // =========================
+
+          // HARD IDENTITY LOCK (IMPORTANT)
+          if (transfer.status === 'SETTLED') {
+            await t.rollback();
+          return res.json({
+          success: true,
+          message: 'Already settled',
+          transferId: transfer.id
           });
-  
+        }
+
+        // ONLY PROCESS VALID STATE
+          if (transfer.status !== 'PROCESSING') { 
+            await t.rollback();  
+          return res.status(400).json({
+          error: 'Transfer must be PROCESSING first'
+          });
         }
   
         const account =
@@ -478,52 +493,52 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
           parseFloat(transfer.amount);
   
         // =========================
-// BANK ACCOUNT BALANCE FLOW
-// =========================
+        // BANK ACCOUNT BALANCE FLOW
+        // =========================
 
-const pendingBefore =
-parseFloat(account.pendingBalance);
+        const pendingBefore =
+           parseFloat(account.pendingBalance);
 
-const ledgerBefore =
-parseFloat(account.ledgerBalance);
+        const ledgerBefore =
+           parseFloat(account.ledgerBalance);
 
-const balanceBefore =
-parseFloat(account.balance);
+        const balanceBefore =
+           parseFloat(account.balance);
 
-const availableBefore =
-parseFloat(account.availableBalance);
+        const availableBefore =
+           parseFloat(account.availableBalance);
 
-const pendingAfter =
-pendingBefore - amount;
+        const pendingAfter =
+           pendingBefore - amount;
 
-const ledgerAfter =
-ledgerBefore - amount;
+        const ledgerAfter =
+           ledgerBefore - amount;
 
-const balanceAfter =
-balanceBefore - amount;
+        const balanceAfter =
+           balanceBefore - amount;
 
-const availableAfter =
-availableBefore - amount;
+        const availableAfter =
+           availableBefore - amount;
 
-await account.update({
+        await account.update({
 
-pendingBalance:
-  pendingAfter,
+        pendingBalance:
+           pendingAfter,
 
-availableBalance:
-  availableAfter,
+        availableBalance:
+           availableAfter,
 
-ledgerBalance:
-  ledgerAfter,
+        ledgerBalance:
+           ledgerAfter,
 
-balance:
-  balanceAfter
+        balance:
+           balanceAfter
 
-}, {
+        }, {
 
-transaction: t,
+        transaction: t,
 
-});
+   });
 
 
         // =========================
@@ -561,43 +576,22 @@ transaction: t,
         // =========================
         // TRANSACTION JOURNAL
         // =========================
-  
-        await Transaction.create({
-  
-          bankAccountId:
-            account.id,
-  
-          reference:
-            settlementReference,
-  
-          type:
-            'TRANSFER',
-  
-          direction:
-            'DEBIT',
-  
-          amount,
-  
-          currency:
-            account.currency,
-  
-          description:
-            'Transfer settled',
-  
-          status:
-            'COMPLETED',
-  
-          balanceBefore:
-            ledgerBefore,
-  
-          balanceAfter:
-            ledgerAfter
-  
-        }, {
-  
-          transaction: t
-  
+
+        await appendLedgerEvent({
+          sequelize,
+          transaction: t,
+          aggregateId: transfer.id,
+          eventType: 'TRANSFER_SETTLED',
+          reference: settlementReference,
+          userId: req.user.id,
+          payload: {
+            amount,
+            accountId: account.id
+          },
+          idempotencyKey: req.idempotencyKey
         });
+  
+        
   
         // =========================
         // REAL DOUBLE-ENTRY LEDGER
@@ -1031,19 +1025,7 @@ transaction: t,
         availableBalance: parseFloat(account.availableBalance) + reversalAmount
       }, { transaction: t });
   
-      // =========================
-      // 10. JOURNAL ENTRY
-      // =========================
-      await Transaction.create({
-        bankAccountId: account.id,
-        reference: reversalReference,
-        type: 'REVERSAL',
-        direction: 'CREDIT',
-        amount: reversalAmount,
-        currency: account.currency,
-        description: 'Transfer reversed',
-        status: 'COMPLETED'
-      }, { transaction: t });
+     
   
       // =========================
       // 11. FINAL STATE
@@ -1071,507 +1053,6 @@ transaction: t,
     }
   });
 
-//  router.post('/reverse/:id', combinedAuth, idempotency, async (req, res) => {
-
-//   const sequelize = BankAccount.sequelize;
-
-//   const t = await sequelize.transaction({
-//     isolationLevel: 
-//     Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE
-//   });
-
-//   // =========================
-//   // FIND TRANSFER
-//   // =========================
-
-//   try {
-
-//     const transfer = await Transfer.findOne({
-//       where: {
-//         id: req.params.id,
-//         userId: req.user.id
-//       },
-//       transaction: t,
-
-//       lock: t.LOCK.UPDATE
-//     });
-
-//     if (!transfer) {
-
-//       await t.rollback();
-      
-//       return res.status(404).json({ error: "Transfer not found" });
-//     }
-
-//     console.log("TRANSFER OBJECT:", transfer);
-
-//     // 2. NOW SAFE TO USE IT FOR LOGGING AND IDEMPOTENCY CHECKS WITHOUT RISK OF LOCK CONTENTION
-//     const reversalReference = `REV-${transfer.reference}`;
-
-//     const existingReversal = await Transaction.findOne({
-//       where: {
-//          reference: reversalReference
-//        },
-//       transaction: t,
-//       lock: t.LOCK.UPDATE
-//     });
-
-//     if (existingReversal) {
-//       await t.rollback();
-//       return res.status(200).json({
-//       success: true,
-//       message: "Transfer already reversed",
-//       reference: reversalReference
-//     });
-//   }
-    
-        
-//         // =========================
-//         // ONLY SETTLED/COMPLETED
-//         // CAN BE REVERSED
-//         // =========================
-   
-//            // VALID REVERSAL STATES
-        
-//          if (transfer.status === 'REVERSED') {
-
-//           await t.rollback();
-
-//              return res.status(409).json({
-//              error: 'Transfer already reversed'
-//            });
-
-//           }
-
-//         if (
-//             transfer.status !== 'SETTLED' &&
-//             transfer.status !== 'COMPLETED'
-//           ) {
-
-//             await t.rollback();
-
-//             return res.status(400).json({
-//             error:
-//            'Only SETTLED or COMPLETED transfers can be reversed'
-//           });
-
-//           } 
-          
-
-//         // =========================
-//         // FIND BANK ACCOUNT
-//         // =========================
-  
-//         const account =
-//           await BankAccount.findOne({
-  
-//             where: {
-//               id: transfer.senderAccountId,
-//             // userId: req.user.id    // ? Temporarily remove userId filter to allow reversal even if account ownership has changed since transfer execution
-//             },
-  
-//             transaction: t,
-
-//             lock: t.LOCK.UPDATE
-//           });
-  
-//         if (!account) {
-  
-//           await t.rollback();
-  
-//           return res.status(404).json({
-//             error: 'Bank account not found'
-//           });
-  
-//         }
-  
-//         const amount = parseFloat(transfer.amount);
-
-//         if (amount <= 0) {
-             
-//           throw new Error("Invalid reversal amount");
-//         }
-  
-//         // =========================
-//         // RESTORE BANK BALANCES
-//         // =========================
-  
-//         const balanceBefore =
-//           parseFloat(account.balance);
-  
-//         const ledgerBefore =
-//           parseFloat(account.ledgerBalance);
-  
-//         const availableBefore =
-//           parseFloat(account.availableBalance);
-  
-//         const balanceAfter =
-//           balanceBefore + amount;
-  
-//         const ledgerAfter =
-//           ledgerBefore + amount;
-  
-//         const availableAfter =
-//           availableBefore + amount;
-  
-//         await account.update({
-  
-//           balance:
-//             balanceAfter,
-  
-//           ledgerBalance:
-//             ledgerAfter,
-  
-//           availableBalance:
-//             availableAfter
-  
-//         }, {
-  
-//           transaction: t
-  
-//         });
-  
-//         // =========================
-//         // FIND LEDGER ACCOUNTS
-//         // =========================
-  
-//         const customerLedger =
-//           await LedgerAccount.findOne({
-  
-//             where: {
-//               userId: req.user.id,
-//               accountType: 'CUSTOMER'
-//             },
-  
-//             transaction: t,
-
-//             lock: t.LOCK.UPDATE
-//           });
-  
-//         if (!customerLedger) {
-  
-//           await t.rollback();
-  
-//           return res.status(404).json({
-//             error: 'Customer ledger not found'
-//           });
-  
-//         }
-  
-//         const systemLedger =
-//           await LedgerAccount.findOne({
-  
-//             where: {
-//               accountType: 'SYSTEM_CLEARING'
-//             },
-  
-//             transaction: t,
-
-//             lock: t.LOCK.UPDATE
-//           });
-  
-//         if (!systemLedger) {
-  
-//           await t.rollback();
-  
-//           return res.status(404).json({
-//             error: 'System ledger not found'
-//           });
-  
-//         }
-
-//         // =========================
-//         // VALIDATE REVERSAL LEDGER ENTRIES
-//         // =========================
-
-//         await validateLedger({
-
-//           t,
-        
-//           reference: reversalReference,
-        
-//           currency:
-//             account.currency,
-        
-//           debitEntries: [
-//             {
-//               amount,
-//               currency: 
-//                 account.currency
-//             }
-//           ],
-        
-//           creditEntries: [
-//             {
-//               amount,
-//               currency:
-//                 account.currency
-//             }
-//           ]
-        
-//         });
-
-
-//         // =========================
-//         // POST REVERSAL TRANSACTIONS (ATOMIC)
-//         // =========================
-//         await postTransaction({
-//           t,
-//           fromAccount: systemLedger,
-//           toAccount: customerLedger,
-//           amount,
-//           currency: account.currency,
-//           reference: ledgerReference,   // 👈 UNIQUE PER OPERATION
-//           description: 'Transfer reversal',
-//           transferId: transfer.id
-//         });
-
-//            // Replaced by  postTransaction above to ensure atomicity and proper validation
-//         // // =========================
-//         // // COMPENSATING LEDGER ENTRIES
-//         // // =========================
-  
-//         // // CUSTOMER GETS CREDIT BACK
-  
-//         // await LedgerEntry.create({
-  
-//         //   ledgerAccountId:
-//         //     customerLedger.id,
-
-//         //   transferId:
-//         //     transfer.id,
-  
-//         //   reference: 
-//         //     reversalReference,
-  
-//         //   type:
-//         //     'CREDIT',
-  
-//         //   amount:
-//         //     reversalAmount,
-  
-//         //   currency:
-//         //     account.currency,
-  
-//         //   description:
-//         //     'Transfer reversal'
-  
-//         // }, {
-  
-//         //   transaction: t
-  
-//         // });
-
-
-//            // Replaced by  postTransaction above to ensure atomicity and proper validation
-//         // // SYSTEM CLEARING LOSES FUNDS
-  
-//         // await LedgerEntry.create({
-  
-//         //   ledgerAccountId:
-//         //     systemLedger.id,
-
-//         //   transferId:
-//         //     transfer.id,
-  
-//         //   reference: 
-//         //     reversalReference,
-  
-//         //   type:
-//         //     'DEBIT',
-  
-//         //   amount:
-//         //     reversalAmount,
-  
-//         //   currency:
-//         //     account.currency,
-  
-//         //   description:
-//         //     'Transfer reversal settlement'
-  
-//         // }, {
-  
-//         //   transaction: t
-  
-//         // });
-
-  
-//         // // =========================
-//         // // UPDATE LEDGER BALANCES
-//         // // =========================
-  
-//         // await customerLedger.update({
-  
-//         //   balance:
-//         //     parseFloat(customerLedger.balance) + amount
-  
-//         // }, {
-  
-//         //   transaction: t
-  
-//         // });
-  
-//         // await systemLedger.update({
-  
-//         //   balance:
-//         //     parseFloat(systemLedger.balance) - amount
-  
-//         // }, {
-  
-//         //   transaction: t
-  
-//         // });
-
-//         // if (systemLedger.balance - amount < 0) {
-//         //   throw new Error("System clearing underflow blocked");
-//         // }
-  
-//         // =========================
-//         // TRANSACTION JOURNAL
-//         // =========================
-  
-//         await Transaction.create({
-  
-//           bankAccountId:
-//             account.id,
-  
-//           reference: reversalReference,
-  
-//           type:
-//             'REVERSAL',
-  
-//           direction:
-//             'CREDIT',
-  
-//             amount,
-  
-//           currency:
-//             account.currency,
-  
-//           description:
-//             'Transfer reversed',
-  
-//           status:
-//             'COMPLETED',
-  
-//           balanceBefore:
-//             availableBefore,
-  
-//           balanceAfter:
-//             availableAfter
-  
-//         }, {
-  
-//           transaction: t
-  
-//         });
-
-
-
-//         // =========================
-//         // VALIDATE FINAL LEDGER STATE
-//         // =========================
-//         await validateLedger({
-
-//           t,
-        
-//           reference: reversalReference, // group reference still same
-        
-//           debitEntries: [
-//             {
-//               amount,
-//               currency: account.currency,
-//                 reference: debitRef
-//             }
-//           ],
-        
-//           creditEntries: [
-//             {
-//               amount,
-//               currency: account.currency,
-//               reference: creditRef
-//             }
-//           ]
-        
-//         });
-
-
-  
-//         // =========================
-//         // UPDATE TRANSFER STATUS
-//         // =========================
-  
-//         await transfer.update(
-//           { status: 'REVERSED' 
-
-//           }, { 
-//              transaction: t 
-//             }
-//           );
-  
-//         // =========================
-//         // COMMIT
-//         // =========================
-
-//         await t.commit();
-
-//         if (req.idempotencyRecord) {
-
-//         await req.idempotencyRecord.update({
-//         status: 'COMPLETED',
-//         response: {
-//         success: true,
-//         transferId: transfer.id,
-//        }
-
-//     });
-
-//   }
-
-//   return res.json({
-//      success: true,
-//      message:
-//         'Transfer reversed successfully',
-//      transfer
-//   });
-  
-//       } catch (err) {
-  
-//         await t.rollback();
-  
-//           // console.error(err);
-//           console.error("REVERSE ERROR FULL:", err);
-//           console.error("STACK:", err?.stack);
-
-
-//         if (req.idempotencyRecord) {
-
-//           // await req.idempotencyRecord.destroy();
-//           await req.idempotencyRecord.update({
-//             status: 'FAILED',
-//             retryCount: 
-//               (req.idempotencyRecord.retryCount || 0) + 1,
-//             response: {
-//               error: 'Transfer reversal failed'
-//             }
-
-//           });
-        
-//         }
-  
-//         return res.status(500).json({
-//           error: err.message // Only for debugging, remove later - in production, return a generic message to avoid leaking internal details
-//           // error: err.message || 'Transfer reversal failed'
-  
-//           // error:
-//           //    'Reversal failed'
-  
-//         });
-  
-//       }
-  
-//     }
-//   );
 
 
   router.post(
@@ -1691,39 +1172,7 @@ transaction: t,
   
         });
   
-        await Transaction.create({
-  
-          bankAccountId:
-            account.id,
-  
-          reference:
-            transfer.reference,
-  
-          type: 'REVERSAL',
-  
-          direction: 'CREDIT',
-  
-          amount,
-  
-          currency:
-            account.currency,
-  
-          description:
-            'Transfer cancelled',
-  
-          status: 'COMPLETED',
-  
-          balanceBefore:
-            availableBefore,
-  
-          balanceAfter:
-            availableAfter
-  
-        }, {
-  
-          transaction: t
-  
-        });
+        
   
         await t.commit();
   

@@ -416,7 +416,7 @@ app.use('/', publicRoutes); // EJS routes (login, register, static pages)
 app.use('/subscribe', subscribeRoutes); // subscription forms (email/social)
 app.use('/auth', socialAuthRoutes);
 app.use('/message', messageRoutes); // contact/message forms 
-// app.use('/admin', adminAuthRoutes); // admin login + review dashboard ???/??
+app.use('/api/admin', adminAuthRoutes); // admin login + review dashboard ???/??
 
 
 // JSON API

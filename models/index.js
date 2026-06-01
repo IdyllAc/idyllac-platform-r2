@@ -3,6 +3,9 @@ const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
 
+console.log("NODE_ENV =", process.env.NODE_ENV);
+console.log("DATABASE_URL =", process.env.DATABASE_URL);
+
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const config = require(path.join(__dirname, "..", "config", "database.js"))[env];
@@ -15,8 +18,6 @@ if (!config) {
 }
 
 let sequelize;
-
-console.log("DATABASE_URL =", process.env.DATABASE_URL);
 
 // ✅ Prefer DATABASE_URL if explicitly configured
 if (config.use_env_variable) {

@@ -42,12 +42,12 @@ storage,
 // 🧍‍♂️ Profile routes 
 
 // Render profile page (EJS)
-router.get('/', combinedAuth, noCache, (req, res) => {
+router.get('/profile', combinedAuth, noCache, (req, res) => {
   res.render('profile', { user: req.user });
 });
 
 // 🧠 Get profile data (JSON)
-router.get('/data', combinedAuth, profileController.getProfile);
+router.get('/data', combinedAuth, noCache, profileController.getProfile);
 
 // 🟢 Profile routes 
 // Update or create profile

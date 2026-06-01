@@ -62,17 +62,17 @@ const {
       // 4. TRANSACTION RECORD
       // =========================
   
-      await Transaction.create({
-        bankAccountId: account.id,
-        reference: payload.reference,
-        type: 'TRANSFER',
-        direction: 'DEBIT',
-        amount,
-        currency: account.currency,
-        status: 'PENDING',
-        balanceBefore: availableBefore,
-        balanceAfter: availableAfter
-      }, { transaction: t });
+      // await Transaction.create({
+      //   bankAccountId: account.id,
+      //   reference: payload.reference,
+      //   type: 'TRANSFER',
+      //   direction: 'DEBIT',
+      //   amount,
+      //   currency: account.currency,
+      //   status: 'PENDING',
+      //   balanceBefore: availableBefore,
+      //   balanceAfter: availableAfter
+      // }, { transaction: t });
   
       // =========================
       // 5. LEDGERS

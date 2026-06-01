@@ -59,25 +59,25 @@ async function postTransaction({
   // 3. 3. DOUBLE ENTRY (ATOMIC WRITE)
   // =========================
 
-  await LedgerEntry.create({
-    transferId,
-    ledgerAccountId: fromAccount.id,
-    reference,
-    type: 'DEBIT',
-    amount: parsedAmount,
-    currency,
-    description
-  }, { transaction: t });
+  // await LedgerEntry.create({
+  //   transferId,
+  //   ledgerAccountId: fromAccount.id,
+  //   reference,
+  //   type: 'DEBIT',
+  //   amount: parsedAmount,
+  //   currency,
+  //   description
+  // }, { transaction: t });
 
-  await LedgerEntry.create({
-    transferId,
-    ledgerAccountId: receiver.id,
-    reference,
-    type: 'CREDIT',
-    amount: parsedAmount,
-    currency,
-    description
-  }, { transaction: t });
+  // await LedgerEntry.create({
+  //   transferId,
+  //   ledgerAccountId: receiver.id,
+  //   reference,
+  //   type: 'CREDIT',
+  //   amount: parsedAmount,
+  //   currency,
+  //   description
+  // }, { transaction: t });
 
   // =========================
   // 4. BALANCE UPDATE (SAFE)
