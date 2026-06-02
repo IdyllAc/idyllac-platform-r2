@@ -137,17 +137,7 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
       pendingBalance: Number(senderAccount.pendingBalance) + parsedAmount
     }, { transaction: t });
 
-    // await Transaction.create({     //commiitted suposed
-    //   bankAccountId: senderAccount.id,
-    //   reference: transfer.reference,
-    //   type: 'TRANSFER',
-    //   direction: 'DEBIT',
-    //   amount: parsedAmount,
-    //   currency: senderAccount.currency,
-    //   status: 'PENDING',
-    //   balanceBefore: senderAccount.availableBalance,
-    //   balanceAfter: Number(senderAccount.availableBalance) - parsedAmount
-    // }, { transaction: t });
+
 
     await createEvent({
       t,
@@ -409,6 +399,15 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
 
 
 
+  /**
+ * BUSINESS SOURCE OF TRUTH
+ *
+ * Money movement happens here.
+ *
+ * CQRS events are emitted AFTER business logic.
+ *
+ * Do not move balance updates into projections.
+ */
   router.post('/settle/:id', combinedAuth, idempotency, async (req, res) => {
   
       const sequelize = BankAccount.sequelize;
@@ -746,9 +745,15 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
 
 
 
-
-
-
+  /**
+ * BUSINESS SOURCE OF TRUTH
+ *
+ * Money movement happens here.
+ *
+ * CQRS events are emitted AFTER business logic.
+ *
+ * Do not move balance updates into projections.
+ */
 
   router.post(
     '/complete/:id',
@@ -842,8 +847,6 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
         // COMMIT
        // =========================
 
-
-        
         await t.commit();
   
         return res.json({
@@ -874,6 +877,15 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
 
 
 
+  /**
+ * BUSINESS SOURCE OF TRUTH
+ *
+ * Money movement happens here.
+ *
+ * CQRS events are emitted AFTER business logic.
+ *
+ * Do not move balance updates into projections.
+ */
   router.post('/reverse/:id', combinedAuth, idempotency, async (req, res) => {
 
     const sequelize = BankAccount.sequelize;

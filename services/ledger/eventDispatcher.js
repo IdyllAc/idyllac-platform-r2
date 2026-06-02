@@ -23,11 +23,7 @@ async function dispatchLedgerEvent({
       event,
       accounts
     });
-
-    // await dispatchLedgerEvent({   // Adding this or better keep controller clean
-    //     sequelize,
-    //     event: result.event
-    //   });
+    
 
     await t.commit();
 

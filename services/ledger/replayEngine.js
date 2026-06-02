@@ -1,15 +1,20 @@
 // services/ledger/replayEngine.js
 const { LedgerEventStream } = require('../../models');
 const { projectLedgerEvent } = require('./projectionEngine');
+const { Op } = require('sequelize');
 
   
   async function replayLedgerEvents({
     sequelize,
     aggregateId = null
   }) {
+
+
   
     const where = {
-      projectionStatus: ['PENDING', 'FAILED']
+      projectionStatus: {
+        [Op.in]: ['PENDING', 'FAILED']
+      }
     };
   
     if (aggregateId) {
@@ -19,9 +24,10 @@ const { projectLedgerEvent } = require('./projectionEngine');
     const events =
       await LedgerEventStream.findAll({
         where,
-        order: [['createdAt', 'ASC']]
+        order: [['createdAt', 'ASC']],
       });
   
+
     let processed = 0;
   
     for (const event of events) {

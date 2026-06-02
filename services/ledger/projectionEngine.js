@@ -2,6 +2,18 @@
 const { LedgerEntry } = require('../../models');
 
 /**
+ * CQRS Projection Layer
+ *
+ * IMPORTANT:
+ * This file must NEVER:
+ * - update Transfer
+ * - update BankAccount
+ * - create business decisions
+ *
+ * It may ONLY build projections/read models.
+ */
+
+/**
  * Converts ledger events → deterministic double-entry ledger rows
  */
 async function projectLedgerEvent({
@@ -12,6 +24,37 @@ async function projectLedgerEvent({
 }) {
 
   const { eventType, payload } = event;
+
+  // // =========================
+  // // TRANSFER CREATED
+  // // =========================
+  // if (eventType === 'TRANSFER_CREATED') {
+
+  //   const { debitAccount, creditAccount, amount, currency } = payload;
+  //   // audit only (NO ledger movement)
+  // }
+
+
+  // // =========================
+  // // TRANSFER AUTHORIZED
+  // // =========================
+  // if (eventType === 'TRANSFER_AUTHORIZED') {
+  //   const { debitAccount, creditAccount, amount, currency } = payload;
+  //   // audit only (NO ledger movement)
+  // }
+
+
+  //  // =========================
+  //  // TRANSFER PROCESSED
+  //  // =========================
+  //   if (eventType === 'TRANSFER_PROCESSED') {
+  //     const { debitAccount, creditAccount, amount, currency } = payload;
+  //     // audit only (NO ledger movement)
+
+
+
+
+
 
   // =========================
   // TRANSFER SETTLED
