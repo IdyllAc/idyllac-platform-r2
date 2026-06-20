@@ -30,6 +30,7 @@ const inactivityMiddleware = require("./middleware/inactivityMiddleware");
 const rateLimit = require('express-rate-limit').default;
 const { generateCardNumber } = require('./utils/cardGenerator');
 
+
 /***********************
  *  ROUTES
  ***********************/
@@ -54,6 +55,29 @@ const transferRoutes = require('./routes/transfers');
  ***********************/
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+const http = require('http');
+const socketIo = require('socket.io');
+
+const server = http.createServer(app);
+const io = socketIo(server, {
+cors: { 
+     origin: '*' 
+//   origin: process.env.BASE_URL,
+//   credentials: true
+ },
+});
+
+
+const {
+  startLedgerSocketBridge
+} = require(
+  './services/ledger/socketBridge'
+);
+
+startLedgerSocketBridge(io);
+
 
 /* ===============================
    RATE LIMITERS (DEFINE FIRST)
@@ -251,9 +275,6 @@ app.use((req, res, next) => {
   res.locals.user = req.user || null;
   next();
 });
-
-
-app.use(flash());
 
 
 // Make flash messages available in all templates
@@ -457,6 +478,6 @@ sequelize.authenticate()
 /***********************
  *  START SERVER
  ***********************/
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });

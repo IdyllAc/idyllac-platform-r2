@@ -1,85 +1,213 @@
 // services/ledger/replayEngine.js
+
 const { LedgerEventStream } = require('../../models');
 const { projectLedgerEvent } = require('./projectionEngine');
 const { Op } = require('sequelize');
 
-  
-  async function replayLedgerEvents({
+const {
+  createReplayJob,
+  completeJob,
+  failJob
+} = require('./replayJobController');
+
+async function replayLedgerEvents({
+  sequelize,
+  aggregateId = null,
+  batchSize = 50
+}) {
+
+  // =========================
+  // 1. CREATE / LOCK JOB
+  // =========================
+  const job = await createReplayJob({
     sequelize,
-    aggregateId = null
-  }) {
+    aggregateId
+  });
 
-
-  
-    const where = {
-      projectionStatus: {
-        [Op.in]: ['PENDING', 'FAILED']
-      }
-    };
-  
-    if (aggregateId) {
-      where.aggregateId = aggregateId;
-    }
-  
-    const events =
-      await LedgerEventStream.findAll({
-        where,
-        order: [['createdAt', 'ASC']],
-      });
-  
+  try {
 
     let processed = 0;
-  
-    for (const event of events) {
-  
-      const t =
-        await sequelize.transaction();
-  
-      try {
-  
-        await projectLedgerEvent({
-          sequelize,
-          transaction: t,
-          event
-        });
-  
-        await event.update({
-  
-          projectionStatus:
-            'PROJECTED',
-  
-          projectedAt:
-            new Date()
-  
-        }, {
-          transaction: t
-        });
-  
-        await t.commit();
-  
-        processed++;
-  
-      } catch (err) {
-  
-        await t.rollback();
-  
-        await event.update({
-          projectionStatus: 'FAILED'
-        });
-  
-        console.error(
-          'REPLAY FAILED:',
-          event.id,
-          err.message
-        );
+    let lastId = 0;
+
+    // =========================
+    // 2. BATCH LOOP (CRASH SAFE)
+    // =========================
+    while (true) {
+
+      const where = {
+        id: { [Op.gt]: lastId },
+        projectionStatus: {
+          [Op.in]: ['PENDING', 'FAILED']
+        }
+      };
+
+      if (aggregateId) {
+        where.aggregateId = aggregateId;
       }
+
+      const events = await LedgerEventStream.findAll({
+        where,
+        order: [['id', 'ASC']],
+        limit: batchSize
+      });
+
+      if (events.length === 0) break;
+
+      for (const event of events) {
+
+        // skip already projected (no transaction needed)
+        if (event.projectionStatus === 'PROJECTED') {
+          lastId = event.id;
+          continue;
+        }
+
+        const t = await sequelize.transaction();
+
+        try {
+
+          // await event.update({
+          //   projectionLocked: true,
+          //   processingSource: 'REPLAY'
+          // }, { transaction: t });
+        
+
+          // =========================
+          // PROJECT EVENT
+          // =========================
+          await projectLedgerEvent({
+            sequelize,
+            transaction: t,
+            event
+          });
+
+          // =========================
+          // MARK PROJECTED
+          // =========================
+          await event.update({
+            projectionStatus: 'PROJECTED',
+            projectedAt: new Date()
+          }, { transaction: t });
+
+          await t.commit();
+
+          processed++;
+          lastId = event.id;
+
+          // =========================
+          // JOB PROGRESS UPDATE
+          // =========================
+          if (processed % 10 === 0) {
+            await job.update({
+              processedEvents: processed,
+              cursorId: lastId
+            });
+          }
+
+        } catch (err) {
+
+          await t.rollback();
+
+          // IMPORTANT: no transaction update here
+          await event.update({
+            projectionStatus: 'FAILED'
+          });
+
+          console.error('REPLAY FAILED:', event.id, err.message);
+        }
+      }
+
+      // small pause (protect DB)
+      await new Promise(r => setTimeout(r, 50));
     }
-  
+
+    // =========================
+    // 3. COMPLETE JOB
+    // =========================
+    await completeJob(job);
+
     return {
-      processed
+      success: true,
+      processed,
+      lastId
     };
+
+  } catch (err) {
+
+    await failJob(job, err);
+
+    throw err;
   }
-  
-  module.exports = {
-    replayLedgerEvents
-  };
+}
+
+
+
+/**
+ * FULL PROJECTION REBUILD (PRODUCTION SAFE)
+ *
+ * WARNING:
+ * This wipes ALL projections and rebuilds from event log.
+ */
+async function rebuildProjectionsFromScratch({
+  sequelize,
+  aggregateId = null
+}) {
+
+  const { LedgerEntry } = require('../../models');
+
+  // =========================
+  // 1. CREATE REPLAY JOB
+  // =========================
+  const job = await createReplayJob({
+    sequelize,
+    aggregateId
+  });
+
+  try {
+
+    // =========================
+    // 2. TRUNCATE PROJECTIONS SAFELY
+    // =========================
+    await sequelize.query(
+      `TRUNCATE TABLE ledger_entries RESTART IDENTITY CASCADE`
+    );
+
+    // reset event projection status
+    await sequelize.query(`
+      UPDATE ledger_event_stream
+      SET "projectionStatus" = 'PENDING',
+          "projectedAt" = NULL
+      WHERE 1=1
+    `);
+
+    // =========================
+    // 3. CALL NORMAL REPLAY ENGINE
+    // =========================
+    const result = await replayLedgerEvents({
+      sequelize,
+      aggregateId
+    });
+
+    // =========================
+    // 4. COMPLETE JOB
+    // =========================
+    await completeJob(job);
+
+    return {
+      success: true,
+      mode: 'FULL_REBUILD',
+      result
+    };
+
+  } catch (err) {
+
+    await failJob(job, err);
+
+    throw err;
+  }
+}
+
+
+module.exports = {
+  replayLedgerEvents,
+  rebuildProjectionsFromScratch
+};

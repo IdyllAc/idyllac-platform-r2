@@ -16,14 +16,12 @@ module.exports = (sequelize, DataTypes) => {
     aggregateId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      index: true,
     },
 
     aggregateType: {
       type: DataTypes.STRING(50),
       allowNull: false,
       defaultValue: 'TRANSFER',
-      index: true,
     },
 
     // =========================
@@ -40,19 +38,16 @@ module.exports = (sequelize, DataTypes) => {
         'TRANSFER_FAILED'
       ),
       allowNull: false,
-      index: true,
     },
 
     reference: {
       type: DataTypes.STRING(100),
       allowNull: false,
-      unique: true,
     },
 
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      index: true,
     },
 
     // =========================
@@ -70,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     idempotencyKey: {
       type: DataTypes.STRING(120),
       allowNull: true,
-      index: true,
+      unique: true
     },
 
     // =========================
@@ -80,7 +75,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(30),
       allowNull: false,
       defaultValue: 'PUBLISHED',
-      index: true,
     },
 
     // =========================
@@ -107,6 +101,20 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 'PENDING'
     },
+
+
+
+    // projectionLocked: {
+    //   type: DataTypes.BOOLEAN,
+    //   defaultValue: false
+    // },
+    
+    // processingSource: {
+    //   type: DataTypes.STRING,
+    //   allowNull: true
+    // },
+
+
     
     projectedAt: {
       type: DataTypes.DATE,
@@ -133,13 +141,12 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       {
-        fields: ['reference'],
-        unique: true
+        fields: ['reference']
       },
 
-      {
-        fields: ['idempotencyKey']
-      }
+      // {
+      //   fields: ['idempotencyKey']
+      // }
 
     ]
   });

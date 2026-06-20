@@ -1,4 +1,5 @@
 // services/ledger/projectionEngine.js
+
 const { LedgerEntry } = require('../../models');
 
 /**
@@ -13,9 +14,16 @@ const { LedgerEntry } = require('../../models');
  * It may ONLY build projections/read models.
  */
 
-/**
- * Converts ledger events → deterministic double-entry ledger rows
- */
+function hasModernLedgerPayload(payload) {
+  return (
+    payload &&
+    payload.debitAccount &&
+    payload.creditAccount &&
+    payload.amount &&
+    payload.currency
+  );
+}
+
 async function projectLedgerEvent({
   sequelize,
   transaction,
@@ -23,7 +31,108 @@ async function projectLedgerEvent({
   accounts
 }) {
 
-  const { eventType, payload } = event;
+  const { eventType } = event;
+  const payload = event.payload || {};
+
+  // ====================================
+  // TRANSFER_SETTLED
+  // ====================================
+  if (eventType === 'TRANSFER_SETTLED') {
+
+    if (!hasModernLedgerPayload(payload)) {
+
+      console.warn(
+        `[PROJECTION] Skipping legacy TRANSFER_SETTLED event ${event.id}`
+      );
+
+      return true;
+    }
+
+    const {
+      debitAccount,
+      creditAccount,
+      amount,
+      currency
+    } = payload;
+
+    await LedgerEntry.create({
+      ledgerAccountId: debitAccount,
+      type: 'DEBIT',
+      amount,
+      currency,
+      reference: event.reference,
+      transferId: event.aggregateId,
+      description: 'Projection: SETTLED'
+    }, { transaction });
+
+    await LedgerEntry.create({
+      ledgerAccountId: creditAccount,
+      type: 'CREDIT',
+      amount,
+      currency,
+      reference: event.reference,
+      transferId: event.aggregateId,
+      description: 'Projection: SETTLED'
+    }, { transaction });
+
+    return true;
+  }
+
+  // ====================================
+  // TRANSFER_REVERSED
+  // ====================================
+  if (eventType === 'TRANSFER_REVERSED') {
+
+    if (!hasModernLedgerPayload(payload)) {
+
+      console.warn(
+        `[PROJECTION] Skipping legacy TRANSFER_REVERSED event ${event.id}`
+      );
+
+      return true;
+    }
+
+    const {
+      debitAccount,
+      creditAccount,
+      amount,
+      currency
+    } = payload;
+
+    await LedgerEntry.create({
+      ledgerAccountId: debitAccount,
+      type: 'DEBIT',
+      amount,
+      currency,
+      reference: event.reference,
+      transferId: event.aggregateId,
+      description: 'Projection: REVERSED'
+    }, { transaction });
+
+    await LedgerEntry.create({
+      ledgerAccountId: creditAccount,
+      type: 'CREDIT',
+      amount,
+      currency,
+      reference: event.reference,
+      transferId: event.aggregateId,
+      description: 'Projection: REVERSED'
+    }, { transaction });
+
+    return true;
+  }
+
+  return true;
+}
+
+module.exports = {
+  projectLedgerEvent
+};
+
+
+
+
+
 
   // // =========================
   // // TRANSFER CREATED
@@ -55,66 +164,3 @@ async function projectLedgerEvent({
 
 
 
-
-  // =========================
-  // TRANSFER SETTLED
-  // =========================
-  if (eventType === 'TRANSFER_SETTLED') {
-
-    const { debitAccount, creditAccount, amount, currency } = payload;
-
-    await LedgerEntry.create({
-      ledgerAccountId: debitAccount,
-      type: 'DEBIT',
-      amount,
-      currency,
-      reference: event.reference,
-      transferId: event.aggregateId,
-      description: 'Projection: SETTLED'
-    }, { transaction });
-
-    await LedgerEntry.create({
-      ledgerAccountId: creditAccount,
-      type: 'CREDIT',
-      amount,
-      currency,
-      reference: event.reference,
-      transferId: event.aggregateId,
-      description: 'Projection: SETTLED'
-    }, { transaction });
-  }
-
-  // =========================
-  // TRANSFER REVERSED
-  // =========================
-  if (eventType === 'TRANSFER_REVERSED') {
-
-    const { debitAccount, creditAccount, amount, currency } = payload;
-
-    await LedgerEntry.create({
-      ledgerAccountId: debitAccount,
-      type: 'DEBIT',
-      amount,
-      currency,
-      reference: event.reference,
-      transferId: event.aggregateId,
-      description: 'Projection: REVERSED'
-    }, { transaction });
-
-    await LedgerEntry.create({
-      ledgerAccountId: creditAccount,
-      type: 'CREDIT',
-      amount,
-      currency,
-      reference: event.reference,
-      transferId: event.aggregateId,
-      description: 'Projection: REVERSED'
-    }, { transaction });
-  }
-
-  return true;
-}
-
-module.exports = {
-  projectLedgerEvent
-};

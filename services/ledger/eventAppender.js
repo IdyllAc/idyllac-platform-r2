@@ -1,4 +1,7 @@
+// services/ledger/eventAppender.js
+
 const { LedgerEventStream } = require('../../models');
+const { ledgerEventHub } = require('./eventStreamHub');
 
 // ONLY WRITE SIDE FUNCTION
 async function appendLedgerEvent({
@@ -9,10 +12,15 @@ async function appendLedgerEvent({
   reference,
   userId,
   payload = {},
-  idempotencyKey = null,
+  idempotencyKey,
   source = 'API',
   version = 1
 }) {
+
+  // 🚨 HARD GUARANTEE: NO IDEMPOTENCY KEY = NO EVENT
+  if (!idempotencyKey) {
+    throw new Error('Missing idempotencyKey for ledger event');
+  }
 
   // =========================
   // IDEMPOTENCY GUARD
@@ -24,17 +32,22 @@ async function appendLedgerEvent({
     });
 
     if (existing) {
-      return {
-        skipped: true,
-        event: existing
+      return { 
+        skipped: true, 
+        event: existing 
       };
     }
+  }
+
+  if (!idempotencyKey) {
+    throw new Error("Missing idempotencyKey for ledger event");
   }
 
   // =========================
   // CREATE EVENT (IMMUTABLE)
   // =========================
-  const event = await LedgerEventStream.create({
+  const event = await LedgerEventStream.create(
+    {
     aggregateId,
     aggregateType,
     eventType,
@@ -44,15 +57,35 @@ async function appendLedgerEvent({
     idempotencyKey,
     source,
     version
-  }, {
+  }, 
+  {
     transaction
   });
+
+  // =========================
+  // REAL-TIME STREAM EMIT
+  // =========================
+  ledgerEventHub.emit(
+    'ledger.event',
+    event.toJSON()
+    );
+
+
+
+    console.log(
+      '[EVENT EMITTED]',
+      event.eventType
+    );
+
+
+    
 
   return {
     skipped: false,
     event
   };
 }
+
 
 module.exports = {
   appendLedgerEvent

@@ -10,3 +10,7 @@ module.exports = function adminOnly(req, res, next) {
     next();
   };
   
+//   return res.json({
+//     reqUser: req.user
+//   });
+// };

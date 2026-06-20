@@ -56,6 +56,7 @@ console.log(`✅ Sequelize initialized. Environment: ${env}`);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.IdempotencyKey = require('./idempotencyKey')(sequelize, Sequelize.DataTypes );
-db.OutboxEvent = require('./outboxEvent')(sequelize, Sequelize.DataTypes);
+db.OutboxEvent = require('./outboxEvent')(sequelize, Sequelize.DataTypes );
+db.ReplayJob = require('./replayJob')(sequelize, Sequelize.DataTypes );
 
 module.exports = db;

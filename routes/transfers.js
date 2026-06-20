@@ -22,7 +22,6 @@ const combinedAuth = require('../middleware/combinedAuth');
 const idempotency = require('../middleware/idempotency');
 const validateLedger = require('../services/ledger/validateLedger');
 const runDailyReconciliation = require('../services/ledger/runDailyReconciliation');
-const createEvent = require('../services/events/createEvent');
 const convertAmount = require('../services/fx/convertAmount');
 const fxProvider = require('../services/fx/fxProvider');
 
@@ -139,32 +138,31 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
 
 
 
-    await createEvent({
-      t,
+    await appendLedgerEvent({
+
+      transaction: t,
+    
       aggregateId: transfer.id,
+    
       eventType: 'TRANSFER_CREATED',
+    
+      reference: transfer.reference,
+    
+      userId: req.user.id,
+    
       payload: {
-        userId: req.user.id,
-
         transferId: transfer.id,
-
-        reference: transfer.reference,
-
         amount: transfer.amount,
-
         senderAccountId: transfer.senderAccountId,
         beneficiaryId: transfer.beneficiaryId,
-
-        // transferType: transfer.transferType,
-
-        // sourceCurrency: transfer.sourceCurrency,
-        // destinationCurrency: transfer.destinationCurrency,
-
-        // description: transfer.description,
-
-         status: 'PENDING'       
-      }
+        status: 'PENDING'
+      },
+      
+      idempotencyKey: `transfer-created-${transfer.id}`
+      // idempotencyKey: req.idempotencyKey
+    
     });
+
 
     await t.commit();
 
@@ -273,7 +271,23 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
           });
   
         }
-  
+
+
+        await appendLedgerEvent({
+          transaction: t,
+          aggregateId: transfer.id,
+          eventType: 'TRANSFER_AUTHORIZED',
+          reference: transfer.reference,
+          userId: req.user.id,
+          payload: {
+            status: 'AUTHORIZED'
+          },
+
+          idempotencyKey: `transfer-authorized-${transfer.id}`
+          // idempotencyKey: req.idempotencyKey
+        });
+
+
         await transfer.update({
   
           status: 'AUTHORIZED'
@@ -360,7 +374,22 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
           });
   
         }
-  
+
+        await appendLedgerEvent({
+          transaction: t,
+          aggregateId: transfer.id,
+          eventType: 'TRANSFER_PROCESSING',
+          reference: transfer.reference,
+          userId: req.user.id,
+          payload: {
+            status: 'PROCESSING'
+          },
+          idempotencyKey: `transfer-processing-${transfer.id}`
+        });
+
+        // =========================
+        // TRANSFER STATE UPDATE
+        // =========================
         await transfer.update({
   
           status: 'PROCESSING'
@@ -517,7 +546,22 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
            balanceBefore - amount;
 
         const availableAfter =
-           availableBefore - amount;
+           availableBefore;
+        // balanceAfter;
+        // availableBefore - amount;
+
+
+
+        console.log({
+          balanceBefore,
+          availableBefore,
+          pendingBefore,
+          amount,
+          balanceAfter,
+          availableAfter,
+          pendingAfter
+        });
+           
 
         await account.update({
 
@@ -572,23 +616,30 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
 
        }
   
-        // =========================
-        // TRANSACTION JOURNAL
-        // =========================
+        // // =========================
+        // // TRANSACTION JOURNAL
+        // // =========================
 
-        await appendLedgerEvent({
-          sequelize,
-          transaction: t,
-          aggregateId: transfer.id,
-          eventType: 'TRANSFER_SETTLED',
-          reference: settlementReference,
-          userId: req.user.id,
-          payload: {
-            amount,
-            accountId: account.id
-          },
-          idempotencyKey: req.idempotencyKey
-        });
+        // await appendLedgerEvent({
+        //   sequelize,
+        //   transaction: t,
+        //   aggregateId: transfer.id,
+        //   eventType: 'TRANSFER_SETTLED',
+        //   reference: settlementReference,
+        //   userId: req.user.id,
+        //   // payload: {
+        //   //   amount,
+        //   //   accountId: account.id
+        //   // },
+        //   payload: {
+        //     debitAccount: customerLedger.id,
+        //     creditAccount: systemLedger.id,
+        //     amount,
+        //     currency: account.currency
+        //   },
+
+        //   idempotencyKey: `transfer-settled-${transfer.id}`
+        // });
   
         
   
@@ -596,11 +647,12 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
         // REAL DOUBLE-ENTRY LEDGER
         // =========================
   
-        const senderLedger =
+        const customerLedger =
           await LedgerAccount.findOne({
   
             where: {
-              userId: req.user.id,
+              userId: transfer.userId,
+           // userId: req.user.id,
               accountType: 'CUSTOMER'
             },
   
@@ -609,7 +661,7 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
   
           });
   
-        if (!senderLedger) {
+        if (!customerLedger) {
   
           await t.rollback();
   
@@ -642,6 +694,32 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
   
         }
 
+
+         // =========================
+        // TRANSACTION JOURNAL
+        // =========================
+
+        await appendLedgerEvent({
+          sequelize,
+          transaction: t,
+          aggregateId: transfer.id,
+          eventType: 'TRANSFER_SETTLED',
+          reference: settlementReference,
+          userId: req.user.id,
+          // payload: {
+          //   amount,
+          //   accountId: account.id
+          // },
+          payload: {
+            debitAccount: customerLedger.id,
+            creditAccount: systemLedger.id,
+            amount,
+            currency: account.currency
+          },
+
+          idempotencyKey: `transfer-settled-${transfer.id}`
+        });
+
   
         await postTransaction({
   
@@ -650,7 +728,7 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
           transferId: transfer.id,
   
           fromAccount:
-            senderLedger,
+          customerLedger,
   
           toAccount:
             systemLedger,
@@ -824,6 +902,19 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
             });
     
           }
+
+
+          await appendLedgerEvent({
+            transaction: t,
+            aggregateId: transfer.id,
+            eventType: 'TRANSFER_COMPLETED',
+            reference: transfer.reference,
+            userId: req.user.id,
+            payload: {
+              status: 'COMPLETED'
+            },
+            idempotencyKey: `transfer-completed-${transfer.id}`
+          });
 
 
           // =========================
@@ -1036,8 +1127,26 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
         ledgerBalance: parseFloat(account.ledgerBalance) + reversalAmount,
         availableBalance: parseFloat(account.availableBalance) + reversalAmount
       }, { transaction: t });
+
+
+      await appendLedgerEvent({
+       sequelize,
+        transaction: t,
+        aggregateId: transfer.id,
+        eventType: 'TRANSFER_REVERSED',
+        reference: reversalReference,
+        userId: req.user.id,
+        
+        payload: {
+          debitAccount: systemLedger.id,
+          creditAccount: customerLedger.id,
+          amount: reversalAmount,
+          currency: account.currency,
+          reversalReference
+        },
+        idempotencyKey: `transfer-reversed-${transfer.id}`
+      });
   
-     
   
       // =========================
       // 11. FINAL STATE
