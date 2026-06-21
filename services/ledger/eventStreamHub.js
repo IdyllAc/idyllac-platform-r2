@@ -9,11 +9,11 @@ const EventEmitter = require('events');
 class LedgerEventHub extends EventEmitter {
 
   emitEvent(event) {
-    this.emit('ledger_event', event);
+    this.emit('ledger.event', event);
   }
 
   subscribe(handler) {
-    this.on('ledger_event', handler);
+    this.on('ledger.event', handler);
   }
 }
 

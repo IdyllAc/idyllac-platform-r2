@@ -3,6 +3,9 @@
 const { LedgerEventStream } = require('../../models');
 const { ledgerEventHub } = require('./eventStreamHub');
 
+const { dispatchLedgerEvent } = require('./eventDispatcher');
+const { sequelize } = require('../../models');
+
 // ONLY WRITE SIDE FUNCTION
 async function appendLedgerEvent({
   transaction,
@@ -70,6 +73,52 @@ async function appendLedgerEvent({
     event.toJSON()
     );
 
+  // =========================
+  // AUTO PROJECTION
+  // =========================
+
+  try {
+
+  await dispatchLedgerEvent({
+    sequelize,
+    event
+  });
+
+
+  console.log(
+    '[AUTO PROJECTION SUCCESS]',
+    event.id
+  );
+
+  
+  // MARK EVENT PROJECTED
+  await event.update(
+    {
+      projectionStatus: 'PROJECTED',
+      projectedAt: new Date()
+    },
+    {
+     transaction
+    }
+  );
+
+
+  } catch (err) {
+
+  console.error(
+    'AUTO PROJECTION FAILED:',
+    err.message
+  );
+
+  await event.update(
+    {
+      projectionStatus: 'FAILED'
+    },
+    {
+      transaction
+      }
+   );
+ }
 
 
     console.log(
@@ -77,8 +126,6 @@ async function appendLedgerEvent({
       event.eventType
     );
 
-
-    
 
   return {
     skipped: false,

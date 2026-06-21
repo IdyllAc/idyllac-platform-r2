@@ -5,9 +5,7 @@ const { ledgerEventHub } =
 
 function startLedgerSocketBridge(io) {
 
-  ledgerEventHub.on(
-    'ledger.event',
-    (event) => {
+  ledgerEventHub.on('ledger.event', (event) => {
 
       io.emit(
         'ledger:event',
