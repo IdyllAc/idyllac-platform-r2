@@ -30,6 +30,8 @@ const inactivityMiddleware = require("./middleware/inactivityMiddleware");
 const rateLimit = require('express-rate-limit').default;
 const { generateCardNumber } = require('./utils/cardGenerator');
 
+ const beneficiaryRoutes = require('./routes/beneficiary'); // Beneficiary routes
+
 
 /***********************
  *  ROUTES
@@ -449,6 +451,7 @@ app.use('/profile', combinedAuth, profileRoutes); // or app.use('/api', profileR
 app.use('/api/upload', uploadRoutes);
 app.use('/api/cards', cardRoutes);
 app.use('/api/transfers', transferRoutes);
+app.use('/api/beneficiaries', beneficiaryRoutes);
 
 
 /***********************

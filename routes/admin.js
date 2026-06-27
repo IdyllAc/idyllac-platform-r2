@@ -1,6 +1,7 @@
 // routes/admin.js
 const express = require('express');
 const router = express.Router();
+const { Beneficiary } = require('../models');
 
 const combinedAuth = require('../middleware/combinedAuth');
 const replayLedgerEvents = require('../services/ledger/replayEngine');
@@ -15,6 +16,7 @@ const adminOnly = require('../middleware/adminOnly');
 const adminReviewController = require('../controllers/adminReviewController');
 const adminPreviewController = require('../controllers/adminPreviewController');
 const { runLedgerHealthCheck } = require('../controllers/ledgerAdminController');
+
 
 // PAGE
 router.get('/reviews', adminOnly, adminReviewController.getReviewsPage);
@@ -245,6 +247,71 @@ router.post('/ledger/retry-failed', adminOnly, async (req, res) => {
 
 // FULL SYSTEM CHECK
 router.post('/ledger/health-check', adminOnly, runLedgerHealthCheck);
+
+
+
+router.post('/beneficiaries/:id/verify', combinedAuth, adminOnly, async(req,res)=>{
+  
+  const beneficiary =
+  await Beneficiary.findByPk(
+  req.params.id
+  );
+  
+  if(!beneficiary){
+  
+  return res.status(404).json({
+  
+  error:'Beneficiary not found'
+  
+  });
+  
+  }
+  
+  beneficiary.isVerified = true;
+  
+  beneficiary.status = 'ACTIVE';
+  
+  await beneficiary.save();
+  
+  res.json({
+  
+  success:true,
+  beneficiary
+  
+  });
+  
+  });
+
+
+
+  router.post('/beneficiaries/:id/block', combinedAuth, adminOnly, async(req,res)=>{
+    
+    const beneficiary =
+    await Beneficiary.findByPk(
+    req.params.id
+    );
+    
+    if(!beneficiary){
+    
+    return res.status(404).json({
+    
+    error:'Beneficiary not found'
+    
+    });
+    
+    }
+    
+    beneficiary.status = 'BLOCKED';
+    
+    await beneficiary.save();
+    
+    res.json({
+    
+    success:true
+    
+    });
+    
+    });
 
 
 

@@ -24,6 +24,8 @@ const validateLedger = require('../services/ledger/validateLedger');
 const runDailyReconciliation = require('../services/ledger/runDailyReconciliation');
 const convertAmount = require('../services/fx/convertAmount');
 const fxProvider = require('../services/fx/fxProvider');
+const { getTreasuryAccount } = require('../services/treasury/treasuryService');
+const { postTreasuryMovement } = require('../services/treasury/postTreasuryMovement');
 
 
 
@@ -65,13 +67,53 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
       return res.status(404).json({ error: 'Sender account not found' });
     }
 
-    const beneficiary = await Beneficiary.findByPk(beneficiaryId, {
-      transaction: t
-    });
+
+    const beneficiary =
+    await Beneficiary.findOne({
+
+       where: {
+
+          id: beneficiaryId,
+
+          userId: req.user.id
+
+     },
+
+     transaction: t
+
+   });  
 
     if (!beneficiary) {
       await t.rollback();
       return res.status(404).json({ error: 'Beneficiary not found' });
+    }
+
+    if (!beneficiary.isVerified) {
+
+      await t.rollback();
+    
+      return res.status(400).json({
+    
+        error:
+          'Beneficiary is not verified'
+    
+      });
+    
+    }
+    
+    if (
+      beneficiary.status === 'BLOCKED'
+    ) {
+    
+      await t.rollback();
+    
+      return res.status(403).json({
+    
+        error:
+          'Beneficiary is blocked'
+    
+      });
+    
     }
 
     const parsedAmount = Number(amount);
@@ -89,6 +131,36 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
 
     const requiresFX =
       senderAccount.currency !== recipientCurrency;
+
+
+
+      const {
+        calculateFee
+      } = require('../services/fees/calculateFee');
+
+      const transferType =
+        beneficiary.transferNetwork;
+
+
+      console.log('transferType:', transferType);
+      
+      const feeAmount =
+        calculateFee({
+      
+          transferType,
+      
+          amount: parsedAmount,
+      
+          requiresFX
+      
+        });
+
+
+        
+
+    const {
+        getTreasuryAccount
+      } = require('../services/treasury/treasuryService');
 
       let fx = {
         amount: parsedAmount,
@@ -112,28 +184,51 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
 
 
     const transfer = await Transfer.create({
+
       userId: req.user.id,
+
       senderAccountId,
+
       beneficiaryId,
 
-      reference: `TRF-${Date.now()}`,
    // reference: 'TRF-' + Date.now(),
    // reference: `TRF-${uuidv4()}`,  // Use UUID for better uniqueness
-      transferType: beneficiary.transferNetwork,
+      reference: `TRF-${Date.now()}`,
+   // reference,
+   
+      transferType,
+   // transferType: beneficiary.transferNetwork,
+   
+
+      direction: 'OUTBOUND',
 
       amount: parsedAmount,
 
+   // feeAmount: 0,
+   // feeAmount: '0.00',
+      feeAmount,
+
+   // fxRate: fx.rate,
+      exchangeRate: fx.rate,
+
       sourceCurrency: senderAccount.currency,
-      destinationCurrency: beneficiary.currency,
+
+   //  destinationCurrency: beneficiary.currency,
+      destinationCurrency: recipientCurrency,
 
       description,
 
       status: 'PENDING'
+
     }, { transaction: t });
 
+
     await senderAccount.update({     //commiitted suposed
-      availableBalance: Number(senderAccount.availableBalance) - parsedAmount,
-      pendingBalance: Number(senderAccount.pendingBalance) + parsedAmount
+      availableBalance: 
+         Number(senderAccount.availableBalance) - parsedAmount,
+
+      pendingBalance: 
+         Number(senderAccount.pendingBalance) + parsedAmount
     }, { transaction: t });
 
 
@@ -695,30 +790,122 @@ router.post('/create', combinedAuth, idempotency, async (req, res) => {
         }
 
 
+        const requiresFX =
+          transfer.sourceCurrency !==
+          transfer.destinationCurrency;
+
+
+        if (requiresFX) {
+
+           const treasurySource =
+              await getTreasuryAccount(
+                 transfer.sourceCurrency,
+                 t
+              );
+  
+           const treasuryDestination =
+              await getTreasuryAccount(
+                 transfer.destinationCurrency,
+                 t
+              );
+  
+           console.log(
+              '[TREASURY FX]',
+              treasurySource.currency,
+              '->',
+              treasuryDestination.currency
+            );
+
+
+
+            await postTreasuryMovement({
+
+              sourceCurrency:
+                 transfer.sourceCurrency,
+           
+              destinationCurrency:
+                 transfer.destinationCurrency,
+           
+              sourceAmount:
+                 Number(transfer.amount),
+           
+              destinationAmount:
+                 Number(transfer.amount)
+                 * Number(transfer.exchangeRate),
+           
+              transaction: t
+           
+           });
+      
+  
+        }
+
+
          // =========================
         // TRANSACTION JOURNAL
         // =========================
 
+        // await appendLedgerEvent({
+        
+        //   transaction: t,
+        //   aggregateId: transfer.id,
+        //   eventType: 'TRANSFER_SETTLED',
+        //   reference: settlementReference,
+        //   userId: req.user.id,
+      
+        //   payload: {
+        //     debitAccount: customerLedger.id,
+        //     creditAccount: systemLedger.id,
+        //     amount,
+        //     currency: account.currency
+        //   },
+
+        //   idempotencyKey: `transfer-settled-${transfer.id}`
+        // });
+
         await appendLedgerEvent({
-          sequelize,
+
           transaction: t,
+
+          userId: transfer.userId,
+
           aggregateId: transfer.id,
+
+          aggregateType: 'TRANSFER',
+       
           eventType: 'TRANSFER_SETTLED',
-          reference: settlementReference,
-          userId: req.user.id,
-          // payload: {
-          //   amount,
-          //   accountId: account.id
-          // },
+       
+          reference:
+             `${transfer.reference}-SETTLEMENT`,
+       
           payload: {
-            debitAccount: customerLedger.id,
-            creditAccount: systemLedger.id,
-            amount,
-            currency: account.currency
+
+            //  transferType: transfer.transferType,
+       
+             debitAccount: customerLedger.id,
+       
+             creditAccount: systemLedger.id,
+       
+             sourceAmount:
+                Number(transfer.amount),
+       
+             sourceCurrency:
+                transfer.sourceCurrency,
+       
+             destinationAmount:
+                Number(transfer.amount) *
+                Number(transfer.exchangeRate),
+       
+             destinationCurrency:
+                transfer.destinationCurrency,
+       
+             exchangeRate:
+                transfer.exchangeRate
           },
 
-          idempotencyKey: `transfer-settled-${transfer.id}`
-        });
+           idempotencyKey: `transfer-settled-${transfer.id}`
+       
+       });
 
   
         await postTransaction({

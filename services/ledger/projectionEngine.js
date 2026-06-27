@@ -15,13 +15,27 @@ const { LedgerEntry } = require('../../models');
  */
 
 function hasModernLedgerPayload(payload) {
-  return (
-    payload &&
-    payload.debitAccount &&
-    payload.creditAccount &&
-    payload.amount &&
-    payload.currency
-  );
+
+  // Old payload support
+  const oldFormat =
+      payload &&
+      payload.debitAccount != null &&
+      payload.creditAccount != null &&
+      payload.amount != null &&
+      payload.currency != null;
+
+
+  // New FX payload support
+  const newFormat =
+      payload &&
+      payload.debitAccount != null &&
+      payload.creditAccount != null &&
+      payload.sourceAmount != null &&
+      payload.sourceCurrency != null &&
+      payload.destinationAmount != null &&
+      payload.destinationCurrency != null;
+
+  return oldFormat || newFormat;
 }
 
 async function projectLedgerEvent({
@@ -51,29 +65,51 @@ async function projectLedgerEvent({
     const {
       debitAccount,
       creditAccount,
+    
       amount,
-      currency
+      currency,
+    
+      sourceAmount,
+      sourceCurrency,
+      destinationAmount,
+      destinationCurrency
+    
     } = payload;
+    
+    
+    // Backward compatibility
+    const debitAmount =
+      sourceAmount || amount;
+    
+    const debitCurrency =
+      sourceCurrency || currency;
+    
+    const creditAmount =
+      destinationAmount || amount;
+    
+    const creditCurrency =
+      destinationCurrency || currency;
+      
 
-    await LedgerEntry.create({
-      ledgerAccountId: debitAccount,
-      type: 'DEBIT',
-      amount,
-      currency,
-      reference: event.reference,
-      transferId: event.aggregateId,
-      description: 'Projection: SETTLED'
-    }, { transaction });
-
-    await LedgerEntry.create({
-      ledgerAccountId: creditAccount,
-      type: 'CREDIT',
-      amount,
-      currency,
-      reference: event.reference,
-      transferId: event.aggregateId,
-      description: 'Projection: SETTLED'
-    }, { transaction });
+      await LedgerEntry.create({
+        ledgerAccountId: debitAccount,
+        type: 'DEBIT',
+        amount: debitAmount,
+        currency: debitCurrency,
+        reference: event.reference,
+        transferId: event.aggregateId,
+        description: 'Projection: SETTLED'
+      }, { transaction });
+      
+      await LedgerEntry.create({
+        ledgerAccountId: creditAccount,
+        type: 'CREDIT',
+        amount: creditAmount,
+        currency: creditCurrency,
+        reference: event.reference,
+        transferId: event.aggregateId,
+        description: 'Projection: SETTLED'
+      }, { transaction });
 
     return true;
   }
@@ -95,29 +131,52 @@ async function projectLedgerEvent({
     const {
       debitAccount,
       creditAccount,
+   
       amount,
-      currency
-    } = payload;
-
-    await LedgerEntry.create({
+      currency,
+   
+      sourceAmount,
+      sourceCurrency,
+      destinationAmount,
+      destinationCurrency
+   
+   } = payload;
+   
+   
+   // Backward compatibility
+   const debitAmount =
+      sourceAmount || amount;
+   
+   const debitCurrency =
+      sourceCurrency || currency;
+   
+   const creditAmount =
+      destinationAmount || amount;
+   
+   const creditCurrency =
+      destinationCurrency || currency;
+   
+   
+   await LedgerEntry.create({
       ledgerAccountId: debitAccount,
       type: 'DEBIT',
-      amount,
-      currency,
+      amount: debitAmount,
+      currency: debitCurrency,
       reference: event.reference,
       transferId: event.aggregateId,
       description: 'Projection: REVERSED'
-    }, { transaction });
-
-    await LedgerEntry.create({
+   }, { transaction });
+   
+   
+   await LedgerEntry.create({
       ledgerAccountId: creditAccount,
       type: 'CREDIT',
-      amount,
-      currency,
+      amount: creditAmount,
+      currency: creditCurrency,
       reference: event.reference,
       transferId: event.aggregateId,
       description: 'Projection: REVERSED'
-    }, { transaction });
+   }, { transaction });
 
     return true;
   }
@@ -129,36 +188,6 @@ module.exports = {
   projectLedgerEvent
 };
 
-
-
-
-
-
-  // // =========================
-  // // TRANSFER CREATED
-  // // =========================
-  // if (eventType === 'TRANSFER_CREATED') {
-
-  //   const { debitAccount, creditAccount, amount, currency } = payload;
-  //   // audit only (NO ledger movement)
-  // }
-
-
-  // // =========================
-  // // TRANSFER AUTHORIZED
-  // // =========================
-  // if (eventType === 'TRANSFER_AUTHORIZED') {
-  //   const { debitAccount, creditAccount, amount, currency } = payload;
-  //   // audit only (NO ledger movement)
-  // }
-
-
-  //  // =========================
-  //  // TRANSFER PROCESSED
-  //  // =========================
-  //   if (eventType === 'TRANSFER_PROCESSED') {
-  //     const { debitAccount, creditAccount, amount, currency } = payload;
-  //     // audit only (NO ledger movement)
 
 
 
