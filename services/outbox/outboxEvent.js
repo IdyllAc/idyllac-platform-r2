@@ -23,3 +23,4 @@ async function createOutboxEvent({
 module.exports = {
   createOutboxEvent
 };
+

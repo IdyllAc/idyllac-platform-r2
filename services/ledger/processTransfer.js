@@ -58,24 +58,9 @@ const {
         pendingBalance: pendingAfter
       }, { transaction: t });
   
-      // =========================
-      // 4. TRANSACTION RECORD
-      // =========================
-  
-      // await Transaction.create({
-      //   bankAccountId: account.id,
-      //   reference: payload.reference,
-      //   type: 'TRANSFER',
-      //   direction: 'DEBIT',
-      //   amount,
-      //   currency: account.currency,
-      //   status: 'PENDING',
-      //   balanceBefore: availableBefore,
-      //   balanceAfter: availableAfter
-      // }, { transaction: t });
   
       // =========================
-      // 5. LEDGERS
+      // 4. LEDGERS
       // =========================
   
       const customerLedger = await LedgerAccount.findOne({
@@ -98,8 +83,9 @@ const {
       if (!customerLedger || !systemLedger)
         throw new Error('Ledger accounts missing');
   
+
       // =========================
-      // 6. DOUBLE ENTRY POSTING
+      // 5. DOUBLE ENTRY POSTING
       // =========================
 
       await postTransaction({
@@ -121,42 +107,10 @@ const {
         transferId: event.aggregateId
       
       });
-         // NO MANUAL ENTRY CREATION ANYMORE, postTransaction avove handles it with proper validation and consistency checks
-      // await LedgerEntry.create({
-      //   ledgerAccountId: customerLedger.id,
-      //   transferId: event.aggregateId,
-      //   reference: payload.reference,
-      //   type: 'DEBIT',
-      //   amount,
-      //   currency: account.currency,
-      //   description: 'Transfer debit'
-      // }, { transaction: t });
-
-         // NO MANUAL ENTRY CREATION ANYMORE, postTransaction avove handles it with proper validation and consistency checks
-      // await LedgerEntry.create({
-      //   ledgerAccountId: systemLedger.id,
-      //   transferId: event.aggregateId,
-      //   reference: payload.reference,
-      //   type: 'CREDIT',
-      //   amount,
-      //   currency: account.currency,
-      //   description: 'System clearing credit'
-      // }, { transaction: t });
+  
   
       // =========================
-      // 7. LEDGER BALANCE UPDATE
-      // =========================
-  
-      await customerLedger.update({
-        balance: parseFloat(customerLedger.balance) - amount
-      }, { transaction: t });
-  
-      await systemLedger.update({
-        balance: parseFloat(systemLedger.balance) + amount
-      }, { transaction: t });
-  
-      // =========================
-      // 8. UPDATE TRANSFER
+      // 6. UPDATE TRANSFER
       // =========================
   
       await Transfer.update(
@@ -167,8 +121,9 @@ const {
         }
       );
   
+
       // =========================
-      // 9. COMMIT
+      // 7. COMMIT
       // =========================
   
       await t.commit();

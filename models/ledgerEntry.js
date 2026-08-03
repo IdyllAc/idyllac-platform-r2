@@ -41,6 +41,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: 'EUR'
       },
+
+      originalAmount: {
+        type: DataTypes.DECIMAL(18, 2),
+        allowNull: true
+      },
+      
+      originalCurrency: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      
+      fxRate: {
+        type: DataTypes.DECIMAL(18, 6),
+        allowNull: true
+      },
   
       description: {
         type: DataTypes.STRING,

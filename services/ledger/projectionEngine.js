@@ -89,30 +89,97 @@ async function projectLedgerEvent({
     
     const creditCurrency =
       destinationCurrency || currency;
-      
 
+
+    const originalAmount = 
+       sourceAmount || amount;
+
+    const originalCurrency = 
+       sourceCurrency || currency;
+       
+    const exchangeRate = 
+       payload.exchangeRate || 1;
+
+
+
+      const debitExists = await LedgerEntry.findOne({
+        where: {
+            transferId: event.aggregateId,
+            ledgerAccountId: debitAccount,
+            type: 'DEBIT',
+            reference: event.reference
+        },
+        transaction
+    });
+
+
+    console.log(
+      '[PROJECTION]',
+      event.aggregateId,
+      debitAccount,
+      creditAccount,
+      debitAmount,
+      creditAmount,
+      event.reference
+  );
+
+
+    if (!debitExists) {
       await LedgerEntry.create({
         ledgerAccountId: debitAccount,
         type: 'DEBIT',
         amount: debitAmount,
         currency: debitCurrency,
-        reference: event.reference,
-        transferId: event.aggregateId,
-        description: 'Projection: SETTLED'
-      }, { transaction });
-      
-      await LedgerEntry.create({
-        ledgerAccountId: creditAccount,
-        type: 'CREDIT',
-        amount: creditAmount,
-        currency: creditCurrency,
+        
+        originalAmount,
+        originalCurrency,
+        fxRate: exchangeRate,
+
         reference: event.reference,
         transferId: event.aggregateId,
         description: 'Projection: SETTLED'
       }, { transaction });
 
+    }
+
+
+
+    const creditExists = await LedgerEntry.findOne({
+      where: {
+          transferId: event.aggregateId,
+          ledgerAccountId: creditAccount,
+          type: 'CREDIT',
+          reference: event.reference
+      },
+      transaction
+  });
+  
+  if (!creditExists) {
+      await LedgerEntry.create({
+        ledgerAccountId: creditAccount,
+        type: 'CREDIT',
+        amount: creditAmount,
+        currency: creditCurrency,
+
+        originalAmount,
+        originalCurrency,
+        fxRate: exchangeRate,
+
+        reference: event.reference,
+        transferId: event.aggregateId,
+        description: 'Projection: SETTLED'
+      }, { transaction });
+    }
+
+    console.log(
+      '[PROJECTION CREATED]',
+      event.aggregateId
+  );
+
     return true;
   }
+
+
 
   // ====================================
   // TRANSFER_REVERSED
@@ -155,28 +222,75 @@ async function projectLedgerEvent({
    
    const creditCurrency =
       destinationCurrency || currency;
-   
+
+
+    const originalAmount = 
+       sourceAmount || amount;
+
+    const originalCurrency = 
+       sourceCurrency || currency;
+
+    const exchangeRate = 
+       payload.exchangeRate || 1;
+
+
+
+      const debitExists = await LedgerEntry.findOne({
+        where: {
+            transferId: event.aggregateId,
+            ledgerAccountId: debitAccount,
+            type: 'DEBIT',
+            reference: event.reference
+        },
+        transaction
+    });
+
+    if (!debitExists) {
    
    await LedgerEntry.create({
       ledgerAccountId: debitAccount,
       type: 'DEBIT',
       amount: debitAmount,
       currency: debitCurrency,
+
+      originalAmount,
+      originalCurrency,
+      fxRate: exchangeRate,
+
       reference: event.reference,
       transferId: event.aggregateId,
       description: 'Projection: REVERSED'
    }, { transaction });
-   
-   
+
+  }
+
+
+  const creditExists = await LedgerEntry.findOne({
+    where: {
+        transferId: event.aggregateId,
+        ledgerAccountId: creditAccount,
+        type: 'CREDIT',
+        reference: event.reference
+    },
+    transaction
+});
+
+if (!creditExists) {
    await LedgerEntry.create({
       ledgerAccountId: creditAccount,
       type: 'CREDIT',
       amount: creditAmount,
       currency: creditCurrency,
+
+      originalAmount,
+      originalCurrency,
+      fxRate: exchangeRate,
+
       reference: event.reference,
       transferId: event.aggregateId,
       description: 'Projection: REVERSED'
    }, { transaction });
+  }
 
     return true;
   }
@@ -187,7 +301,6 @@ async function projectLedgerEvent({
 module.exports = {
   projectLedgerEvent
 };
-
 
 
 

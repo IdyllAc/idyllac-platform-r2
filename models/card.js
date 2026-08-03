@@ -112,12 +112,17 @@ module.exports = (sequelize, DataTypes) => {
 
     status: {
       type: DataTypes.ENUM(
-        'active',
-        'blocked',
-        'expired',
-        'pending'
+        'REQUESTED',
+        'GENERATED',
+        'ACTIVE',
+        'BLOCKED',
+        'REPLACED',
+        'EXPIRED',
+        'CLOSED',
+        'CANCELLED'
+    
       ),
-      defaultValue: 'active'
+      defaultValue: 'REQUESTED'
     },
 
     isFrozen: {
@@ -138,7 +143,32 @@ module.exports = (sequelize, DataTypes) => {
     activatedAt: {
       type: DataTypes.DATE,
       allowNull: true
-    }
+    },
+
+    requestedAt: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+
+    generatedAt: {
+          type: DataTypes.DATE,
+          allowNull: true
+      },
+
+      replacedAt: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+
+    blockedAt: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+
+    closedAt: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
 
   }, {
 

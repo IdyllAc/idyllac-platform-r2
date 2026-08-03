@@ -25,6 +25,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
 
+    beneficiaryType: {
+      type: DataTypes.ENUM(
+          'INTERNAL',
+          'EXTERNAL'
+      ),
+      allowNull: false,
+      defaultValue: 'EXTERNAL'
+  },
+
     iban: {
       type: DataTypes.STRING,
       allowNull: false
@@ -61,9 +70,11 @@ module.exports = (sequelize, DataTypes) => {
 
     status: {
       type: DataTypes.ENUM(
+        'PENDING',
+        'VERIFIED',
         'ACTIVE',
         'BLOCKED',
-        'PENDING'
+        'DEACTIVATED'
       ),
       defaultValue: 'PENDING'
     },

@@ -1,114 +1,114 @@
-// utils/cardGenerator.js
+// // utils/cardGenerator.js
 
-// =====================================
-// GENERATE CARD NUMBER
-// =====================================
+// // =====================================
+// // GENERATE CARD NUMBER
+// // =====================================
 
-function generateCardNumber() {
+// function generateCardNumber() {
 
-  let number = "4"; // VISA starts with 4
+//   let number = "4"; // VISA starts with 4
 
-  for (let i = 0; i < 15; i++) {
+//   for (let i = 0; i < 15; i++) {
 
-    number += Math.floor(Math.random() * 10);
+//     number += Math.floor(Math.random() * 10);
 
-  }
+//   }
 
-  return number.replace(/(.{4})/g, '$1 ').trim();
+//   return number.replace(/(.{4})/g, '$1 ').trim();
 
-}
-
-
-// =====================================
-// MASK CARD NUMBER
-// =====================================
-
-function generateMaskedNumber(number) {
-
-  const clean =
-    number.replace(/\s/g, '');
-
-  return `**** **** **** ${clean.slice(-4)}`;
-
-}
+// }
 
 
-// =====================================
-// GENERATE IBAN
-// =====================================
+// // =====================================
+// // MASK CARD NUMBER
+// // =====================================
 
-function generateIBAN() {
+// function generateMaskedNumber(number) {
 
-  // FR = France
-  // 76 = example checksum
+//   const clean =
+//     number.replace(/\s/g, '');
 
-  return (
-    'FR76' +
-    Math.random()
-      .toString()
-      .slice(2, 25)
-  );
+//   return `**** **** **** ${clean.slice(-4)}`;
 
-}
+// }
 
 
-// =====================================
-// GENERATE BIC / SWIFT
-// =====================================
+// // =====================================
+// // GENERATE IBAN
+// // =====================================
 
-function generateBIC() {
+// function generateIBAN() {
 
-  return 'IDYLFRPP';
+//   // FR = France
+//   // 76 = example checksum
 
-}
+//   return (
+//     'FR76' +
+//     Math.random()
+//       .toString()
+//       .slice(2, 25)
+//   );
 
-
-// =====================================
-// GENERATE EXPIRY
-// =====================================
-
-function generateExpiry() {
-
-  const month =
-    String(Math.floor(Math.random() * 12) + 1)
-      .padStart(2, '0');
-
-  const year =
-    String(new Date().getFullYear() + 4);
-
-  return {
-    month,
-    year
-  };
-
-}
+// }
 
 
-// =====================================
-// GENERATE CVV
-// =====================================
+// // =====================================
+// // GENERATE BIC / SWIFT
+// // =====================================
 
-function generateCVV() {
+// function generateBIC() {
 
-  return String(
-    Math.floor(100 + Math.random() * 900)
-  );
+//   return 'IDYLFRPP';
 
-}
+// }
 
 
-module.exports = {
+// // =====================================
+// // GENERATE EXPIRY
+// // =====================================
 
-  generateCardNumber,
+// function generateExpiry() {
 
-  generateMaskedNumber,
+//   const month =
+//     String(Math.floor(Math.random() * 12) + 1)
+//       .padStart(2, '0');
 
-  generateIBAN,
+//   const year =
+//     String(new Date().getFullYear() + 4);
 
-  generateBIC,
+//   return {
+//     month,
+//     year
+//   };
 
-  generateExpiry,
+// }
 
-  generateCVV
 
-};
+// // =====================================
+// // GENERATE CVV
+// // =====================================
+
+// function generateCVV() {
+
+//   return String(
+//     Math.floor(100 + Math.random() * 900)
+//   );
+
+// }
+
+
+// module.exports = {
+
+//   generateCardNumber,
+
+//   generateMaskedNumber,
+
+//   generateIBAN,
+
+//   generateBIC,
+
+//   generateExpiry,
+
+//   generateCVV
+
+// };

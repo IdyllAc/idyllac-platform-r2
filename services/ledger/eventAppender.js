@@ -42,9 +42,6 @@ async function appendLedgerEvent({
     }
   }
 
-  if (!idempotencyKey) {
-    throw new Error("Missing idempotencyKey for ledger event");
-  }
 
   // =========================
   // CREATE EVENT (IMMUTABLE)
@@ -91,16 +88,16 @@ async function appendLedgerEvent({
   );
 
   
-  // MARK EVENT PROJECTED
-  await event.update(
-    {
-      projectionStatus: 'PROJECTED',
-      projectedAt: new Date()
-    },
-    {
-     transaction
-    }
-  );
+  // // MARK EVENT PROJECTED
+  // await event.update(
+  //   {
+  //     projectionStatus: 'PROJECTED',
+  //     projectedAt: new Date()
+  //   },
+  //   {
+  //    transaction
+  //   }
+  // );
 
 
   } catch (err) {

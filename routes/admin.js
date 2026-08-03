@@ -4,11 +4,12 @@ const router = express.Router();
 const { Beneficiary } = require('../models');
 
 const combinedAuth = require('../middleware/combinedAuth');
-const replayLedgerEvents = require('../services/ledger/replayEngine');
+const replayEngine = require('../services/ledger/replayEngine');
 const { verifyDoubleEntry } = require('../services/ledger/doubleEntryVerifier');
 const { runLedgerReconciliation } = require('../services/ledger/reconciliationEngine');
 const { runSelfHealing } = require('../services/ledger/selfHealingEngine');
 const { retryFailedEvents } = require('../services/ledger/deadLetterQueue');
+const { runLedgerAudit } = require('../services/ledger/auditEngine');
 const { sequelize } = require('../models');
   
 
@@ -32,11 +33,11 @@ router.post('/documents/:userId/reject', adminOnly, adminReviewController.reject
 router.get('/debug', (req, res) => res.json(req.user));
 
 // REPLAY
-router.post('/replay-ledger', adminOnly, async (req, res) => {
+router.post('/replay-ledger', combinedAuth, adminOnly, async (req, res) => {
   
       try {
   
-        const result = await replayLedgerEvents({
+        const result = await replayEngine.replayLedgerEvents({
             sequelize
           });
   
@@ -58,11 +59,11 @@ router.post('/replay-ledger', adminOnly, async (req, res) => {
 
 
   // FULL REBUILD OF PROJECTIONS (DANGEROUS - USE WITH CAUTION)
-  router.post('/rebuild-projections', adminOnly, async (req, res) => {
+  router.post('/rebuild-projections', combinedAuth, adminOnly, async (req, res) => {
 
     try {
   
-      const result = await replayLedgerEvents.rebuildProjectionsFromScratch({
+      const result = await replayEngine.rebuildProjectionsFromScratch({
         sequelize
       });
   

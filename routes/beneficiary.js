@@ -4,228 +4,25 @@ const express = require('express');
 const router = express.Router();
 
 const combinedAuth = require('../middleware/combinedAuth');
+const beneficiaryController = require('../controllers/beneficiaryController');
 
-const { Beneficiary } = require('../models');
 
 
 // CREATE
-
-router.post(
-'/',
-combinedAuth,
-async(req,res)=>{
-
-try{
-
-const beneficiary =
-await Beneficiary.create({
-
-userId:req.user.id,
-
-beneficiaryName:
-req.body.beneficiaryName,
-
-iban:req.body.iban,
-
-bic:req.body.bic,
-
-bankName:req.body.bankName,
-
-country:req.body.country,
-
-currency:req.body.currency,
-
-transferNetwork:
-req.body.transferNetwork
-
-});
-
-res.status(201).json({
-
-success:true,
-beneficiary
-
-});
-
-}catch(err){
-
-res.status(500).json({
-
-error:err.message
-
-});
-
-}
-
-});
-
-
-
+router.post('/', combinedAuth, beneficiaryController.createBeneficiary);
 
 // LIST
-
-router.get(
-'/',
-combinedAuth,
-async(req,res)=>{
-
-const beneficiaries =
-await Beneficiary.findAll({
-
-where:{
-userId:req.user.id
-},
-
-order:[
-['createdAt','DESC']
-]
-
-});
-
-res.json({
-
-success:true,
-beneficiaries
-
-});
-
-});
-
-
-
+router.get('/', combinedAuth, beneficiaryController.getBeneficiaries);
 
 // SINGLE
-
-router.get(
-'/:id',
-combinedAuth,
-async(req,res)=>{
-
-const beneficiary =
-await Beneficiary.findOne({
-
-where:{
-id:req.params.id,
-userId:req.user.id
-}
-
-});
-
-if(!beneficiary){
-
-return res.status(404).json({
-
-error:'Beneficiary not found'
-
-});
-
-}
-
-res.json({
-
-success:true,
-beneficiary
-
-});
-
-});
-
-
-
+router.get('/:id', combinedAuth, beneficiaryController.getBeneficiaryId);
 
 // UPDATE
-
-router.patch(
-'/:id',
-combinedAuth,
-async(req,res)=>{
-
-const beneficiary =
-await Beneficiary.findOne({
-
-where:{
-id:req.params.id,
-userId:req.user.id
-}
-
-});
-
-if(!beneficiary){
-
-return res.status(404).json({
-
-error:'Beneficiary not found'
-
-});
-
-}
-
-if(req.body.beneficiaryName){
-
-beneficiary.beneficiaryName =
-req.body.beneficiaryName;
-
-}
-
-if(
-req.body.isFavorite !== undefined
-){
-
-beneficiary.isFavorite =
-req.body.isFavorite;
-
-}
-
-await beneficiary.save();
-
-res.json({
-
-success:true,
-beneficiary
-
-});
-
-});
-
-
-
+router.patch('/:id', combinedAuth, beneficiaryController.updateBeneficiary);
 
 // DELETE
+router.delete('/:id', combinedAuth, beneficiaryController.deleteBeneficiary);
 
-router.delete(
-'/:id',
-combinedAuth,
-async(req,res)=>{
-
-const beneficiary =
-await Beneficiary.findOne({
-
-where:{
-id:req.params.id,
-userId:req.user.id
-}
-
-});
-
-if(!beneficiary){
-
-return res.status(404).json({
-
-error:'Beneficiary not found'
-
-});
-
-}
-
-await beneficiary.destroy();
-
-res.json({
-
-success:true
-
-});
-
-});
 
 module.exports = router;
 

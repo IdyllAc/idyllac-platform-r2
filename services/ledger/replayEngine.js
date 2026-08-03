@@ -1,7 +1,8 @@
 // services/ledger/replayEngine.js
 
-const { LedgerEventStream } = require('../../models');
+const { LedgerEventStream, LedgerEntry } = require('../../models');
 const { projectLedgerEvent } = require('./projectionEngine');
+const { rebuildLedgerBalances } = require('./balanceProjection');
 const { Op } = require('sequelize');
 
 const {
@@ -152,7 +153,7 @@ async function rebuildProjectionsFromScratch({
   aggregateId = null
 }) {
 
-  const { LedgerEntry } = require('../../models');
+
 
   // =========================
   // 1. CREATE REPLAY JOB
@@ -186,6 +187,13 @@ async function rebuildProjectionsFromScratch({
       sequelize,
       aggregateId
     });
+
+
+
+    
+    await rebuildLedgerBalances();
+
+
 
     // =========================
     // 4. COMPLETE JOB

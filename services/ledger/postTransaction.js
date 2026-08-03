@@ -1,15 +1,14 @@
 // services/ledger/postTransaction.js
-const { LedgerAccount, LedgerEntry } = require('../../models');
+
+const { LedgerAccount } = require('../../models');
 
 async function postTransaction({
   t,
   fromAccount,
   toAccount,
   amount,
-  currency,
   reference,
-  description,
-  transferId
+  rebuildMode = false
 }) {
 
   // =========================
@@ -51,26 +50,22 @@ async function postTransaction({
   // =========================
   const senderBalance = Number(sender.balance);
 
+  console.log('[BALANCE CHECK]', {
+    senderId: sender.id,
+    senderType: sender.accountType,
+    senderCurrency: sender.currency,
+    senderBalance,
+    amount: parsedAmount,
+    reference
+});
+
   if (senderBalance < parsedAmount) {
     throw new Error('Insufficient balance');
   }
 
-  
 
   // =========================
-  // 4. BALANCE UPDATE (SAFE)
-  // =========================
-
-  await sender.update({
-    balance: senderBalance - parsedAmount
-  }, { transaction: t });
-
-  await receiver.update({
-    balance: Number(receiver.balance) + parsedAmount
-  }, { transaction: t });
-
-  // =========================
-  // 5. FINAL CONSISTENCY CHECK
+  // 4. FINAL CONSISTENCY CHECK
   // =========================
 
   const debit = parsedAmount;

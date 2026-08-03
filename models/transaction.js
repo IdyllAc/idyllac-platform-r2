@@ -8,6 +8,15 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
+
+      transferId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        // references: {
+        //     model: 'transfers',
+        //     key: 'id'
+        // }
+    },
   
       bankAccountId: {
         type: DataTypes.INTEGER,
@@ -86,9 +95,11 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'transactions'
   
     });
-  
+
+
+
     Transaction.associate = (models) => {
-  
+
       Transaction.belongsTo(models.BankAccount, {
   
         foreignKey: 'bankAccountId',
@@ -96,6 +107,16 @@ module.exports = (sequelize, DataTypes) => {
         as: 'bankAccount'
   
       });
+
+
+    Transaction.belongsTo(models.Transfer, {
+
+      foreignKey: 'transferId',
+    
+      as: 'transfer'
+    
+    });
+  
   
       Transaction.belongsTo(models.Card, {
   

@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
           'SYSTEM_CLEARING',
           'SYSTEM_FEES',
           'SYSTEM_SUSPENSE',
-          'TREASURY'
+          'TREASURY',
+          'CORRESPONDENT'
         ),
         allowNull: false
       },
